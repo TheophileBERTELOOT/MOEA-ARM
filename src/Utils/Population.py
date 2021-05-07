@@ -26,8 +26,13 @@ class Population:
 
     def InitIndividual_HorizontalBinary(self):
         individual = []
-        for i in range(self.nbItem * 2):
-            individual.append(float(rd.randint(-1, 1)))
+        for i in range(self.nbItem):
+            individual.append(-1.0)
+        for i in range(self.nbItem):
+            individual.append(float(rd.randint(-1,1)))
+        for i in range(5):
+            index = rd.randint(0,self.nbItem-1)
+            individual[index] = 1.0
         return np.array(individual)
 
     def InitIndividual_HorizontalIndex(self):
