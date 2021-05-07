@@ -86,18 +86,19 @@ class MOBARM:
     def UpdateBestIndividual(self):
         for i in range(self.population.populationSize):
             score = self.Fitness.scores[i].dot(self.coefs)
-            if self.bestFitness < score:
+            if self.bestFitness <= score:
                 self.bestFitness = score
                 self.bestIndividual = copy.deepcopy(self.population.population[i])
 
     def GetLocalSearch(self,data,t):
         candidat = copy.deepcopy(self.bestIndividual)
         law = candidat[2:]
-        index = rd.randint(0,self.nbItem)
+        index = rd.randint(0,self.nbItem-1)
         value = rd.randint(0, self.nbItem - 1)
         while sum(np.isin(law,value))>1:
             value = rd.randint(0, self.nbItem - 1)
         candidat[2+index] = value
+
 
         score = self.Fitness.ComputeScoreIndividual([law],data)
         score = score.dot(self.coefs)
@@ -132,8 +133,6 @@ class MOBARM:
                 if rd.random()>self.pulseRate:
                     self.GetLocalSearch(data,t)
                 t+=1
-                print(self.bestFitness)
-                print(self.bestIndividual)
             self.frontPareto.append(self.bestIndividual)
             law = self.bestIndividual[2:]
             self.frontParetoFitness.append(self.Fitness.ComputeScoreIndividual([law],data))

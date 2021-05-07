@@ -48,8 +48,6 @@ class CSOARM:
 
     def UpdateBestInd(self):
         for i in range(self.population.populationSize):
-            print(self.fitness.scores[i])
-            print(self.bestIndScore)
             if self.fitness.Domination(self.fitness.scores[i],self.bestIndScore ) == -1:
                 self.bestIndScore = self.fitness.scores[i]
                 self.bestInd = copy.deepcopy(self.population.population[i])

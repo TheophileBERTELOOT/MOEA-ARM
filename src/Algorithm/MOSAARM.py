@@ -23,7 +23,21 @@ class MOSAARM:
             ind[index]*=-1
         return ind
 
-
+    def PrintGraph(self,i):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        plt.xlim([0,1])
+        plt.ylim([0, 1])
+        data = pd.DataFrame(self.fitness.scores,columns=['supp','confiance','comprehensibility'])
+        x = self.fitness.scores[:,0]
+        y = self.fitness.scores[:,1]
+        z = self.fitness.scores[:,2]
+        ax.set_xlabel('support')
+        ax.set_ylabel('confiance')
+        ax.set_zlabel('comprehensibility')
+        ax.scatter(x,y,z)
+        plt.show()
+        fig.savefig("Figures/MOSAARM/"+str(i)+".png")
 
     def Run(self,data):
         T = self.tempInitial
@@ -43,3 +57,4 @@ class MOSAARM:
                             self.population.population[j] = copy.deepcopy(newRule)
             T*=self.alpha
             print(self.fitness.scores)
+            self.PrintGraph(k)

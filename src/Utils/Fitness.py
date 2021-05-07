@@ -1,5 +1,15 @@
 import random as rd
 import numpy as np
+from numba import jit, cuda
+from numba import njit
+
+@njit
+def SuppGPU( individual, data):
+    supp = 0
+    for i in range(data.shape[0]):
+        if np.sum(data[i][individual]) == len(individual):
+            supp += 1
+    return supp / data.shape[0]
 
 class Fitness:
     def __init__(self,representation,objectivesNames,populationSize):
@@ -9,17 +19,20 @@ class Fitness:
         self.populationSize = populationSize
         self.scores = np.array([np.array([0.0 for i in range(self.nbObjectives)]) for j in range(self.populationSize)])
 
-
     def Supp(self,individual,data):
-        return sum([np.sum(np.isin(individual, row.nonzero())) == len(individual) for row in data]) / data.shape[0]
+        supp = 0
+        for i in range(data.shape[0]):
+            if np.sum(data[i][individual]) == len(individual):
+                supp+=1
+        return supp/data.shape[0]
 
 
     def Support(self,indexRule,data):
-        return self.Supp(indexRule, data)
+        return SuppGPU(indexRule, data)
 
     def Confidence(self,indexRule,indexAntecedent,data):
-        suppAntecedent = self.Supp(indexAntecedent, data)
-        suppRule = self.Supp(indexRule,data)
+        suppAntecedent = SuppGPU(indexAntecedent, data)
+        suppRule = SuppGPU(indexRule,data)
         if suppAntecedent == 0 :
             return 0
         else:
@@ -27,6 +40,15 @@ class Fitness:
 
     def Comprehensibility(self,indexRule,indexConsequent):
         return np.log(1+len(indexConsequent))/np.log(1+len(indexRule))
+
+    def Lift(self,indexRule,indexAntecedent,indexConsequent,data):
+        suppAntecedent = SuppGPU(indexAntecedent, data)
+        suppRule = SuppGPU(indexRule, data)
+        suppConsequent = SuppGPU(indexConsequent, data)
+        if suppConsequent == 0 or suppAntecedent == 0:
+            return 0
+        else:
+            return suppRule/(suppAntecedent*suppConsequent)
 
     def GetIndividualRepresentation(self,individual):
         if self.representation == 'horizontal_binary':
@@ -53,6 +75,8 @@ class Fitness:
                 score[j] = self.Confidence(indexRule, indexAntecedent, data)
             if objective == 'comprehensibility':
                 score[j] = self.Comprehensibility(indexRule, indexConsequent)
+            if objective == 'lift':
+                score[j] = self.Lift(indexRule,indexAntecedent,indexConsequent,data)
         return np.array(score)
 
     def ComputeScorePopulation(self,population,data):

@@ -80,7 +80,7 @@ class MOPSO:
 
     def UpdatePersonalBest(self):
         for i in range(self.population.populationSize):
-            if self.fitness.Domination(self.Fitness.scores[i],self.personalBestsFitness[i]) == -1:
+            if self.Fitness.Domination(self.Fitness.scores[i],self.personalBestsFitness[i]) == -1:
                 self.personalBestsFitness[i] = self.Fitness.scores[i]
                 self.personalBests[i] = copy.deepcopy(self.population.population[i])
 
@@ -124,7 +124,6 @@ class MOPSO:
 
     def Run(self,data):
         for i in range(self.nbIteration):
-            print(self.population.population)
             self.Fitness.ComputeScorePopulation(self.population.population,data)
             self.UpdateParetoFront()
             self.UpdatePersonalBest()
@@ -132,7 +131,7 @@ class MOPSO:
             self.UpdatePosition()
             self.PrintGraph(i)
             print('iteration numero : ' + str(i))
-            #print(self.globalBestFitness)
+            print(self.globalBestFitness)
             #print(self.paretoFront)
 
 
