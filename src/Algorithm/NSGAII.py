@@ -2,9 +2,12 @@ from src.Utils.Fitness import *
 from src.Utils.Population import *
 import matplotlib.pyplot as plt
 import pandas as pd
+from src.Utils.Graphs import *
 
 class NSGAII:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,mutationRate = 0.1, crossOverRate = 0.5):
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
+                 objectiveNames,mutationRate = 0.1, crossOverRate = 0.5,
+                 save=True,display=True,path='Figures/'):
         self.P = Population('horizontal_binary',populationSize,nbItem)
         self.Q = Population('horizontal_binary',populationSize,nbItem)
         self.R = Population('horizontal_binary',populationSize*2,nbItem)
@@ -17,6 +20,9 @@ class NSGAII:
         self.mutationRate = mutationRate
         self.crossOverRate = crossOverRate
         self.rank = [0 for _ in range(self.R.populationSize)]
+        self.save = save
+        self.display = display
+        self.path = path
 
 
     def FastNonDominatedSort(self,population):
@@ -137,23 +143,6 @@ class NSGAII:
         currentPopulation,currentPopulationScores,self.distances = self.CrowdingDistanceAssignment(currentPopulation,currentPopulationScores)
         self.P.SetPopulation(np.array(currentPopulation))
 
-    def PrintGraph(self,i):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        plt.xlim([0,1])
-        plt.ylim([0, 1])
-        data = pd.DataFrame(self.fitness.scores,columns=['supp','confiance','comprehensibility'])
-        x = self.fitness.scores[:,0]
-        y = self.fitness.scores[:,1]
-        z = self.fitness.scores[:,2]
-        ax.set_xlabel('support')
-        ax.set_ylabel('confiance')
-        ax.set_zlabel('comprehensibility')
-        ax.scatter(x,y,z)
-        plt.show()
-        fig.savefig("Figures/NSGAII/"+str(i)+".png")
-
-
     def Run(self,data):
         self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
         self.BinaryTournament(True)
@@ -167,8 +156,8 @@ class NSGAII:
             self.BinaryTournament(False)
             self.CrossOver(self.Q)
             self.Mutation(self.Q)
-            self.PrintGraph(i)
-
+            graph = Graphs(self.fitness.objectivesNames,self.fitness.scores,self.save,self.display,self.path+str(i))
+            graph.Graph3D()
 
 
 

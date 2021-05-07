@@ -3,9 +3,12 @@ from src.Utils.Population import *
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
+from src.Utils.Graphs import *
 
 class CSOARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,visualScope=10,ruthlessRatio =0.01,step=3):
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+                 visualScope=10,ruthlessRatio =0.01,step=3,
+                 save=True,display=True,path='Figures/'):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -17,6 +20,9 @@ class CSOARM:
         self.ruthlessRatio = ruthlessRatio
         self.step = step
         self.distance = np.array([[0 for i in range(populationSize)] for j in range(populationSize)])
+        self.save = save
+        self.display = display
+        self.path = path
 
     def FindLocalBest(self,matesScore):
         dominant = 0
@@ -64,21 +70,7 @@ class CSOARM:
             if r<self.ruthlessRatio:
                 self.population.population[i] = copy.deepcopy(self.bestInd)
 
-    def PrintGraph(self,i):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        plt.xlim([0,1])
-        plt.ylim([0, 1])
-        data = pd.DataFrame(self.fitness.scores,columns=['supp','confiance','comprehensibility'])
-        x = self.fitness.scores[:,0]
-        y = self.fitness.scores[:,1]
-        z = self.fitness.scores[:,2]
-        ax.set_xlabel('support')
-        ax.set_ylabel('confiance')
-        ax.set_zlabel('comprehensibility')
-        ax.scatter(x,y,z)
-        plt.show()
-        fig.savefig("Figures/CSOARM/"+str(i)+".png")
+
 
     def Run(self,data):
         self.fitness.ComputeScorePopulation(self.population.population, data)
@@ -91,5 +83,7 @@ class CSOARM:
             self.UpdateBestInd()
             self.RuthlessBehavior()
             print(self.bestIndScore)
-            self.PrintGraph(i)
+            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
+                           self.path + str(i))
+            graph.Graph3D()
 

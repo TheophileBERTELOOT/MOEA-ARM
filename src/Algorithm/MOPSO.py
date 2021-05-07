@@ -4,6 +4,7 @@ import copy
 
 from src.Utils.Fitness import *
 from src.Utils.Population import *
+from src.Utils.Graphs import *
 
 """
 article :
@@ -12,7 +13,9 @@ article :
 
 
 class MOPSO:
-    def __init__(self,nbItem, populationSize, nbIteration, nbObjectifs, objectiveNames , inertie=0.5, localAccelaration = 0.5, globalAcceleration = 0.5):
+    def __init__(self,nbItem, populationSize, nbIteration, nbObjectifs, objectiveNames ,
+                 inertie=0.5, localAccelaration = 0.5, globalAcceleration = 0.5,
+                 save=True,display=True,path='Figures/'):
         self.population = Population('horizontal_binary',populationSize,nbItem)
         self.speeds = []
         self.personalBests = []
@@ -27,6 +30,9 @@ class MOPSO:
         self.nbObjectifs = nbObjectifs
         self.paretoFront = []
         self.Fitness = Fitness('horizontal_binary',objectiveNames,self.population.populationSize)
+        self.save = save
+        self.display = display
+        self.path = path
 
         self.InitSpeed()
         self.InitPersonalBest()
@@ -106,21 +112,7 @@ class MOPSO:
         for i in range(self.population.populationSize):
             self.population.population[i] = self.population.population[i] + self.speeds[i]
 
-    def PrintGraph(self,i):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        plt.xlim([0,1])
-        plt.ylim([0, 1])
-        data = pd.DataFrame(self.Fitness.scores,columns=['supp','confiance','comprehensibility'])
-        x = self.Fitness.scores[:,0]
-        y = self.Fitness.scores[:,1]
-        z = self.Fitness.scores[:,2]
-        ax.set_xlabel('support')
-        ax.set_ylabel('confiance')
-        ax.set_zlabel('comprehensibility')
-        ax.scatter(x,y,z)
-        plt.show()
-        fig.savefig("Figures/MOPSO/"+str(i)+".png")
+
 
     def Run(self,data):
         for i in range(self.nbIteration):
@@ -129,10 +121,12 @@ class MOPSO:
             self.UpdatePersonalBest()
             self.UpdateSpeed()
             self.UpdatePosition()
-            self.PrintGraph(i)
             print('iteration numero : ' + str(i))
             print(self.globalBestFitness)
             #print(self.paretoFront)
+            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
+                           self.path + str(i))
+            graph.Graph3D()
 
 
 

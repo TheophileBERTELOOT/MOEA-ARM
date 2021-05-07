@@ -3,9 +3,12 @@ from src.Utils.Population import *
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
+from src.Utils.Graphs import *
 
 class HMOFAARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,nbSolution=10,alpha = 0.5,beta0 = 1.0,crossOverRate=0.5):
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+                 nbSolution=10,alpha = 0.5,beta0 = 1.0,crossOverRate=0.5,
+                 save=True,display=True,path='Figures/'):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -18,6 +21,9 @@ class HMOFAARM:
         self.nbSolution = nbSolution
         self.paretoFront = []
         self.paretoFrontScore = []
+        self.save = save
+        self.display = display
+        self.path = path
 
 
     def UpdateAlpha(self,i):
@@ -138,4 +144,7 @@ class HMOFAARM:
             self.FastNonDominatedSort(self.population)
             self.FindParetoFront()
             print(self.paretoFrontScore)
+            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
+                           self.path + str(i))
+            graph.Graph3D()
 

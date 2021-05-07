@@ -3,9 +3,12 @@ from src.Utils.Population import *
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
+from src.Utils.Graphs import *
 
 class MOSAARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,tempInitial = 1,nbIterationPerTemp=100,nbChanges=2,alpha = 0.9):
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+                 tempInitial = 1,nbIterationPerTemp=100,nbChanges=2,alpha = 0.9,
+                 save=True,display=True,path='Figures/'):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -15,6 +18,9 @@ class MOSAARM:
         self.nbIterationPerTemp = nbIterationPerTemp
         self.nbChanges = nbChanges
         self.alpha = alpha
+        self.save = save
+        self.display = display
+        self.path = path
 
     def GenerateRule(self,i):
         ind = copy.deepcopy(self.population.population[i])
@@ -23,21 +29,7 @@ class MOSAARM:
             ind[index]*=-1
         return ind
 
-    def PrintGraph(self,i):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        plt.xlim([0,1])
-        plt.ylim([0, 1])
-        data = pd.DataFrame(self.fitness.scores,columns=['supp','confiance','comprehensibility'])
-        x = self.fitness.scores[:,0]
-        y = self.fitness.scores[:,1]
-        z = self.fitness.scores[:,2]
-        ax.set_xlabel('support')
-        ax.set_ylabel('confiance')
-        ax.set_zlabel('comprehensibility')
-        ax.scatter(x,y,z)
-        plt.show()
-        fig.savefig("Figures/MOSAARM/"+str(i)+".png")
+
 
     def Run(self,data):
         T = self.tempInitial
@@ -57,4 +49,6 @@ class MOSAARM:
                             self.population.population[j] = copy.deepcopy(newRule)
             T*=self.alpha
             print(self.fitness.scores)
-            self.PrintGraph(k)
+            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
+                           self.path + str(k))
+            graph.Graph3D()

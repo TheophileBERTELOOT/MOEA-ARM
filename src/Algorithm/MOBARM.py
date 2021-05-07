@@ -3,12 +3,15 @@ import copy
 
 from src.Utils.Fitness import *
 from src.Utils.Population import *
+from src.Utils.Graphs import *
 """
 article :
 """
 
 class MOBARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbPoints, nbObjectifs, objectiveNames , beta = 0.7,gamma = 0.1, alpha =0.9):
+    def __init__(self,nbItem,populationSize,nbIteration,nbPoints, nbObjectifs, objectiveNames ,
+                 beta = 0.7,gamma = 0.1, alpha =0.9,
+                 save=True,display=True,path='Figures/'):
         self.population = Population('horizontal_index',populationSize,nbItem)
         self.fitnessScore = []
         self.nbItem = nbItem
@@ -24,9 +27,12 @@ class MOBARM:
         self.initialPulseRate =rd.random()
         self.pulseRate = self.initialPulseRate
         self.loudness = rd.random()
-        self.Fitness = Fitness('horizontal_index', objectiveNames, self.population.populationSize)
+        self.fitness = Fitness('horizontal_index', objectiveNames, self.population.populationSize)
         self.bestFitness = 0
         self.bestIndividual = np.array([])
+        self.save = save
+        self.display = display
+        self.path = path
 
         self.InitCoefs()
         self.InitPopulation()
@@ -85,7 +91,7 @@ class MOBARM:
 
     def UpdateBestIndividual(self):
         for i in range(self.population.populationSize):
-            score = self.Fitness.scores[i].dot(self.coefs)
+            score = self.fitness.scores[i].dot(self.coefs)
             if self.bestFitness <= score:
                 self.bestFitness = score
                 self.bestIndividual = copy.deepcopy(self.population.population[i])
@@ -100,7 +106,7 @@ class MOBARM:
         candidat[2+index] = value
 
 
-        score = self.Fitness.ComputeScoreIndividual([law],data)
+        score = self.fitness.ComputeScoreIndividual([law],data)
         score = score.dot(self.coefs)
         if score> self.bestFitness:
             self.bestFitness = score
@@ -108,26 +114,13 @@ class MOBARM:
             self.pulseRate = self.initialPulseRate*(1-np.exp(-self.gamma*t))
             self.loudness = self.alpha*self.loudness
 
-    def PrintGraph(self,i):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        data = np.array(self.frontParetoFitness)
-        x = data[:,0]
-        y = data[:,1]
-        z = data[:,2]
-        ax.set_xlabel('support')
-        ax.set_ylabel('confiance')
-        ax.set_zlabel('comprehensibility')
-        ax.scatter(x,y,z)
-        plt.show()
-        fig.savefig("Figures/MOBARM/"+str(i)+".png")
 
     def Run(self,data):
         for i in range(self.nbPoints):
             t = 0
             while t < self.nbIteration:
                 laws = self.population.population[:,[np.arange(2,self.nbItem)]]
-                self.Fitness.ComputeScorePopulation(laws,data)
+                self.fitness.ComputeScorePopulation(laws,data)
                 self.UpdatePopulation()
                 self.UpdateBestIndividual()
                 if rd.random()>self.pulseRate:
@@ -135,12 +128,14 @@ class MOBARM:
                 t+=1
             self.frontPareto.append(self.bestIndividual)
             law = self.bestIndividual[2:]
-            self.frontParetoFitness.append(self.Fitness.ComputeScoreIndividual([law],data))
+            self.frontParetoFitness.append(self.fitness.ComputeScoreIndividual([law],data))
             print(np.array(self.frontParetoFitness))
-            self.PrintGraph(i)
             self.population.InitPopulation()
             self.InitPopulation()
             self.bestFitness = 0
+            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
+                           self.path + str(i))
+            graph.Graph3D()
 
 
 
