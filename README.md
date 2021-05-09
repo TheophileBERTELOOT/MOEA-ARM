@@ -17,4 +17,6 @@ Gather a huge amount of multi objectives evolutionnary algorithm for solve the a
 > HERAGUEMI, Kamel Eddine, KAMEL, Nadjet, et DRIAS, Habiba. Multi-objective bat algorithm for mining interesting association rules. In : International Conference on Mining Intelligence and Knowledge Exploration. Springer, Cham, 2016. p. 13-23.
 * MOPSO *MultiObjective Particle Swarm Optimization*
 > COELLO, CA Coello et LECHUGA, Maximino Salazar. MOPSO: A proposal for multiple objective particle swarm optimization. In : Proceedings of the 2002 Congress on Evolutionary Computation. CEC'02 (Cat. No. 02TH8600). IEEE, 2002. p. 1051-1056.
+* MOCatSOARM *MultiObjective Cat Swarm Optimization Association Rules Mining*
+> BAHRAMI, Mahdi, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Cat swarm optimization (CSO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 9-18.
 
