@@ -4,11 +4,12 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
+from time import time
 
 class MOCatSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
                 mixtureRatio = 0.1,velocitySize=3,velocityRatio = 0.5,SMP=10, SRD = 3,
-                 save=True,display=True,path='Figures/'):
+                 save=True,display=False,path='Figures/'):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -24,6 +25,7 @@ class MOCatSOARM:
         self.save = save
         self.display = display
         self.path = path
+        self.executionTime = 0
 
     def GenerateVelocity(self):
         velocity = [0 for _ in range(self.nbItem*2)]
@@ -62,20 +64,19 @@ class MOCatSOARM:
 
 
 
-    def Run(self,data):
-        for i in range(self.nbIteration):
-            self.fitness.ComputeScorePopulation(self.population.population,data)
-            self.UpdateBestInd()
-            for j in range(self.population.populationSize):
+    def Run(self,data,i):
+        t1 = time()
+        self.fitness.ComputeScorePopulation(self.population.population,data)
+        self.UpdateBestInd()
+        for j in range(self.population.populationSize):
+            r = rd.random()
+            if r<self.mixtureRatio:
+                velocity = self.GenerateVelocity()
                 r = rd.random()
-                if r<self.mixtureRatio:
-                    velocity = self.GenerateVelocity()
-                    r = rd.random()
-                    self.population.population[j] =self.population.population[j]+ velocity+r*self.velocityRatio*(self.bestCat-self.population.population[j])
-                else:
-                    self.Resting(j,data)
-            print(self.bestCatScore)
-            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
-                           self.path + str(i))
-            graph.Graph3D()
+                self.population.population[j] =self.population.population[j]+ velocity+r*self.velocityRatio*(self.bestCat-self.population.population[j])
+            else:
+                self.Resting(j,data)
+        self.executionTime = time() - t1
+        print(self.bestCatScore)
+
 

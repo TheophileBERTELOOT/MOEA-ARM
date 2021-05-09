@@ -3,10 +3,11 @@ from src.Utils.Population import *
 import matplotlib.pyplot as plt
 import pandas as pd
 from src.Utils.Graphs import *
+from time import time
 
 class NSGAII:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
-                 objectiveNames,mutationRate = 0.1, crossOverRate = 0.5,
+                 objectiveNames,data,mutationRate = 0.1, crossOverRate = 0.5,
                  save=True,display=True,path='Figures/'):
         self.P = Population('horizontal_binary',populationSize,nbItem)
         self.Q = Population('horizontal_binary',populationSize,nbItem)
@@ -23,6 +24,12 @@ class NSGAII:
         self.save = save
         self.display = display
         self.path = path
+        self.executionTime = 0
+
+        self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
+        self.BinaryTournament(True)
+        self.CrossOver(self.Q)
+        self.Mutation(self.Q)
 
 
     def FastNonDominatedSort(self,population):
@@ -143,21 +150,16 @@ class NSGAII:
         currentPopulation,currentPopulationScores,self.distances = self.CrowdingDistanceAssignment(currentPopulation,currentPopulationScores)
         self.P.SetPopulation(np.array(currentPopulation))
 
-    def Run(self,data):
-        self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
-        self.BinaryTournament(True)
+    def Run(self,data,i):
+        t1 = time()
+        self.R.SetPopulation(np.concatenate([self.P.population,self.Q.population],axis=0))
+        self.fitness.ComputeScorePopulation(self.R.population, data)
+        self.FastNonDominatedSort(self.R)
+        self.SelectCurrentPopulation()
+        self.BinaryTournament(False)
         self.CrossOver(self.Q)
         self.Mutation(self.Q)
-        for i in range(self.nbIteration):
-            self.R.SetPopulation(np.concatenate([self.P.population,self.Q.population],axis=0))
-            self.fitness.ComputeScorePopulation(self.R.population, data)
-            self.FastNonDominatedSort(self.R)
-            self.SelectCurrentPopulation()
-            self.BinaryTournament(False)
-            self.CrossOver(self.Q)
-            self.Mutation(self.Q)
-            graph = Graphs(self.fitness.objectivesNames,self.fitness.scores,self.save,self.display,self.path+str(i))
-            graph.Graph3D()
+        self.executionTime = time() - t1
 
 
 

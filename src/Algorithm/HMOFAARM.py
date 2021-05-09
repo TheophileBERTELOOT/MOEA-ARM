@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
+from time import  time
 
 class HMOFAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
@@ -24,6 +25,7 @@ class HMOFAARM:
         self.save = save
         self.display = display
         self.path = path
+        self.executionTime = 0
 
 
     def UpdateAlpha(self,i):
@@ -136,15 +138,14 @@ class HMOFAARM:
         self.paretoFrontScore=copy.deepcopy(scores[:self.nbSolution])
 
 
-    def Run(self,data):
-        for i in range(self.nbIteration):
-            self.UpdateAlpha(i)
-            self.fitness.ComputeScorePopulation(self.population.population,data)
-            self.UpdatePopulation(data)
-            self.FastNonDominatedSort(self.population)
-            self.FindParetoFront()
-            print(self.paretoFrontScore)
-            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
-                           self.path + str(i))
-            graph.Graph3D()
+    def Run(self,data,i):
+        t1 = time()
+        self.UpdateAlpha(i)
+        self.fitness.ComputeScorePopulation(self.population.population,data)
+        self.UpdatePopulation(data)
+        self.FastNonDominatedSort(self.population)
+        self.FindParetoFront()
+        self.executionTime = time() - t1
+        print(self.paretoFrontScore)
+
 

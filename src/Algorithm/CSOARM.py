@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
+from time import time
 
 class CSOARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                  visualScope=10,ruthlessRatio =0.01,step=3,
                  save=True,display=True,path='Figures/'):
         self.population = Population('horizontal_binary', populationSize, nbItem)
@@ -23,6 +24,8 @@ class CSOARM:
         self.save = save
         self.display = display
         self.path = path
+        self.executionTime = 0
+        self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def FindLocalBest(self,matesScore):
         dominant = 0
@@ -72,18 +75,16 @@ class CSOARM:
 
 
 
-    def Run(self,data):
+    def Run(self,data,i):
+        t1 = time()
+        self.CalculDistance()
+        self.UpdateBestInd()
+        self.ChaseSwarming()
+        self.Dispersion()
         self.fitness.ComputeScorePopulation(self.population.population, data)
-        for i in range(self.nbIteration):
-            self.CalculDistance()
-            self.UpdateBestInd()
-            self.ChaseSwarming()
-            self.Dispersion()
-            self.fitness.ComputeScorePopulation(self.population.population, data)
-            self.UpdateBestInd()
-            self.RuthlessBehavior()
-            print(self.bestIndScore)
-            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
-                           self.path + str(i))
-            graph.Graph3D()
+        self.UpdateBestInd()
+        self.RuthlessBehavior()
+        self.executionTime = time() - t1
+        print(self.bestIndScore)
+
 

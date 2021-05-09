@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
+from time import time
 
 class MOSAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
@@ -14,13 +15,14 @@ class MOSAARM:
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
-        self.tempInitial = tempInitial
+        self.temp = tempInitial
         self.nbIterationPerTemp = nbIterationPerTemp
         self.nbChanges = nbChanges
         self.alpha = alpha
         self.save = save
         self.display = display
         self.path = path
+        self.executionTime = 0
 
     def GenerateRule(self,i):
         ind = copy.deepcopy(self.population.population[i])
@@ -31,8 +33,8 @@ class MOSAARM:
 
 
 
-    def Run(self,data):
-        T = self.tempInitial
+    def Run(self,data,i):
+        t1 = time()
         for k in range(self.nbIteration):
             self.fitness.ComputeScorePopulation(self.population.population,data)
             for j in range(self.population.populationSize):
@@ -45,10 +47,8 @@ class MOSAARM:
                         self.population.population[j] = copy.deepcopy(newRule)
                     else:
                         r = rd.random()
-                        if np.exp(-delta/T)>r and delta != 0 and sum(newRuleScore) !=0:
+                        if np.exp(-delta/self.temp)>r and delta != 0 and sum(newRuleScore) !=0:
                             self.population.population[j] = copy.deepcopy(newRule)
-            T*=self.alpha
+            self.temp*=self.alpha
+            self.executionTime = time()-t1
             print(self.fitness.scores)
-            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
-                           self.path + str(k))
-            graph.Graph3D()

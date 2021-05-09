@@ -5,6 +5,7 @@ import copy
 from src.Utils.Fitness import *
 from src.Utils.Population import *
 from src.Utils.Graphs import *
+from time import time
 
 """
 article :
@@ -33,6 +34,7 @@ class MOPSO:
         self.save = save
         self.display = display
         self.path = path
+        self.executionTime = 0
 
         self.InitSpeed()
         self.InitPersonalBest()
@@ -114,19 +116,15 @@ class MOPSO:
 
 
 
-    def Run(self,data):
-        for i in range(self.nbIteration):
-            self.Fitness.ComputeScorePopulation(self.population.population,data)
-            self.UpdateParetoFront()
-            self.UpdatePersonalBest()
-            self.UpdateSpeed()
-            self.UpdatePosition()
-            print('iteration numero : ' + str(i))
-            print(self.globalBestFitness)
-            #print(self.paretoFront)
-            graph = Graphs(self.fitness.objectivesNames, self.fitness.scores, self.save, self.display,
-                           self.path + str(i))
-            graph.Graph3D()
+    def Run(self,data,i):
+        t1 = time()
+        self.Fitness.ComputeScorePopulation(self.population.population,data)
+        self.UpdateParetoFront()
+        self.UpdatePersonalBest()
+        self.UpdateSpeed()
+        self.UpdatePosition()
+        self.executionTime = time() - t1
+        print(self.globalBestFitness)
 
 
 
