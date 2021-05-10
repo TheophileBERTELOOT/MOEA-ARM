@@ -146,6 +146,5 @@ class HMOFAARM:
         self.FastNonDominatedSort(self.population)
         self.FindParetoFront()
         self.executionTime = time() - t1
-        print(self.paretoFrontScore)
 
 

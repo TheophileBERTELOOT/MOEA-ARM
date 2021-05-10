@@ -7,7 +7,7 @@ from time import time
 
 class NSGAII:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
-                 objectiveNames,data,mutationRate = 0.1, crossOverRate = 0.5,
+                 objectiveNames,data,mutationRate = 0.01, crossOverRate = 0.5,
                  save=True,display=True,path='Figures/'):
         self.P = Population('horizontal_binary',populationSize,nbItem)
         self.Q = Population('horizontal_binary',populationSize,nbItem)

@@ -69,4 +69,4 @@ class MOWSAARM:
                 escapeSpot = self.GenerateEscape()
                 self.population.population[j] = escapeSpot
         self.executionTime = time() - t1
-        print(self.fitness.scores)
+

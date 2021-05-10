@@ -32,13 +32,13 @@ class CSOARM:
         for i in range(1,len(matesScore)):
             if self.fitness.Domination(matesScore[i],matesScore[dominant]) == -1:
                 dominant = i
-        return i
+        return dominant
 
     def ChaseSwarming(self):
         step = rd.random()
         for i in range(self.population.populationSize):
             mates = []
-            distance = self.distance[:,i]
+            distance = self.distance[i,:]
             for j in range(self.population.populationSize):
                 if distance[j] < self.visualScope:
                     mates.append(j)
@@ -51,7 +51,7 @@ class CSOARM:
 
     def CalculDistance(self):
         for i in range(self.population.populationSize):
-            for j in range(i) :
+            for j in range(self.population.populationSize) :
                 dst = distance.euclidean(self.population.population[i], self.population.population[j])
                 self.distance[i,j] = dst
 
@@ -73,8 +73,6 @@ class CSOARM:
             if r<self.ruthlessRatio:
                 self.population.population[i] = copy.deepcopy(self.bestInd)
 
-
-
     def Run(self,data,i):
         t1 = time()
         self.CalculDistance()
@@ -85,6 +83,6 @@ class CSOARM:
         self.UpdateBestInd()
         self.RuthlessBehavior()
         self.executionTime = time() - t1
-        print(self.bestIndScore)
+
 
 

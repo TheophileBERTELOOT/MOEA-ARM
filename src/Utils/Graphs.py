@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib.colors import ListedColormap
 
 class Graphs:
-    def __init__(self,objectiveNames,data,save=True,display=True,path='Figures/'):
+    def __init__(self,objectiveNames,data,save=True,display=True,path='./Figures/'):
         self.objectiveNames = objectiveNames
         self.data = data
         self.save = save
@@ -22,8 +22,12 @@ class Graphs:
             os.mkdir(p)
 
     def GraphExecutionTime(self):
+        fig = plt.figure()
         sns.lineplot(x='i',y='execution Time',hue='algorithm',data=self.data)
-        plt.show()
+        if self.display:
+            plt.show()
+        if self.save:
+            fig.savefig(self.path+".png")
 
     def GraphScores(self):
         fig = plt.figure()
@@ -36,9 +40,14 @@ class Graphs:
         for alg in self.data.algorithm.unique():
             ax.scatter(self.data[self.data.algorithm==alg][self.objectiveNames[0]],
                        self.data[self.data.algorithm==alg][self.objectiveNames[1]],
-                       self.data[self.data.algorithm==alg][self.objectiveNames[2]])
+                       self.data[self.data.algorithm==alg][self.objectiveNames[2]],
+                       label=alg)
+        ax.legend()
 
-        plt.show()
+        if self.display:
+            plt.show()
+        if self.save:
+            fig.savefig(self.path+".png")
 
     def Graph3D(self):
         fig = plt.figure()

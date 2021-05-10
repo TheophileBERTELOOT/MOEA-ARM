@@ -77,6 +77,6 @@ class MOCatSOARM:
             else:
                 self.Resting(j,data)
         self.executionTime = time() - t1
-        print(self.bestCatScore)
+
 
 

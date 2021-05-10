@@ -51,4 +51,3 @@ class MOSAARM:
                             self.population.population[j] = copy.deepcopy(newRule)
             self.temp*=self.alpha
             self.executionTime = time()-t1
-            print(self.fitness.scores)

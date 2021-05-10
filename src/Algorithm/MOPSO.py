@@ -30,7 +30,7 @@ class MOPSO:
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.paretoFront = []
-        self.Fitness = Fitness('horizontal_binary',objectiveNames,self.population.populationSize)
+        self.fitness = Fitness('horizontal_binary',objectiveNames,self.population.populationSize)
         self.save = save
         self.display = display
         self.path = path
@@ -53,11 +53,14 @@ class MOPSO:
         self.personalBests = np.array(self.personalBests)
         self.personalBestsFitness = np.array(self.personalBestsFitness)
 
+
     def InitGlobalBest(self):
         self.globalBest = []
         for i in range(self.nbItem*2):
             self.globalBest.append(0.0)
         self.globalBest = np.array(self.globalBest)
+        self.paretoFront = np.array([copy.deepcopy(self.globalBest)])
+        self.globalBestFitness = np.array([[0 for i in range(self.nbObjectifs)]])
 
     def InitSpeed(self):
         self.speeds = []
@@ -70,26 +73,21 @@ class MOPSO:
 
 
     def UpdateParetoFront(self):
-        bestIndexs = self.IdentifyPareto(self.population.population,self.Fitness.scores)
-        if len(self.paretoFront) == 0:
-            self.paretoFront = self.population.population[bestIndexs]
-            self.globalBestFitness = self.Fitness.scores[bestIndexs]
-        else:
-            bestIndexs = self.IdentifyPareto(self.population.population, self.Fitness.scores)
-            candidateParetoFront = self.population.population[bestIndexs]
-            candidateFitness = self.Fitness.scores[bestIndexs]
-            population = np.concatenate([self.paretoFront,candidateParetoFront],axis=0)
-            populationScore = np.concatenate([self.globalBestFitness,candidateFitness],axis=0)
-            bestIndexs = self.IdentifyPareto(population, populationScore)
+        bestIndexs = self.IdentifyPareto( self.fitness.scores)
+        if len(bestIndexs) != 0:
+            candidateParetoFront = copy.deepcopy(self.population.population[bestIndexs])
+            candidateFitness = copy.deepcopy(self.fitness.scores[bestIndexs])
+            population = np.concatenate([copy.deepcopy(self.paretoFront),candidateParetoFront],axis=0)
+            populationScore = np.concatenate([copy.deepcopy(self.globalBestFitness),candidateFitness],axis=0)
+            bestIndexs = self.IdentifyPareto( populationScore)
             self.paretoFront = population[bestIndexs]
             self.globalBestFitness = populationScore[bestIndexs]
-
-        self.globalBest = rd.choice(self.paretoFront)
+            self.globalBest = rd.choice(self.paretoFront)
 
     def UpdatePersonalBest(self):
         for i in range(self.population.populationSize):
-            if self.Fitness.Domination(self.Fitness.scores[i],self.personalBestsFitness[i]) == -1:
-                self.personalBestsFitness[i] = self.Fitness.scores[i]
+            if self.fitness.Domination(self.fitness.scores[i],self.personalBestsFitness[i]) == -1:
+                self.personalBestsFitness[i] = self.fitness.scores[i]
                 self.personalBests[i] = copy.deepcopy(self.population.population[i])
 
     def UpdateSpeed(self):
@@ -98,16 +96,22 @@ class MOPSO:
             r2 = rd.random()
             self.speeds[i] = self.inertie*self.speeds[i]+self.localAcceleration*r1*(self.personalBests[i]-self.population.population[i])+self.globalAcceleration*r2*(self.globalBest-self.population.population[i])
 
-    def IdentifyPareto(self,population,score):
-        population_size = population.shape[0]
+    def IdentifyPareto(self,score):
+        population_size = score.shape[0]
         population_ids = np.arange(population_size)
         pareto_front = np.ones(population_size, dtype=bool)
+        uniqueScores = []
         for i in range(population_size):
             for j in range(population_size):
-                # Check if our 'i' pint is dominated by out 'j' point
-                if all(score[j] >= score[i]) and any(score[j] > score[i]):
-                    pareto_front[i] = 0
+                domination = self.fitness.Domination(score[j],score[i])
+                if domination == -1 :
+                    pareto_front[i] = False
                     break
+            if pareto_front[i] and not list(score[i]) in uniqueScores:
+                uniqueScores.append(list(score[i]))
+            else:
+                pareto_front[i] = False
+
         return population_ids[pareto_front]
 
     def UpdatePosition(self):
@@ -118,13 +122,13 @@ class MOPSO:
 
     def Run(self,data,i):
         t1 = time()
-        self.Fitness.ComputeScorePopulation(self.population.population,data)
+        self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdateParetoFront()
         self.UpdatePersonalBest()
         self.UpdateSpeed()
         self.UpdatePosition()
         self.executionTime = time() - t1
-        print(self.globalBestFitness)
+
 
 
 
