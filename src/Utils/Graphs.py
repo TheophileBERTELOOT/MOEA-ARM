@@ -49,6 +49,9 @@ class Graphs:
         if self.save:
             fig.savefig(self.path+".png")
 
+
+
+
     def Graph3D(self):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')

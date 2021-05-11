@@ -16,11 +16,11 @@ nbIteration = 20
 populationSize = 200
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
-algorithmNameList = ['MOTLBOARM']
-#algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm']
+#algorithmNameList = ['MOTLBOARM','MOCatSOARM']
+algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
-data = pd.read_csv('Data/congress.csv')
+data = pd.read_csv('Data/risk.csv')
 data = data.to_numpy()
 mopso = MOPSO(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
 #mobarm = MOBARM(data.shape[1],populationSize,nbIteration,10,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/MOBARM/')
@@ -32,8 +32,8 @@ mowsaarm = MOWSAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames)
 mocatsoarm = MOCatSOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOCatSOARM/')
 motlboarm = MOTLBOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOTLBOARM/')
 
-#algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm]
-algorithmList = [motlboarm]
+algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm]
+#algorithmList = [motlboarm,mocatsoarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
@@ -45,6 +45,7 @@ for i in range(nbIteration):
         k+=1
     graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=False)
     graph.GraphScores()
+    perf.UpdateLeaderBoard()
     perf.FreeScores()
 graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time')
 graph.GraphExecutionTime()

@@ -37,7 +37,7 @@ class MOTLBOARM:
     def Run(self,data,i):
         t1 = time()
         self.fitness.ComputeScorePopulation(self.population.population,data)
-        M = np.array([np.average(self.population.population[i,:]) for i in range(self.nbItem*2)])
+        M = np.array([np.average(self.population.population[:,i]) for i in range(self.nbItem*2)])
         self.UpdateTeacher()
         self.TF = np.round(1+rd.random()*rd.randint(1,2))
         self.Diff = rd.random()*(self.teacher-self.TF*M)
