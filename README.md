@@ -34,7 +34,7 @@ perf.UpdateLeaderBoard()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
  
-# List of avaible algorithms
+# List of avaible a lgorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
 > DEB, Kalyanmoy, PRATAP, Amrit, AGARWAL, Sameer, et al. A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE transactions on evolutionary computation, 2002, vol. 6, no 2, p. 182-197.
 * MOWSAARM *MultiObjective Wolf Search Algorithm Association Rules Mining*
