@@ -54,4 +54,4 @@ perf.UpdateLeaderBoard()
 * MOTLBOARM *MultiObjective Teaching learning Based Optimization Association Rules Mining*
 > SARZAEIM, Parisa, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Teaching-learning-based optimization (TLBO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 51-58.
 
-
+ 
