@@ -20,3 +20,5 @@ Gather a huge amount of multi objectives evolutionnary algorithm for solve the a
 * MOCatSOARM *MultiObjective Cat Swarm Optimization Association Rules Mining*
 > BAHRAMI, Mahdi, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Cat swarm optimization (CSO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 9-18.
 
+# Figure example :
+![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Comparison/comparison.gif "Comparison of found Pareto front")
