@@ -19,6 +19,8 @@ Gather a huge amount of multi objectives evolutionnary algorithm for solve the a
 > COELLO, CA Coello et LECHUGA, Maximino Salazar. MOPSO: A proposal for multiple objective particle swarm optimization. In : Proceedings of the 2002 Congress on Evolutionary Computation. CEC'02 (Cat. No. 02TH8600). IEEE, 2002. p. 1051-1056.
 * MOCatSOARM *MultiObjective Cat Swarm Optimization Association Rules Mining*
 > BAHRAMI, Mahdi, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Cat swarm optimization (CSO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 9-18.
+* MOTLBOARM *MultiObjective Teaching learning Based Optimization Association Rules Mining*
+> SARZAEIM, Parisa, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Teaching-learning-based optimization (TLBO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 51-58.
 
 # Figure example :
 ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Comparison/comparison.gif "Comparison of found Pareto front")
