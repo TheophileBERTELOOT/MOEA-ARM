@@ -10,9 +10,9 @@ objectiveNames = ['support','confidence','klosgen']
   algorithmNameList = ['CSOARM','MOPSO']
   perf = Performances(algorithmNameList,criterionList,objectiveNames)
 ```
-There is an exemample for update the performance compoment, usually in the main loop
+There is an exemample for update the performance component, usually in the main loop
 ```python
-  perf.UpdatePerformances(score=alg.fitness.paretoFront,i=i,algorithmName=algorithmNameList[k])
+  perf.UpdatePerformances(score=alg.fitness.paretoFront,executionTime=alg.executionTime,i=i,algorithmName=algorithmNameList[k])
 ```
   ## Domination scores graph
   ```python
