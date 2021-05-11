@@ -2,7 +2,39 @@
 Multi Objectives Evolutionnary Algorithm - Association rules mining
 # Introduction
 Gather a huge amount of multi objectives evolutionnary algorithm for solve the association rules mining problem. This library provide state of the art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPU.
-# list of avaible algorithms
+# Performance analysis tools
+There is an example for instanciate the performance component.
+```python
+objectiveNames = ['support','confidence','klosgen']
+  criterionList = ['scores','execution time']
+  algorithmNameList = ['CSOARM','MOPSO']
+  perf = Performances(algorithmNameList,criterionList,objectiveNames)
+```
+There is an exemample for update the performance compoment, usually in the main loop
+```python
+  perf.UpdatePerformances(score=alg.fitness.paretoFront,i=i,algorithmName=algorithmNameList[k])
+```
+  ## Domination scores graph
+  ```python
+  graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=False)
+  graph.GraphScores()
+  ```
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/comparison.gif "Comparison of found Pareto front")
+  ## Execution time graph
+  Display the execution time for each iteration of each algorithm
+  ```python
+  graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time')
+  graph.GraphExecutionTime()
+  ```
+   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/ExecutionTime.PNG "Execution time")
+  ## LeaderBoard
+  the leaderboard display a sorted list of the average number of dominated solution by each solution by algorithm.
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
+  ```python
+  perf.UpdateLeaderBoard()
+  ```
+ 
+# List of avaible algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
 > DEB, Kalyanmoy, PRATAP, Amrit, AGARWAL, Sameer, et al. A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE transactions on evolutionary computation, 2002, vol. 6, no 2, p. 182-197.
 * MOWSAARM *MultiObjective Wolf Search Algorithm Association Rules Mining*
@@ -22,5 +54,4 @@ Gather a huge amount of multi objectives evolutionnary algorithm for solve the a
 * MOTLBOARM *MultiObjective Teaching learning Based Optimization Association Rules Mining*
 > SARZAEIM, Parisa, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Teaching-learning-based optimization (TLBO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 51-58.
 
-# Figure example :
-![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Comparison/comparison.gif "Comparison of found Pareto front")
+
