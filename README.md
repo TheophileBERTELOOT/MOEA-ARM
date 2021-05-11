@@ -26,13 +26,13 @@ There is an exemample for update the performance compoment, usually in the main 
   graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time')
   graph.GraphExecutionTime()
   ```
-   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/ExecutionTime.PNG "Execution time")
+   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/ExecutionTime.png "Execution time")
   ## LeaderBoard
   the leaderboard display a sorted list of the average number of dominated solution by each solution by algorithm.
-  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
   ```python
   perf.UpdateLeaderBoard()
   ```
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
  
 # List of avaible algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
