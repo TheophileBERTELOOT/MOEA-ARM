@@ -1,7 +1,7 @@
 # MOEA-ARM
 Multi Objectives Evolutionary Algorithm - Association rules mining
 # Introduction
-Gather a huge amount of multi objectives evolutionary algorithm for solve the association rules mining problem. This library provide state-of-the-art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPUs.
+Gather a huge number of multi objectives evolutionary algorithm for solve the association rules mining problem. This library provide state-of-the-art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPUs.
 # Performance analysis tools
 There is an example of instantiate the performance component.
 ```python
