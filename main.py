@@ -20,7 +20,7 @@ criterionList = ['scores','execution time']
 algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
-data = pd.read_csv('Data/risk.csv')
+data = pd.read_csv('Data/congress.csv')
 data = data.to_numpy()
 mopso = MOPSO(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
 #mobarm = MOBARM(data.shape[1],populationSize,nbIteration,10,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/MOBARM/')
