@@ -53,5 +53,7 @@ perf.UpdateLeaderBoard()
 > BAHRAMI, Mahdi, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Cat swarm optimization (CSO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 9-18.
 * MOTLBOARM *MultiObjective Teaching learning Based Optimization Association Rules Mining*
 > SARZAEIM, Parisa, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Teaching-learning-based optimization (TLBO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 51-58.
+* MOFPAARM *MultiObjective Flower Pollination Algorithm Association Rules Mining*
+> AZAD, Marzie, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Flower pollination algorithm (FPA). In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 59-67.
 
  
