@@ -1,16 +1,16 @@
 # MOEA-ARM
-Multi Objectives Evolutionnary Algorithm - Association rules mining
+Multi Objectives Evolutionary Algorithm - Association rules mining
 # Introduction
-Gather a huge amount of multi objectives evolutionnary algorithm for solve the association rules mining problem. This library provide state of the art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPU.
+Gather a huge amount of multi objectives evolutionary algorithm for solve the association rules mining problem. This library provide state-of-the-art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPUs.
 # Performance analysis tools
-There is an example for instanciate the performance component.
+There is an example of instantiate the performance component.
 ```python
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
 algorithmNameList = ['CSOARM','MOPSO']
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 ```
-There is an exemample for update the performance component, usually in the main loop
+There is an example of update the performance component, usually in the main loop
 ```python
 perf.UpdatePerformances(score=alg.fitness.paretoFront,executionTime=alg.executionTime,i=i,algorithmName=algorithmNameList[k])
 ```
@@ -34,7 +34,7 @@ perf.UpdateLeaderBoard()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
  
-# List of avaible a lgorithms
+# List of available algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
 > DEB, Kalyanmoy, PRATAP, Amrit, AGARWAL, Sameer, et al. A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE transactions on evolutionary computation, 2002, vol. 6, no 2, p. 182-197.
 * MOWSAARM *MultiObjective Wolf Search Algorithm Association Rules Mining*
