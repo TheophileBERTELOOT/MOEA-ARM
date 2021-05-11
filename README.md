@@ -6,31 +6,31 @@ Gather a huge amount of multi objectives evolutionnary algorithm for solve the a
 There is an example for instanciate the performance component.
 ```python
 objectiveNames = ['support','confidence','klosgen']
-  criterionList = ['scores','execution time']
-  algorithmNameList = ['CSOARM','MOPSO']
-  perf = Performances(algorithmNameList,criterionList,objectiveNames)
+criterionList = ['scores','execution time']
+algorithmNameList = ['CSOARM','MOPSO']
+perf = Performances(algorithmNameList,criterionList,objectiveNames)
 ```
 There is an exemample for update the performance component, usually in the main loop
 ```python
-  perf.UpdatePerformances(score=alg.fitness.paretoFront,executionTime=alg.executionTime,i=i,algorithmName=algorithmNameList[k])
+perf.UpdatePerformances(score=alg.fitness.paretoFront,executionTime=alg.executionTime,i=i,algorithmName=algorithmNameList[k])
 ```
   ## Domination scores graph
   ```python
-  graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=False)
-  graph.GraphScores()
+graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=False)
+graph.GraphScores()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/comparison.gif "Comparison of found Pareto front")
   ## Execution time graph
   Display the execution time for each iteration of each algorithm
   ```python
-  graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time')
-  graph.GraphExecutionTime()
+graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time')
+graph.GraphExecutionTime()
   ```
    ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/ExecutionTime.png "Execution time")
   ## LeaderBoard
   the leaderboard display a sorted list of the average number of dominated solution by each solution by algorithm.
   ```python
-  perf.UpdateLeaderBoard()
+perf.UpdateLeaderBoard()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
  
