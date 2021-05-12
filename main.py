@@ -10,6 +10,7 @@ from src.Algorithm.MOWSAARM import *
 from src.Algorithm.MOCatSOARM import *
 from src.Algorithm.MOTLBOARM import *
 from src.Algorithm.MOFPAARM import *
+from src.Algorithm.MOALOARM import *
 
 from src.Utils.Performances import *
 
@@ -17,7 +18,7 @@ nbIteration = 20
 populationSize = 200
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
-algorithmNameList = ['MOTLBOARM','MOFPAARM']
+algorithmNameList = ['MOALOARM','MOFPAARM']
 #algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
@@ -33,9 +34,10 @@ mowsaarm = MOWSAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames)
 mocatsoarm = MOCatSOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOCatSOARM/')
 motlboarm = MOTLBOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOTLBOARM/')
 mofpaarm = MOFPAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOFPAARM/')
+moaloarm = MOALOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOALOARM/')
 
 #algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm]
-algorithmList = [motlboarm,mofpaarm]
+algorithmList = [moaloarm,mofpaarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
