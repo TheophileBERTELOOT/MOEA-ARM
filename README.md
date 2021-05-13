@@ -57,5 +57,7 @@ perf.UpdateLeaderBoard()
 > AZAD, Marzie, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Flower pollination algorithm (FPA). In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 59-67.
 * MOALOARM *MultiObjective Ant Lion Optimization Association Rule Mining*
 > MANI, Melika, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Ant lion optimizer (ALO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 105-116.
+* MODAARM *MultiObjective Dragonfly Algorithm Association Rule Mining*
+> ZOLGHADR-ASLI, Babak, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Dragonfly Algorithm (DA). In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 151-159.
 
  
