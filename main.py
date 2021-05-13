@@ -19,8 +19,8 @@ nbIteration = 20
 populationSize = 200
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
-algorithmNameList = ['MODAARM','MOFPAARM']
-#algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm']
+#algorithmNameList = ['MODAARM','MOFPAARM']
+algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 data = pd.read_csv('Data/congress.csv')
@@ -38,8 +38,8 @@ mofpaarm = MOFPAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames)
 moaloarm = MOALOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOALOARM/')
 modaarm = MODAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MODAARM/')
 
-#algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm]
-algorithmList = [modaarm,mofpaarm]
+algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm]
+#algorithmList = [modaarm,mofpaarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
@@ -49,11 +49,11 @@ for i in range(nbIteration):
         print(algorithmNameList[k])
         print(alg.fitness.paretoFront)
         k+=1
-    graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=False)
+    graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=True)
     graph.GraphScores()
     perf.UpdateLeaderBoard()
     perf.FreeScores()
-graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time')
+graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time',display=True)
 graph.GraphExecutionTime()
 
 
