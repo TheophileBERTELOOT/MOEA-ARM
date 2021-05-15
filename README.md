@@ -59,5 +59,7 @@ perf.UpdateLeaderBoard()
 > MANI, Melika, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Ant lion optimizer (ALO) algorithm. In : Advanced optimization by nature-inspired algorithms. Springer, Singapore, 2018. p. 105-116.
 * MODAARM *MultiObjective Dragonfly Algorithm Association Rule Mining*
 > ZOLGHADR-ASLI, Babak, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Dragonfly Algorithm (DA). In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 151-159.
+* MOHBSOTSARM *MultiObjective Hybrid Bee Swarm Optimization Tabu Search Association Rule Mining*
+>DJENOURI, Youcef, HABBAS, Zineb, DJENOURI, Djamel, et al. Diversification heuristics in bees swarm optimization for association rules mining. In : Pacific-Asia Conference on Knowledge Discovery and Data Mining. Springer, Cham, 2017. p. 68-78.
 
  
