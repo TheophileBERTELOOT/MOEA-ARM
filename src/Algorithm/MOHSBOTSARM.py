@@ -1,0 +1,102 @@
+from src.Utils.Fitness import *
+from src.Utils.Population import *
+import matplotlib.pyplot as plt
+import pandas as pd
+from scipy.spatial import distance
+from src.Utils.Graphs import *
+from time import time
+
+class MOHSBOTSARM:
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
+                    nbChanges = 5, nbNeighbours = 50,
+                 save=True,display=True,path='Figures/'):
+        populationSize = nbItem*2
+        self.population = Population('horizontal_binary', populationSize, nbItem)
+        self.nbItem = nbItem
+        self.nbIteration = nbIteration
+        self.nbObjectifs = nbObjectifs
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.bestInd = copy.deepcopy(self.population.population[rd.randint(0,populationSize-1)])
+        self.bestIndScore = []
+        self.tabooList = []
+        self.danceTable = []
+        self.danceTableScore = []
+        self.save = save
+        self.display = display
+        self.path = path
+        self.executionTime = 0
+        self.nbNeighbours = nbNeighbours
+        self.nbChanges = nbChanges
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.UpdateBestInd()
+
+
+    def UpdateBestInd(self):
+        indexs = np.arange(self.population.populationSize)
+        paretoFront = np.ones(self.population.populationSize)
+        for i in range(self.population.populationSize):
+            for j in range(self.population.populationSize):
+                domination = self.fitness.Domination(self.fitness.scores[i],self.fitness.scores[j])
+                if domination == 1:
+                    paretoFront[i] = 0
+                    break
+        candidate = indexs[paretoFront == 1]
+        index = rd.choice(candidate)
+        self.bestInd = copy.deepcopy(self.population.population[index])
+        self.bestIndScore = copy.deepcopy(self.fitness.scores[index])
+
+    def FindSearchRegion(self):
+        for i in range(self.population.populationSize):
+            self.population.population[i] = self.population.InitIndividual_HorizontalBinary()
+            self.population.population[i,i] = self.bestInd[i]
+
+    def LocalSearch(self,bee,data):
+        bestInd = []
+        bestScore = np.zeros(self.nbObjectifs,dtype=float)
+        for j in range(self.nbNeighbours):
+            ind = copy.deepcopy(self.population.population[bee])
+            nbChange = rd.randint(1,self.nbChanges)
+            for i in range(nbChange):
+                index = rd.randint(0,self.nbItem*2-1)
+                ind[index] = rd.randint(-1,1)
+            score = self.fitness.ComputeScoreIndividual(ind,data)
+            domination = self.fitness.Domination(bestScore,score)
+            if domination == 1:
+                bestScore = score
+                bestInd = ind
+        return bestInd,bestScore
+
+    def BestOfDance(self):
+        indexs = np.arange(self.population.populationSize)
+        paretoFront = np.ones(self.population.populationSize)
+        for i in range(self.population.populationSize):
+            for j in range(self.population.populationSize):
+                domination = self.fitness.Domination(self.danceTableScore[i], self.danceTableScore[j])
+                if domination == 1:
+                    paretoFront[i] = 0
+                    break
+        candidate = indexs[paretoFront == 1]
+        index = rd.choice(candidate)
+        self.bestInd = copy.deepcopy(self.danceTable[index])
+        self.bestIndScore = copy.deepcopy(self.danceTableScore[index])
+
+    def Run(self,data,i):
+        t1 = time()
+        self.danceTable = []
+        self.danceTableScore = []
+        self.tabooList.append(list(self.bestInd))
+        self.FindSearchRegion()
+        self.fitness.ComputeScorePopulation(self.population.population,data)
+        for j in range(self.population.populationSize):
+            bestInd,bestScore = self.LocalSearch(j,data)
+            self.danceTable.append(bestInd)
+            self.danceTableScore.append(bestScore)
+        self.danceTable = np.array(self.danceTable)
+        self.danceTableScore = np.array(self.danceTableScore)
+        if list(self.bestInd) in self.tabooList:
+            index = rd.randint(0,len(self.tabooList)-1)
+            self.bestInd = copy.deepcopy(self.tabooList[index])
+        self.executionTime = time() - t1
+
+
+

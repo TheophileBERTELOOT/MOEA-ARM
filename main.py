@@ -12,6 +12,7 @@ from src.Algorithm.MOTLBOARM import *
 from src.Algorithm.MOFPAARM import *
 from src.Algorithm.MOALOARM import *
 from src.Algorithm.MODAARM import *
+from src.Algorithm.MOHSBOTSARM import *
 
 from src.Utils.Performances import *
 
@@ -19,8 +20,8 @@ nbIteration = 20
 populationSize = 200
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
-#algorithmNameList = ['MODAARM','MOFPAARM']
-algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm']
+algorithmNameList = ['MODAARM','MOHSBOTSARM']
+#algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 data = pd.read_csv('Data/congress.csv')
@@ -37,9 +38,11 @@ motlboarm = MOTLBOARM(data.shape[1],populationSize,nbIteration,len(objectiveName
 mofpaarm = MOFPAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOFPAARM/')
 moaloarm = MOALOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOALOARM/')
 modaarm = MODAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MODAARM/')
+mohsbotsarm = MOHSBOTSARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MODAARM/')
 
-algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm]
-#algorithmList = [modaarm,mofpaarm]
+
+#algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm]
+algorithmList = [modaarm,mohsbotsarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
