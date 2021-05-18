@@ -15,6 +15,7 @@ from src.Algorithm.MODAARM import *
 from src.Algorithm.MOHSBOTSARM import *
 
 from src.Utils.Performances import *
+from src.Utils.Data import *
 
 nbIteration = 20
 populationSize = 200
@@ -24,21 +25,24 @@ algorithmNameList = ['MODAARM','MOHSBOTSARM']
 #algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
-data = pd.read_csv('Data/congress.csv')
-data = data.to_numpy()
-mopso = MOPSO(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
-#mobarm = MOBARM(data.shape[1],populationSize,nbIteration,10,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/MOBARM/')
-nsgaii = NSGAII(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/NSGAII/')
-csoarm = CSOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=True,path='Figures/CSOARM/')
-hmofaarm = HMOFAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/HMOFAARM/')
-mosaarm = MOSAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/MOSAARM/')
-mowsaarm = MOWSAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOWSAARM/')
-mocatsoarm = MOCatSOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOCatSOARM/')
-motlboarm = MOTLBOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOTLBOARM/')
-mofpaarm = MOFPAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOFPAARM/')
-moaloarm = MOALOARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MOALOARM/')
-modaarm = MODAARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MODAARM/')
-mohsbotsarm = MOHSBOTSARM(data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,data,save=True,display=False,path='Figures/MODAARM/')
+d = Data('Data/Transform/abalone.data',header=0,indexCol=0)
+#d.TransformToHorizontalBinary()
+#d.Save('Data/Transform/abalone.data')
+d.ToNumpy()
+
+mopso = MOPSO(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
+#mobarm = MOBARM(d.data.shape[1],populationSize,nbIteration,10,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/MOBARM/')
+nsgaii = NSGAII(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data,save=True,display=False,path='Figures/NSGAII/')
+csoarm = CSOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data,save=True,display=True,path='Figures/CSOARM/')
+hmofaarm = HMOFAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/HMOFAARM/')
+mosaarm = MOSAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=True,path='Figures/MOSAARM/')
+mowsaarm = MOWSAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOWSAARM/')
+mocatsoarm = MOCatSOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOCatSOARM/')
+motlboarm = MOTLBOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,save=True,display=False,path='Figures/MOTLBOARM/')
+mofpaarm = MOFPAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data,save=True,display=False,path='Figures/MOFPAARM/')
+moaloarm = MOALOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data,save=True,display=False,path='Figures/MOALOARM/')
+modaarm = MODAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data,save=True,display=False,path='Figures/MODAARM/')
+mohsbotsarm = MOHSBOTSARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data,save=True,display=False,path='Figures/MODAARM/')
 
 
 #algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm]
@@ -46,7 +50,7 @@ algorithmList = [modaarm,mohsbotsarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
-        alg.Run(data,i)
+        alg.Run(d.data,i)
         alg.fitness.GetParetoFront()
         perf.UpdatePerformances(score=alg.fitness.paretoFront,executionTime=alg.executionTime,i=i,algorithmName=algorithmNameList[k])
         print(algorithmNameList[k])
