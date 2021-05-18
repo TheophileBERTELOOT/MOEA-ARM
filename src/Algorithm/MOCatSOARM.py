@@ -20,8 +20,8 @@ class MOCatSOARM:
         self.velocitySize = velocitySize
         self.SMP = SMP
         self.SRD =SRD
-        self.bestCat = []
-        self.bestCatScore = [0 for _ in range(nbObjectifs)]
+        self.bestCat = np.zeros(nbItem*2,dtype=float)
+        self.bestCatScore = np.zeros(nbObjectifs,dtype=float)
         self.save = save
         self.display = display
         self.path = path
@@ -33,7 +33,7 @@ class MOCatSOARM:
         for i in range(nbChanges):
             index = rd.randint(0,self.nbItem*2-1)
             velocity[index] = float(rd.randint(-1,1))
-        return velocity
+        return np.array(velocity)
 
     def UpdateBestInd(self):
         for i in range(self.population.populationSize):
