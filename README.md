@@ -2,6 +2,20 @@
 Multi Objectives Evolutionary Algorithm - Association rule mining
 # Introduction
 Gather a huge number of multi objectives evolutionary algorithm for solve the association rule mining problem. This library provide state-of-the-art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPUs.
+# Hyperparameters managment 
+It's possible to perform a RandomSearch on the hyperparameters of an algorithm and next save then load latter hyperparameters with the best performances. You can do this using this template :
+```python
+populationSize = 200
+nbIteration = 10,
+objectiveNames = ['support','confidence','klosgen']
+parameterNames = ['s','a','c','f','e','w']
+d = Data('Data/Transform/congress.csv',header=0,indexCol=0)
+d.ToNumpy()
+modaarm = MODAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
+hyper = HyperParameters(parameterNames)
+hyper.RandomSearch(30,modaarm,d.data)
+hyper.SaveBestParameters('HyperParameters/MODAARM/bestParameters.json')
+```
 # Performance analysis tools
 There is an example of instantiate the performance component.
 ```python
