@@ -8,27 +8,27 @@ from time import time
 import numpy as np
 import scipy.special
 from sklearn.preprocessing import MinMaxScaler
+from src.Utils.HyperParameters import *
 
 class MODAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 minDist = 8,nbChanges = 5,s=0.5,a=0.5,c=0.5,f=0.5,e=0.05,w=0.3,
-                 save=True,display=True,path='Figures/'):
+                 minDist = 8,nbChanges = 5,hyperParameters = HyperParameters(['s','a','c','f','e','w'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
-        self.food = np.zeros
-        self.predator = []
+        self.food = np.zeros(nbItem*2,dtype=float)
+        self.predator = np.zeros(nbItem*2,dtype=float)
         self.executionTime = 0
         self.minDist = minDist
         self.nbChanges= nbChanges
-        self.s=s
-        self.a=a
-        self.c=c
-        self.f=f
-        self.e=e
-        self.w=w
+        self.s=hyperParameters.hyperParameters['s']
+        self.a=hyperParameters.hyperParameters['a']
+        self.c=hyperParameters.hyperParameters['c']
+        self.f=hyperParameters.hyperParameters['f']
+        self.e=hyperParameters.hyperParameters['e']
+        self.w=hyperParameters.hyperParameters['w']
         self.distance = np.zeros((populationSize,populationSize),dtype=float)
         self.velocity = np.zeros((populationSize,nbItem*2),dtype=float)
         self.orientaiton = np.zeros((populationSize,nbItem*2),dtype=float)
@@ -128,6 +128,24 @@ class MODAARM:
         sigma = np.power((self.gamma(1+beta )*np.sin(np.pi*beta/2))/(self.gamma((1+beta)/2)*beta*np.power(2,(beta-1)/2)),1/beta)
         levy = 0.01* (rd.random()*sigma)/(np.power(rd.random(),1/beta))
         self.population.population[df] = self.population.population[df] + rd.randint(-1,1)*levy * self.population.population[df]
+
+    def ResetPopulation(self,data,hyperParameters):
+        self.s = hyperParameters.hyperParameters['s']
+        self.a = hyperParameters.hyperParameters['a']
+        self.c = hyperParameters.hyperParameters['c']
+        self.f = hyperParameters.hyperParameters['f']
+        self.e = hyperParameters.hyperParameters['e']
+        self.w = hyperParameters.hyperParameters['w']
+        self.population.InitPopulation()
+        self.food = np.zeros(self.nbItem * 2, dtype=float)
+        self.predator = np.zeros(self.nbItem * 2, dtype=float)
+        self.distance = np.zeros((self.population.populationSize, self.population.populationSize), dtype=float)
+        self.velocity = np.zeros((self.population.populationSize, self.nbItem * 2), dtype=float)
+        self.orientaiton = np.zeros((self.population.populationSize, self.nbItem * 2), dtype=float)
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.UpdatePredator()
+        self.UpdateFood()
+        self.CalculDistance()
 
     def Run(self,data,i):
         t1 = time()

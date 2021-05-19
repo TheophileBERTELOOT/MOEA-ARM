@@ -7,21 +7,21 @@ from src.Utils.Graphs import *
 from time import time
 import numpy as np
 from scipy.stats import levy
+from src.Utils.HyperParameters import *
 
 class MOFPAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                P = 0.5,lambd= 1.5, gamma = 0.5,nbChanges=5,
-                 save=True,display=True,path='Figures/'):
+                hyperParameters = HyperParameters(['P','gamma']) ,lambd= 1.5 , nbChanges=5):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
-        self.P =P
+        self.P = hyperParameters.hyperParameters['P']
         self.lambd = lambd
         self.bestSolution = []
         self.bestSolutionScore = 0
-        self.gamma = gamma
+        self.gamma = hyperParameters.hyperParameters['gamma']
         self.nbChanges =nbChanges
         self.executionTime = 0
         self.fitness.ComputeScorePopulation(self.population.population, data)

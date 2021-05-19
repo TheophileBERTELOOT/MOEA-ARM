@@ -5,26 +5,25 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import time
+from src.Utils.HyperParameters import *
+
 
 class MOCatSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
-                mixtureRatio = 0.1,velocitySize=3,velocityRatio = 0.5,SMP=10, SRD = 3,
-                 save=True,display=False,path='Figures/'):
+                hyperParameters = HyperParameters(['mixtureRatio','velocityRatio']) ,velocitySize=3,SMP=10, SRD = 3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
-        self.mixtureRatio = mixtureRatio
-        self.velocityRatio = velocityRatio
+        self.mixtureRatio = hyperParameters.hyperParameters['mixtureRatio']
+        self.velocityRatio = hyperParameters.hyperParameters['velocityRatio']
         self.velocitySize = velocitySize
         self.SMP = SMP
         self.SRD =SRD
         self.bestCat = np.zeros(nbItem*2,dtype=float)
         self.bestCatScore = np.zeros(nbObjectifs,dtype=float)
-        self.save = save
-        self.display = display
-        self.path = path
+
         self.executionTime = 0
 
     def GenerateVelocity(self):

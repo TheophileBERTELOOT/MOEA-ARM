@@ -8,9 +8,7 @@ from time import time
 import numpy as np
 
 class MOTLBOARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
-
-                 save=True,display=True,path='Figures/'):
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration

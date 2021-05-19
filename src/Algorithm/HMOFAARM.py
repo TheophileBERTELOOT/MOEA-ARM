@@ -5,26 +5,24 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import  time
+from src.Utils.HyperParameters import *
 
 class HMOFAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
-                 nbSolution=10,alpha = 0.5,beta0 = 1.0,crossOverRate=0.5,
-                 save=True,display=True,path='Figures/'):
+                 nbSolution=10,hyperParameters = HyperParameters(['alpha','beta0','crossOverRate']),
+                ):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
-        self.alpha = alpha
-        self.beta0 = beta0
+        self.alpha = hyperParameters.hyperParameters['alpha']
+        self.beta0 = hyperParameters.hyperParameters['beta0']
         self.gamma = 1/((self.nbItem*2)**2)
-        self.crossOverRate = crossOverRate
+        self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.nbSolution = nbSolution
         self.paretoFront = []
         self.paretoFrontScore = []
-        self.save = save
-        self.display = display
-        self.path = path
         self.executionTime = 0
 
 

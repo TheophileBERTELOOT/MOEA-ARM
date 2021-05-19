@@ -5,11 +5,12 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import time
+from src.Utils.HyperParameters import *
 
 class MOHSBOTSARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                     nbChanges = 5, nbNeighbours = 50,
-                 save=True,display=True,path='Figures/'):
+                 ):
         populationSize = nbItem*2
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
@@ -21,9 +22,7 @@ class MOHSBOTSARM:
         self.tabooList = []
         self.danceTable = []
         self.danceTableScore = []
-        self.save = save
-        self.display = display
-        self.path = path
+
         self.executionTime = 0
         self.nbNeighbours = nbNeighbours
         self.nbChanges = nbChanges

@@ -5,11 +5,11 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import time
+from src.Utils.HyperParameters import *
 
 class MOWSAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
-                 visionRange=10,nbPrey=10,step=2,velocityFactor=0.3,enemyProb=0.01,
-                 save=True,display=False,path='Figures/'):
+                 visionRange=10,nbPrey=10,step=2,hyperParameters = HyperParameters(['velocityFactor','enemyProb'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -17,12 +17,10 @@ class MOWSAARM:
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
         self.visionRange = visionRange
         self.step = step
-        self.velocityFactor = velocityFactor
-        self.enemyProb = enemyProb
+        self.velocityFactor = hyperParameters.hyperParameters['velocityFactor']
+        self.enemyProb = hyperParameters.hyperParameters['enemyProb']
         self.nbPrey = nbPrey
-        self.save = save
-        self.display = display
-        self.path = path
+
         self.executionTime = 0
 
     def GenerateRule(self, i,data):

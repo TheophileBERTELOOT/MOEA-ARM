@@ -1,11 +1,28 @@
 import pandas as pd
 import numpy as np
+import random as rd
 
 class Data:
-    def __init__(self,path,header=None,indexCol=None,nbSample = 10):
-        self.data = pd.read_csv(path,header=header,index_col =indexCol)
+    def __init__(self,path='',header=None,indexCol=None,nbSample = 10,artificial=False,nbRow=2000,nbItem=50):
+
+        self.artificial = artificial
+        self.nbRow=nbRow
+        self.nbItem = nbItem
         self.nbSample = nbSample
         self.labels = []
+        if self.artificial:
+            self.GenerateArtificialData()
+        else:
+            self.data = pd.read_csv(path, header=header, index_col=indexCol)
+
+    def GenerateArtificialData(self):
+        data = []
+        for i in range(self.nbRow):
+            row = []
+            for j in range(self.nbItem):
+                row.append(rd.randint(0,1))
+            data.append(row)
+        self.data = pd.DataFrame(np.array(data))
 
     def TransformToHorizontalBinary(self):
         transformed = []

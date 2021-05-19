@@ -4,22 +4,22 @@ import copy
 from src.Utils.Fitness import *
 from src.Utils.Population import *
 from src.Utils.Graphs import *
+from src.Utils.HyperParameters import *
 """
 article :
 """
 
 class MOBARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbPoints, nbObjectifs, objectiveNames ,
-                 beta = 0.7,gamma = 0.1, alpha =0.9,
-                 save=True,display=True,path='Figures/'):
+                 hyperParameters = HyperParameters(['beta','gamma', 'alpha'])):
         self.population = Population('horizontal_index',populationSize,nbItem)
         self.fitnessScore = []
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.beta = beta
-        self.alpha = alpha
-        self.gamma = gamma
+        self.beta = hyperParameters.hyperParameters['beta']
+        self.alpha = hyperParameters.hyperParameters['alpha']
+        self.gamma = hyperParameters.hyperParameters['gamma']
         self.nbPoints = nbPoints
         self.frontPareto = []
         self.frontParetoFitness = []
@@ -30,9 +30,7 @@ class MOBARM:
         self.fitness = Fitness('horizontal_index', objectiveNames, self.population.populationSize)
         self.bestFitness = 0
         self.bestIndividual = np.array([])
-        self.save = save
-        self.display = display
-        self.path = path
+
 
         self.InitCoefs()
         self.InitPopulation()

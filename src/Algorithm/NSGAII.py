@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from src.Utils.Graphs import *
 from time import time
+from src.Utils.HyperParameters import *
 
 class NSGAII:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
-                 objectiveNames,data,mutationRate = 0.01, crossOverRate = 0.5,
-                 save=True,display=True,path='Figures/'):
+                 objectiveNames,data,hyperParameters = HyperParameters(['mutationRate', 'crossOverRate'])):
         self.P = Population('horizontal_binary',populationSize,nbItem)
         self.Q = Population('horizontal_binary',populationSize,nbItem)
         self.R = Population('horizontal_binary',populationSize*2,nbItem)
@@ -18,12 +18,9 @@ class NSGAII:
         self.nbObjectifs = nbObjectifs
         self.fitness = Fitness('horizontal_binary',objectiveNames,populationSize*2)
         self.fitnessFirstGeneration = Fitness('horizontal_binary',objectiveNames,populationSize)
-        self.mutationRate = mutationRate
-        self.crossOverRate = crossOverRate
+        self.mutationRate = hyperParameters.hyperParameters['mutationRate']
+        self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.rank = [0 for _ in range(self.R.populationSize)]
-        self.save = save
-        self.display = display
-        self.path = path
         self.executionTime = 0
 
         self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)

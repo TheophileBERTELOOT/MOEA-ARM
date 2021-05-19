@@ -49,6 +49,7 @@ class Performances:
             self.leaderBoard[i] = self.leaderBoard[i]/len(solutionsi)
         self.leaderBoardSorted = list(zip(self.leaderBoard, self.algorithmList))
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
+        print(self.scores)
         print(self.leaderBoardSorted)
 
 

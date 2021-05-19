@@ -5,11 +5,11 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import time
+from src.Utils.HyperParameters import *
 
 class CSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 visualScope=10,ruthlessRatio =0.01,step=3,
-                 save=True,display=True,path='Figures/'):
+                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=10,step=3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -18,12 +18,9 @@ class CSOARM:
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0,populationSize-1)])
         self.bestIndScore = 0
         self.visualScope = visualScope
-        self.ruthlessRatio = ruthlessRatio
+        self.ruthlessRatio = hyperParameters.hyperParameters['ruthlessRatio']
         self.step = step
         self.distance = np.array([[0 for i in range(populationSize)] for j in range(populationSize)])
-        self.save = save
-        self.display = display
-        self.path = path
         self.executionTime = 0
         self.fitness.ComputeScorePopulation(self.population.population, data)
 

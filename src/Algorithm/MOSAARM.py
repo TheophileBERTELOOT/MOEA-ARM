@@ -5,11 +5,11 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import time
+from src.Utils.HyperParameters import *
 
 class MOSAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
-                 tempInitial = 1,nbIterationPerTemp=100,nbChanges=2,alpha = 0.9,
-                 save=True,display=True,path='Figures/'):
+                 tempInitial = 1,nbIterationPerTemp=100,nbChanges=2,hyperParameters = HyperParameters(['alpha'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -18,10 +18,7 @@ class MOSAARM:
         self.temp = tempInitial
         self.nbIterationPerTemp = nbIterationPerTemp
         self.nbChanges = nbChanges
-        self.alpha = alpha
-        self.save = save
-        self.display = display
-        self.path = path
+        self.alpha = hyperParameters.hyperParameters['alpha']
         self.executionTime = 0
 
     def GenerateRule(self,i):

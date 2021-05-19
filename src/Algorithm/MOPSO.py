@@ -6,7 +6,7 @@ from src.Utils.Fitness import *
 from src.Utils.Population import *
 from src.Utils.Graphs import *
 from time import time
-
+from src.Utils.HyperParameters import *
 """
 article :
 """
@@ -15,8 +15,7 @@ article :
 
 class MOPSO:
     def __init__(self,nbItem, populationSize, nbIteration, nbObjectifs, objectiveNames ,
-                 inertie=0.5, localAccelaration = 0.5, globalAcceleration = 0.5,
-                 save=True,display=True,path='Figures/'):
+                 hyperParameters = HyperParameters(['inertie', 'localAccelaration', 'globalAcceleration'])):
         self.population = Population('horizontal_binary',populationSize,nbItem)
         self.speeds = []
         self.personalBests = []
@@ -24,16 +23,14 @@ class MOPSO:
         self.globalBest = []
         self.globalBestFitness = []
         self.nbItem = nbItem
-        self.inertie = inertie
-        self.localAcceleration = localAccelaration
-        self.globalAcceleration = globalAcceleration
+        self.inertie = hyperParameters.hyperParameters['inertie']
+        self.localAcceleration = hyperParameters.hyperParameters['localAccelaration']
+        self.globalAcceleration = hyperParameters.hyperParameters['globalAcceleration']
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.paretoFront = []
         self.fitness = Fitness('horizontal_binary',objectiveNames,self.population.populationSize)
-        self.save = save
-        self.display = display
-        self.path = path
+
         self.executionTime = 0
 
         self.InitSpeed()
