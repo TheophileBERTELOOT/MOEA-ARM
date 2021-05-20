@@ -47,6 +47,14 @@ graph.GraphExecutionTime()
 perf.UpdateLeaderBoard()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
+  
+  ## Number of Rules
+  This graph allow to know how many rules each algorithm find in his pareto front. There is how compute and display the number of rules.
+   ```python
+graph = Graphs(objectiveNames, perf.nbRules, path='./Figures/Comparison/nbRules' + str(i), display=True)
+graph.GraphNbRules()
+  ```
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.PNG "nbRules")
  
 # List of available algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
