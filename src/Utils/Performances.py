@@ -6,11 +6,12 @@ class Performances:
         self.algorithmList = algorithmList
         self.criterionList = criterionList
         self.objectiveNames = objectiveNames
-        self.leaderBoard = np.array([0 for i in range(len(algorithmList))])
+        self.leaderBoard = np.zeros(len(algorithmList),dtype=float)
         self.Init()
 
     def InitScores(self):
         self.columnsScores = ['algorithm'] + self.objectiveNames
+        self.nbRules = pd.DataFrame(columns=['algorithm','nbRules'])
         self.scores = pd.DataFrame(columns=self.columnsScores)
 
     def InitExecutionTime(self):
@@ -29,8 +30,10 @@ class Performances:
     def UpdatePerformances(self,score = [],executionTime=[],i=0,algorithmName=''):
         if 'scores' in self.criterionList:
             score = [[algorithmName]+list(score[i]) for i in range(len(score))]
+            nbRule = pd.DataFrame([[algorithmName,len(score)]],columns=['algorithm','nbRules'])
             scoreDF = pd.DataFrame(score,columns=self.columnsScores)
             self.scores = self.scores.append(scoreDF, ignore_index=True)
+            self.nbRules = self.nbRules.append(nbRule,ignore_index=True)
         if 'execution time' in self.criterionList:
             executionTimeDF = pd.DataFrame([[i,algorithmName,executionTime]],columns=self.columnsET)
             self.executionTime = self.executionTime.append(executionTimeDF, ignore_index=True)
@@ -46,7 +49,7 @@ class Performances:
                     domination = fitness.Domination(solutionsi[j],solutionsj[k])
                     if domination == -1:
                         self.leaderBoard[i]+=1
-            self.leaderBoard[i] = self.leaderBoard[i]/len(solutionsi)
+            self.leaderBoard[i] = self.leaderBoard[i]/(len(solutionsi)+len(solutionsj))
         self.leaderBoardSorted = list(zip(self.leaderBoard, self.algorithmList))
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
         print(self.scores)

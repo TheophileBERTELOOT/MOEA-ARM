@@ -59,6 +59,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\Utils\Graphs.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\Utils\Performances.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

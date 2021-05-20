@@ -21,6 +21,16 @@ class Graphs:
         if not pathExist :
             os.mkdir(p)
 
+    def GraphNbRules(self):
+        fig = plt.figure()
+        sns.barplot(x='algorithm', y='nbRules', data=self.data)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        if self.save:
+            fig.savefig(self.path + ".png")
+
     def GraphExecutionTime(self):
         fig = plt.figure()
         sns.lineplot(x='i',y='execution Time',hue='algorithm',data=self.data)

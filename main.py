@@ -19,28 +19,28 @@ from src.Utils.Data import *
 from src.Utils.HyperParameters import *
 
 '''
-populationSize = 200
+populationSize = 300
 nbIteration = 10,
 objectiveNames = ['support','confidence','klosgen']
 parameterNames = ['s','a','c','f','e','w']
-d = Data('Data/Transform/congress.csv',header=0,indexCol=0)
+d = Data('Data/Transform/chess.data',header=0,indexCol=0)
 d.ToNumpy()
 modaarm = MODAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 hyper = HyperParameters(parameterNames)
-hyper.RandomSearch(30,modaarm,d.data)
+hyper.RandomSearch(100,modaarm,d.data)
 hyper.SaveBestParameters('HyperParameters/MODAARM/bestParameters.json')
 '''
 
-nbIteration = 20
+nbIteration = 10
 populationSize = 200
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
-algorithmNameList = ['MODAARM','MOHSBOTSARM']
-#algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm']
+#algorithmNameList = ['MODAARM','MOHSBOTSARM']
+algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm','MOHSBOTSARM']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 d = Data(artificial=True)
-d = Data('Data/Transform/abalone.data',header=0,indexCol=0)
+d = Data('Data/Transform/congress.csv',header=0,indexCol=0)
 #d.TransformToHorizontalBinary()
 #d.Save('Data/Transform/abalone.data')
 d.ToNumpy()
@@ -60,8 +60,8 @@ modaarm = MODAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames)
 mohsbotsarm = MOHSBOTSARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 
 
-#algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm]
-algorithmList = [modaarm,mohsbotsarm]
+algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm,mohsbotsarm]
+#algorithmList = [modaarm,mohsbotsarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
@@ -71,13 +71,15 @@ for i in range(nbIteration):
         print(algorithmNameList[k])
         print(alg.fitness.paretoFront)
         k+=1
+
     graph = Graphs(objectiveNames,perf.scores,path='./Figures/Comparison/paretoFront'+str(i),display=True)
     graph.GraphScores()
+    graph = Graphs(objectiveNames, perf.nbRules, path='./Figures/Comparison/nbRules' + str(i), display=True)
+    graph.GraphNbRules()
     perf.UpdateLeaderBoard()
     perf.FreeScores()
 graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/execution_time',display=True)
 graph.GraphExecutionTime()
-
 
 
 

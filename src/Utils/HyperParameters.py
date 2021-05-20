@@ -36,7 +36,7 @@ class HyperParameters:
                 perf.UpdateLeaderBoard()
                 best = perf.leaderBoard[0]
                 candidate = perf.leaderBoard[1]
-                if candidate>=best:
+                if candidate>best:
                     candidateScores = perf.scores[perf.scores['algorithm'] == 'candidate']
                     candidateScores['algorithm'] = 'best'
                     perf.scores = copy.deepcopy(candidateScores)

@@ -55,7 +55,10 @@ class MOALOARM:
                 domination = self.fitness.Domination(self.fitness.scores[i],self.fitness.scores[j])
                 if domination == 1:
                     candidate.append(i)
-        index = rd.choice(candidate)
+        if len(candidate) == 0:
+            index= rd.randint(0,self.lions.populationSize-1)
+        else:
+            index = rd.choice(candidate)
         return index
 
     def UpdateBounds(self,i):
