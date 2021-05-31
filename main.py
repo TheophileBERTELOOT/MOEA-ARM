@@ -3,7 +3,7 @@ import pandas as pd
 from src.Algorithm.MOPSO import *
 from src.Algorithm.MOBARM import *
 from src.Algorithm.NSGAII import *
-from src.Algorithm.CSOARM import *
+from src.Algorithm.MOCSOARM import *
 from src.Algorithm.HMOFAARM import *
 from src.Algorithm.MOSAARM import *
 from src.Algorithm.MOWSAARM import *
@@ -13,6 +13,7 @@ from src.Algorithm.MOFPAARM import *
 from src.Algorithm.MOALOARM import *
 from src.Algorithm.MODAARM import *
 from src.Algorithm.MOHSBOTSARM import *
+from src.Algorithm.MODEARM import *
 
 from src.Utils.Performances import *
 from src.Utils.Data import *
@@ -35,11 +36,11 @@ nbIteration = 10
 populationSize = 200
 objectiveNames = ['support','confidence','klosgen']
 criterionList = ['scores','execution time']
-#algorithmNameList = ['MODAARM','MOHSBOTSARM']
-algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm','MOHSBOTSARM']
+algorithmNameList = ['MOCSOARM','MODEARM']
+#algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm','MOHSBOTSARM']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
-d = Data(artificial=True)
+#d = Data(artificial=True)
 d = Data('Data/Transform/congress.csv',header=0,indexCol=0)
 #d.TransformToHorizontalBinary()
 #d.Save('Data/Transform/abalone.data')
@@ -48,7 +49,7 @@ d.ToNumpy()
 mopso = MOPSO(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
 #mobarm = MOBARM(d.data.shape[1],populationSize,nbIteration,10,len(objectiveNames),objectiveNames)
 nsgaii = NSGAII(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
-csoarm = CSOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
+mocsoarm = MOCSOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 hmofaarm = HMOFAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
 mosaarm = MOSAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
 mowsaarm = MOWSAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames)
@@ -58,10 +59,11 @@ mofpaarm = MOFPAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveName
 moaloarm = MOALOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 modaarm = MODAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 mohsbotsarm = MOHSBOTSARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
+modearm = MODEARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 
 
-algorithmList = [csoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm,mohsbotsarm]
-#algorithmList = [modaarm,mohsbotsarm]
+#algorithmList = [mocsoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm,mohsbotsarm]
+algorithmList = [mocsoarm,modearm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
