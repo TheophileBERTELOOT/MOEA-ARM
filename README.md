@@ -54,7 +54,7 @@ perf.UpdateLeaderBoard()
 graph = Graphs(objectiveNames, perf.nbRules, path='./Figures/Comparison/nbRules' + str(i), display=True)
 graph.GraphNbRules()
   ```
-  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.PNG "nbRules")
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.png "nbRules")
  
 # List of available algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
