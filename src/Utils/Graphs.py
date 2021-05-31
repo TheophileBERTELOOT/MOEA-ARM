@@ -42,7 +42,10 @@ class Graphs:
     def GraphScores(self):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-
+        ax.set_xlim3d(0, 1)
+        ax.set_ylim3d(0, 1)
+        #a Changer si on a une IM avec un interval de definition autre
+        ax.set_zlim3d(0, 1)
         ax.set_xlabel(self.objectiveNames[0])
         ax.set_ylabel(self.objectiveNames[1])
         ax.set_zlabel(self.objectiveNames[2])

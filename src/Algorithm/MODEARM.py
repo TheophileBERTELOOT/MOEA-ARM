@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MODEARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['F','CR']),visualScope=10,step=3):
+                 hyperParameters = HyperParameters(['F','CR'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
