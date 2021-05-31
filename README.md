@@ -87,4 +87,5 @@ graph.GraphNbRules()
 >ALATAS, Bilal, AKIN, Erhan, et KARCI, Ali. MODENAR: Multi-objective differential evolution algorithm for mining numeric association rules. Applied Soft Computing, 2008, vol. 8, no 1, p. 646-656.
 * NSHSDEARM *Non-Dominated Sorting Harmony Search Differential Evolution Association Rule Mining*
 >YAZDI, Jafar, CHOI, Young Hwan, et KIM, Joong Hoon. Non-dominated sorting harmony search differential evolution (NS-HS-DE): A hybrid algorithm for multi-objective design of water distribution networks. Water, 2017, vol. 9, no 8, p. 587.
- 
+*MOGEAARM *MultiObjective Gradient Evolution Algorithm Association Rule Mining*
+>ABDI-DEHKORDI, Mehri, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Gradient Evolution (GE) Algorithm. In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 117-130.
