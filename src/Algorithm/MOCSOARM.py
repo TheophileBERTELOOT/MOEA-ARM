@@ -71,11 +71,13 @@ class MOCSOARM:
                 self.population.population[i] = copy.deepcopy(self.bestInd)
 
     def Run(self,data,i):
+
         t1 = time()
         self.CalculDistance()
         self.UpdateBestInd()
         self.ChaseSwarming()
         self.Dispersion()
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateBestInd()
         self.RuthlessBehavior()

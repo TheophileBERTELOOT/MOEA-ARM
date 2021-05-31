@@ -148,8 +148,10 @@ class NSGAII:
         self.P.SetPopulation(np.array(currentPopulation))
 
     def Run(self,data,i):
+
         t1 = time()
         self.R.SetPopulation(np.concatenate([self.P.population,self.Q.population],axis=0))
+        self.R.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.R.population, data)
         self.FastNonDominatedSort(self.R)
         self.SelectCurrentPopulation()

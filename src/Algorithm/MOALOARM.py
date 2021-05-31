@@ -88,6 +88,7 @@ class MOALOARM:
 
 
     def Run(self,data,i):
+
         t1 = time()
         for i in range(self.ants.populationSize):
             lion = self.SelectLions()
@@ -100,6 +101,8 @@ class MOALOARM:
             self.fitnessAnts.scores[i] = copy.deepcopy(score)
             if domination == 1:
                 self.lions.population[lion] = copy.deepcopy(self.ants.population[i])
+        self.ants.CheckIfNull()
+        self.lions.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.lions.population,data)
         self.UpdateElite()
         self.executionTime = time() - t1

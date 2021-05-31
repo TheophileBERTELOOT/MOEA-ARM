@@ -137,8 +137,10 @@ class HMOFAARM:
 
 
     def Run(self,data,i):
+
         t1 = time()
         self.UpdateAlpha(i)
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdatePopulation(data)
         self.FastNonDominatedSort(self.population)

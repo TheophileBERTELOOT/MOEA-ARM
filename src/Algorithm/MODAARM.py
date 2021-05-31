@@ -148,6 +148,7 @@ class MODAARM:
         self.CalculDistance()
 
     def Run(self,data,i):
+
         t1 = time()
         self.minDist -=0.1
         self.UpdateOrientation()
@@ -157,6 +158,7 @@ class MODAARM:
                 self.population.population[j] = self.population.population[j] + self.orientaiton[j]
             else:
                 self.RandomWalk(j)
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdateFood()
         self.UpdatePredator()

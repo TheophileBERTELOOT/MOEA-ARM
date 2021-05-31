@@ -114,10 +114,12 @@ class MOBARM:
 
 
     def Run(self,data):
+
         for i in range(self.nbPoints):
             t = 0
             while t < self.nbIteration:
                 laws = self.population.population[:,[np.arange(2,self.nbItem)]]
+                self.population.CheckIfNull()
                 self.fitness.ComputeScorePopulation(laws,data)
                 self.UpdatePopulation()
                 self.UpdateBestIndividual()

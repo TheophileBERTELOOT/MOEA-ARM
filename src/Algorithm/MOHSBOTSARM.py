@@ -80,11 +80,13 @@ class MOHSBOTSARM:
         self.bestIndScore = copy.deepcopy(self.danceTableScore[index])
 
     def Run(self,data,i):
+
         t1 = time()
         self.danceTable = []
         self.danceTableScore = []
         self.tabooList.append(list(self.bestInd))
         self.FindSearchRegion()
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population,data)
         for j in range(self.population.populationSize):
             bestInd,bestScore = self.LocalSearch(j,data)

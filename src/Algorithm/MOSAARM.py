@@ -31,8 +31,10 @@ class MOSAARM:
 
 
     def Run(self,data,i):
+
         t1 = time()
         for k in range(self.nbIteration):
+            self.population.CheckIfNull()
             self.fitness.ComputeScorePopulation(self.population.population,data)
             for j in range(self.population.populationSize):
                 for m in range(self.nbIterationPerTemp):

@@ -65,6 +65,7 @@ class MOCatSOARM:
 
     def Run(self,data,i):
         t1 = time()
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdateBestInd()
         for j in range(self.population.populationSize):

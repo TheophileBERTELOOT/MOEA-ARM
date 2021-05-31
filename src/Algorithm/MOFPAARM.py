@@ -46,6 +46,7 @@ class MOFPAARM:
         self.bestSolution = copy.deepcopy(self.population.population[index])
 
     def Run(self,data,i):
+
         t1 = time()
         r = rd.random()
         if r>self.P:
@@ -64,7 +65,7 @@ class MOFPAARM:
                 domination = self.fitness.Domination(score, self.fitness.scores[i])
                 if domination == -1:
                     self.population.population[i] = copy.deepcopy(n)
-
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdateBestSolution()
         self.executionTime = time() - t1

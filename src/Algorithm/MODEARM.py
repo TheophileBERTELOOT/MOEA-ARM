@@ -54,10 +54,12 @@ class MODEARM:
 
 
     def Run(self,data,i):
+
         t1 = time()
         self.Mutation()
         self.CrossOver()
         self.Selection(data)
+        self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.executionTime = time() - t1
 
