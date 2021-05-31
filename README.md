@@ -83,5 +83,6 @@ graph.GraphNbRules()
 > ZOLGHADR-ASLI, Babak, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Dragonfly Algorithm (DA). In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 151-159.
 * MOHBSOTSARM *MultiObjective Hybrid Bee Swarm Optimization Tabu Search Association Rule Mining*
 >DJENOURI, Youcef, HABBAS, Zineb, DJENOURI, Djamel, et al. Diversification heuristics in bees swarm optimization for association rules mining. In : Pacific-Asia Conference on Knowledge Discovery and Data Mining. Springer, Cham, 2017. p. 68-78.
-
+* MODEARM *MultiObjective Differential Evolution Association Rule Mining*
+>ALATAS, Bilal, AKIN, Erhan, et KARCI, Ali. MODENAR: Multi-objective differential evolution algorithm for mining numeric association rules. Applied Soft Computing, 2008, vol. 8, no 1, p. 646-656.
  
