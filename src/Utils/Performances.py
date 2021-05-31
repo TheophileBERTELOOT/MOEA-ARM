@@ -39,7 +39,7 @@ class Performances:
             self.executionTime = self.executionTime.append(executionTimeDF, ignore_index=True)
 
     def UpdateLeaderBoard(self):
-        self.leaderBoard = np.array([0 for i in range(len(self.algorithmList))])
+        self.leaderBoard = np.array([0 for i in range(len(self.algorithmList))],dtype=float)
         fitness = Fitness('horizontal_binary',self.objectiveNames,0)
         for i in range(len(self.algorithmList)):
             solutionsi = self.scores[self.scores['algorithm'] == self.algorithmList[i]][self.objectiveNames].to_numpy()
