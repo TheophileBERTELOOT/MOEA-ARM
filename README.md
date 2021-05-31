@@ -85,4 +85,6 @@ graph.GraphNbRules()
 >DJENOURI, Youcef, HABBAS, Zineb, DJENOURI, Djamel, et al. Diversification heuristics in bees swarm optimization for association rules mining. In : Pacific-Asia Conference on Knowledge Discovery and Data Mining. Springer, Cham, 2017. p. 68-78.
 * MODEARM *MultiObjective Differential Evolution Association Rule Mining*
 >ALATAS, Bilal, AKIN, Erhan, et KARCI, Ali. MODENAR: Multi-objective differential evolution algorithm for mining numeric association rules. Applied Soft Computing, 2008, vol. 8, no 1, p. 646-656.
+* NSHSDEARM *Non-Dominated Sorting Harmony Search Differential Evolution Association Rule Mining*
+>YAZDI, Jafar, CHOI, Young Hwan, et KIM, Joong Hoon. Non-dominated sorting harmony search differential evolution (NS-HS-DE): A hybrid algorithm for multi-objective design of water distribution networks. Water, 2017, vol. 9, no 8, p. 587.
  
