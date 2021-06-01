@@ -89,3 +89,5 @@ graph.GraphNbRules()
 >YAZDI, Jafar, CHOI, Young Hwan, et KIM, Joong Hoon. Non-dominated sorting harmony search differential evolution (NS-HS-DE): A hybrid algorithm for multi-objective design of water distribution networks. Water, 2017, vol. 9, no 8, p. 587.
 * MOGEAARM *MultiObjective Gradient Evolution Algorithm Association Rule Mining*
 >ABDI-DEHKORDI, Mehri, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Gradient Evolution (GE) Algorithm. In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 117-130.
+* MOGSAARM *MultiObjective Gravitantional Search Algorithm Association Rule Mining*
+> RASHEDI, Esmat, NEZAMABADI-POUR, Hossein, et SARYAZDI, Saeid. GSA: a gravitational search algorithm. Information sciences, 2009, vol. 179, no 13, p. 2232-2248.
