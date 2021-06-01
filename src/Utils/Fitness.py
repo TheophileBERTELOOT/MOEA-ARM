@@ -74,6 +74,15 @@ class Fitness:
         else:
             return np.sqrt(suppRule)*((suppRule/suppAntecedent)-suppConsequent)
 
+    def Cosine(self, indexRule, indexAntecedent, indexConsequent, data):
+        suppAntecedent = SuppGPU(indexAntecedent, data)
+        suppRule = SuppGPU(indexRule, data)
+        suppConsequent = SuppGPU(indexConsequent, data)
+        if suppAntecedent == 0 or suppConsequent == 0 or suppRule == 0:
+            return 0
+        else:
+            return suppRule/np.sqrt(suppAntecedent*suppConsequent)
+
     def ComputeScoreIndividual(self,individual,data):
         score = [0 for _ in range(self.nbObjectives)]
         for j in range(self.nbObjectives):
@@ -91,6 +100,8 @@ class Fitness:
                 score[j] = self.Accuracy(indexRule,data)
             if objective == 'klosgen':
                 score[j] = self.Klosgen(indexRule,indexAntecedent,indexConsequent,data)
+            if objective == 'cosine':
+                score[j] = self.Cosine(indexRule, indexAntecedent, indexConsequent, data)
         return np.array(score)
 
     def ComputeScorePopulation(self,population,data):

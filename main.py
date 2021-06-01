@@ -38,10 +38,11 @@ hyper.SaveBestParameters('HyperParameters/MODAARM/bestParameters.json')
 
 nbIteration = 10
 populationSize = 200
-objectiveNames = ['support','confidence','accuracy']
+objectiveNames = ['support','confidence','cosine']
 criterionList = ['scores','execution time']
 algorithmNameList = ['MOCSOARM','MOSSOARM']
-#algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm','MOHSBOTSARM']
+algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm',
+                     'mofpaarm','moaloarm','modaarm','mohsbotsarm','modearm','nshsdearm','mogeaarm','mogsaarm','mossoarm']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 #d = Data(artificial=True)
@@ -70,8 +71,8 @@ mogsaarm = MOGSAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveName
 mossoarm = MOSSOARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 
 
-#algorithmList = [mocsoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm,mohsbotsarm]
-algorithmList = [mocsoarm,mossoarm]
+algorithmList = [mocsoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm,mohsbotsarm,modearm,nshsdearm,mogeaarm,mogsaarm,mossoarm]
+#algorithmList = [mocsoarm,mossoarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
