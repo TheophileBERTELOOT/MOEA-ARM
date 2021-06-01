@@ -91,3 +91,5 @@ graph.GraphNbRules()
 >ABDI-DEHKORDI, Mehri, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Gradient Evolution (GE) Algorithm. In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 117-130.
 * MOGSAARM *MultiObjective Gravitantional Search Algorithm Association Rule Mining*
 > RASHEDI, Esmat, NEZAMABADI-POUR, Hossein, et SARYAZDI, Saeid. GSA: a gravitational search algorithm. Information sciences, 2009, vol. 179, no 13, p. 2232-2248.
+* MOSSOARM *MultiObjective Social-Spider Optimization Association Rule Mining*
+>CUEVAS, Erik, CIENFUEGOS, Miguel, ZALDÍVAR, Daniel, et al. A swarm optimization algorithm inspired in the behavior of the social-spider. Expert Systems with Applications, 2013, vol. 40, no 16, p. 6374-6384.
