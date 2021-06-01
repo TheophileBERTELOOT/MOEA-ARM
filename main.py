@@ -16,6 +16,7 @@ from src.Algorithm.MOHSBOTSARM import *
 from src.Algorithm.MODEARM import *
 from src.Algorithm.NSHSDEARM import *
 from src.Algorithm.MOGEAARM import *
+from src.Algorithm.MOGSAARM import *
 
 from src.Utils.Performances import *
 from src.Utils.Data import *
@@ -38,7 +39,7 @@ nbIteration = 10
 populationSize = 200
 objectiveNames = ['support','confidence','accuracy']
 criterionList = ['scores','execution time']
-algorithmNameList = ['MOCSOARM','MOGEAARM']
+algorithmNameList = ['MOCSOARM','MOGSAARM']
 #algorithmNameList = ['CSOARM','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm','modaarm','MOHSBOTSARM']
 
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
@@ -64,10 +65,11 @@ mohsbotsarm = MOHSBOTSARM(d.data.shape[1],populationSize,nbIteration,len(objecti
 modearm = MODEARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 nshsdearm = NSHSDEARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 mogeaarm = MOGEAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
+mogsaarm = MOGSAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 
 
 #algorithmList = [mocsoarm,mopso,nsgaii,hmofaarm,mowsaarm,mocatsoarm,motlboarm,mofpaarm,moaloarm,modaarm,mohsbotsarm]
-algorithmList = [mocsoarm,mogeaarm]
+algorithmList = [mocsoarm,mogsaarm]
 for i in range(nbIteration):
     k = 0
     for alg in algorithmList:
