@@ -8,7 +8,7 @@ from time import time
 from src.Utils.HyperParameters import *
 
 class MOWSAARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                  visionRange=10,nbPrey=10,step=2,hyperParameters = HyperParameters(['velocityFactor','enemyProb'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem

@@ -14,7 +14,7 @@ article :
 
 
 class MOPSO:
-    def __init__(self,nbItem, populationSize, nbIteration, nbObjectifs, objectiveNames ,
+    def __init__(self,nbItem, populationSize, nbIteration, nbObjectifs, objectiveNames ,data,
                  hyperParameters = HyperParameters(['inertie', 'localAccelaration', 'globalAcceleration'])):
         self.population = Population('horizontal_binary',populationSize,nbItem)
         self.speeds = []

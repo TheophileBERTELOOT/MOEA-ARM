@@ -8,7 +8,7 @@ from time import  time
 from src.Utils.HyperParameters import *
 
 class HMOFAARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                  nbSolution=10,hyperParameters = HyperParameters(['alpha','beta0','crossOverRate']),
                 ):
         self.population = Population('horizontal_binary', populationSize, nbItem)

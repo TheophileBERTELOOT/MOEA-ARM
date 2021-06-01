@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib.colors import ListedColormap
 
 class Graphs:
-    def __init__(self,objectiveNames,data,save=True,display=True,path='./Figures/'):
+    def __init__(self,objectiveNames,data,save=True,display=False,path='./Figures/'):
         self.objectiveNames = objectiveNames
         self.data = data
         self.save = save

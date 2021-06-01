@@ -1,6 +1,7 @@
 import pandas as pd
 from src.Utils.Graphs import *
 from src.Utils.Fitness import *
+from os import path,mkdir
 class Performances:
     def __init__(self,algorithmList,criterionList,objectiveNames=[]):
         self.algorithmList = algorithmList
@@ -54,6 +55,26 @@ class Performances:
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
         print(self.scores)
         print(self.leaderBoardSorted)
+
+    def SaveIntermediaryPerf(self,p,i):
+        scorePath = p+'Score/'
+        nbRulesPath = p+'NbRules/'
+        leaderBoardPath = p+'LeaderBoard/'
+        if (not path.exists(scorePath)):
+            mkdir(scorePath)
+        if (not path.exists(nbRulesPath)):
+            mkdir(nbRulesPath)
+        if (not path.exists(leaderBoardPath)):
+            mkdir(leaderBoardPath)
+        self.scores.to_csv(p+'Score/'+str(i)+'.csv')
+        self.nbRules.to_csv(p+'NbRules/'+str(i)+'.csv')
+        pd.DataFrame(self.leaderBoardSorted).to_csv(p+'LeaderBoard/'+str(i)+'.csv')
+
+    def SaveFinalPerf(self,p):
+        if (not path.exists(p)):
+            mkdir(p)
+        self.executionTime.to_csv(p+'ExecutionTime.csv')
+
 
 
 

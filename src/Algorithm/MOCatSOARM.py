@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 
 class MOCatSOARM:
-    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,
+    def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                 hyperParameters = HyperParameters(['mixtureRatio','velocityRatio']) ,velocitySize=3,SMP=10, SRD = 3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
