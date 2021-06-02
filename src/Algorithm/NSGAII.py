@@ -9,15 +9,15 @@ from src.Utils.HyperParameters import *
 class NSGAII:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
                  objectiveNames,data,hyperParameters = HyperParameters(['mutationRate', 'crossOverRate'])):
-        self.P = Population('horizontal_binary',populationSize/2,nbItem)
-        self.Q = Population('horizontal_binary',populationSize/2,nbItem)
+        self.P = Population('horizontal_binary',int(populationSize/2),nbItem)
+        self.Q = Population('horizontal_binary',int(populationSize/2),nbItem)
         self.R = Population('horizontal_binary',populationSize,nbItem)
         self.nbItem = nbItem
         self.distances = []
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary',objectiveNames,populationSize*2)
-        self.fitnessFirstGeneration = Fitness('horizontal_binary',objectiveNames,populationSize)
+        self.fitness = Fitness('horizontal_binary',objectiveNames,populationSize)
+        self.fitnessFirstGeneration = Fitness('horizontal_binary',objectiveNames,int(populationSize/2))
         self.mutationRate = hyperParameters.hyperParameters['mutationRate']
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.rank = [0 for _ in range(self.R.populationSize)]
