@@ -9,9 +9,9 @@ from src.Utils.HyperParameters import *
 class NSGAII:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
                  objectiveNames,data,hyperParameters = HyperParameters(['mutationRate', 'crossOverRate'])):
-        self.P = Population('horizontal_binary',populationSize,nbItem)
-        self.Q = Population('horizontal_binary',populationSize,nbItem)
-        self.R = Population('horizontal_binary',populationSize*2,nbItem)
+        self.P = Population('horizontal_binary',populationSize/2,nbItem)
+        self.Q = Population('horizontal_binary',populationSize/2,nbItem)
+        self.R = Population('horizontal_binary',populationSize,nbItem)
         self.nbItem = nbItem
         self.distances = []
         self.nbIteration = nbIteration
