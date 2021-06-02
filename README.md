@@ -72,7 +72,10 @@ graph.GraphNbRules()
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.png "nbRules")
  
 # Upcoming
-* Shark Smell Optimization
+* Charged system search
+* Big Bang–Big Crunch
+* Mine blast algorithm
+* Dolphin echolocation
 * Krill herd
 * Bacterial Foraging
 
