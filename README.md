@@ -74,7 +74,6 @@ graph.GraphNbRules()
 # Upcoming
 * Shark Smell Optimization
 * Krill herd
-* Symbiotic Organisms Search
 * Bacterial Foraging
 
 # List of available algorithms
@@ -116,4 +115,6 @@ graph.GraphNbRules()
 >CUEVAS, Erik, CIENFUEGOS, Miguel, ZALDÍVAR, Daniel, et al. A swarm optimization algorithm inspired in the behavior of the social-spider. Expert Systems with Applications, 2013, vol. 40, no 16, p. 6374-6384.
 * MOWOAARM *MultiObjective Whale Optimization Algorithm Association Rule Mining*
 >MIRJALILI, Seyedali et LEWIS, Andrew. The whale optimization algorithm. Advances in engineering software, 2016, vol. 95, p. 51-67.
+* MOSOSARM *MultiObjective Symbiotic Organisms Search Association Rule Mining*
+>CHENG, Min-Yuan et PRAYOGO, Doddy. Symbiotic organisms search: a new metaheuristic optimization algorithm. Computers & Structures, 2014, vol. 139, p. 98-112.
 
