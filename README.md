@@ -71,13 +71,6 @@ graph.GraphNbRules()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.png "nbRules")
  
-# Upcoming
-* Charged system search
-* Big Bang–Big Crunch
-* Mine blast algorithm
-* Dolphin echolocation
-* Krill herd
-* Bacterial Foraging
 
 # List of available algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
@@ -120,4 +113,6 @@ graph.GraphNbRules()
 >MIRJALILI, Seyedali et LEWIS, Andrew. The whale optimization algorithm. Advances in engineering software, 2016, vol. 95, p. 51-67.
 * MOSOSARM *MultiObjective Symbiotic Organisms Search Association Rule Mining*
 >CHENG, Min-Yuan et PRAYOGO, Doddy. Symbiotic organisms search: a new metaheuristic optimization algorithm. Computers & Structures, 2014, vol. 139, p. 98-112.
+* MOCSSARM *MultiObjective Charged System Search Association Rule Mining*
+>KAVEH, A. et TALATAHARI, Siamak. A novel heuristic optimization method: charged system search. Acta Mechanica, 2010, vol. 213, no 3, p. 267-289.
 
