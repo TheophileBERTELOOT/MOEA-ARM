@@ -51,6 +51,7 @@ class Performances:
                     if domination == -1:
                         self.leaderBoard[i]+=1
             self.leaderBoard[i] = self.leaderBoard[i]/(len(solutionsi)+len(solutionsj))
+            self.leaderBoard[i] = np.round(self.leaderBoard[i],2)
         self.leaderBoardSorted = list(zip(self.leaderBoard, self.algorithmList))
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
         print(self.scores)

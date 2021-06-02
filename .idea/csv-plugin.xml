@@ -227,6 +227,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\Utils\Fitness.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\src\Utils\Graphs.py">
           <value>
             <Attribute>
@@ -238,6 +245,13 @@
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\src\Utils\Population.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
             </Attribute>
           </value>
         </entry>
