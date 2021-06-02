@@ -83,6 +83,21 @@ class Fitness:
         else:
             return suppRule/np.sqrt(suppAntecedent*suppConsequent)
 
+    def Jaccard(self,indexRule, indexAntecedent, indexConsequent, data):
+        suppAntecedent = SuppGPU(indexAntecedent, data)
+        suppRule = SuppGPU(indexRule, data)
+        suppConsequent = SuppGPU(indexConsequent, data)
+        if suppAntecedent == 0 or suppConsequent == 0 or suppRule == 0:
+            return 0
+        else:
+            return suppRule/(suppAntecedent+suppConsequent-suppRule)
+
+    def PiatetskiShapiro(self,indexRule, indexAntecedent, indexConsequent, data):
+        suppAntecedent = SuppGPU(indexAntecedent, data)
+        suppRule = SuppGPU(indexRule, data)
+        suppConsequent = SuppGPU(indexConsequent, data)
+        return suppRule - suppAntecedent*suppConsequent
+
     def ComputeScoreIndividual(self,individual,data):
         score = [0 for _ in range(self.nbObjectives)]
         for j in range(self.nbObjectives):
@@ -102,6 +117,11 @@ class Fitness:
                 score[j] = self.Klosgen(indexRule,indexAntecedent,indexConsequent,data)
             if objective == 'cosine':
                 score[j] = self.Cosine(indexRule, indexAntecedent, indexConsequent, data)
+            if objective == 'jaccard':
+                score[j] = self.Jaccard(indexRule, indexAntecedent, indexConsequent, data)
+            if objective == 'piatetskiShapiro':
+                score[j] = self.PiatetskiShapiro(indexRule, indexAntecedent, indexConsequent, data)
+
         return np.array(score)
 
     def ComputeScorePopulation(self,population,data):
