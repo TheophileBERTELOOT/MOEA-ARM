@@ -206,6 +206,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Experiments\TAE\0\LeaderBoard\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\0\NbRules\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\0\Score\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\MOB-ARM.py">
           <value>
             <Attribute>

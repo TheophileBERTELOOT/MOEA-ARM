@@ -18,7 +18,7 @@ from src.Algorithm.MOGSAARM import *
 from src.Algorithm.MOSSOARM import *
 from src.Algorithm.MOWOAARM import *
 from src.Algorithm.MOSOSARM import *
-from src.Algorithm.MOCMSARM import *
+from src.Algorithm.MOCSSARM import *
 from os import path,mkdir
 
 

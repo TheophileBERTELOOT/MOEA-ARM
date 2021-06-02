@@ -22,7 +22,7 @@ nbRepetition = 5
 populationSize = 200
 objectiveNames = ['support','confidence','jaccard']
 criterionList = ['scores','execution time']
-algorithmNameList = ['mososarm','mocmsarm']
+algorithmNameList = ['mososarm','mocssarm']
 #algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm',
 #                     'mofpaarm','moaloarm','modaarm','mohsbotsarm','modearm','nshsdearm','mogeaarm','mogsaarm','mossoarm']
 

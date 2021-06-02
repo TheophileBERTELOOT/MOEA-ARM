@@ -7,7 +7,7 @@ from src.Utils.Graphs import *
 from time import time
 from src.Utils.HyperParameters import *
 
-class MOCMSARM:
+class MOCSSARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                  hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=10,step=3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
