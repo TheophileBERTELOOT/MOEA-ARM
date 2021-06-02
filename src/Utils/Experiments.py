@@ -16,6 +16,7 @@ from src.Algorithm.NSHSDEARM import *
 from src.Algorithm.MOGEAARM import *
 from src.Algorithm.MOGSAARM import *
 from src.Algorithm.MOSSOARM import *
+from src.Algorithm.MOWOAARM import *
 from os import path,mkdir
 
 
@@ -33,7 +34,6 @@ class Experiment:
         self.path = path
         self.CheckIfFolderExist(self.path)
         self.perf = Performances(algListNames, criterionList, objectiveNames)
-        self.InitAlgList()
 
     def CheckIfFolderExist(self,p):
         if(not path.exists(p)):
@@ -111,6 +111,10 @@ class Experiment:
                 self.algList.append(
                     MOSSOARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
+            if name == 'mowoaarm':
+                self.algList.append(
+                    MOWOAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
+                             self.objectiveNames, self.data))
 
 
     def Run(self):
@@ -121,6 +125,7 @@ class Experiment:
         self.CheckIfFolderExist(scoreGraphPath)
         self.CheckIfFolderExist(nbRulesGraphPath)
         for rep in range(self.nbRepetition):
+            self.InitAlgList()
             executionTimeGraphPath = graphPath + 'ExecutionTime/'
             scoreGraphPath = graphPath + 'Scores/'+str(rep)+'/'
             nbRulesGraphPath = graphPath + 'NbRules/'+str(rep)+'/'
