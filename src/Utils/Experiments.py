@@ -17,6 +17,7 @@ from src.Algorithm.MOGEAARM import *
 from src.Algorithm.MOGSAARM import *
 from src.Algorithm.MOSSOARM import *
 from src.Algorithm.MOWOAARM import *
+from src.Algorithm.MOSOSARM import *
 from os import path,mkdir
 
 
@@ -114,6 +115,10 @@ class Experiment:
             if name == 'mowoaarm':
                 self.algList.append(
                     MOWOAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
+                             self.objectiveNames, self.data))
+            if name == 'mososarm':
+                self.algList.append(
+                    MOSOSARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
 
 
