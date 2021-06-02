@@ -75,7 +75,6 @@ graph.GraphNbRules()
 * Shark Smell Optimization
 * Krill herd
 * Symbiotic Organisms Search
-* Whale Optimization Algorithm
 * Bacterial Foraging
 
 # List of available algorithms
