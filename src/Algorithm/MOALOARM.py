@@ -86,6 +86,16 @@ class MOALOARM:
         rdw = np.array(rdw)
         return rdw
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.ants.InitPopulation()
+        self.lions.InitPopulation()
+        self.fitness = Fitness('horizontal_binary', self.objectiveNames, self.lions.populationSize)
+        self.fitnessAnts = Fitness('horizontal_binary', self.objectiveNames, self.ants.populationSize)
+        self.elite = []
+        self.eliteScore = []
+        self.fitnessAnts.ComputeScorePopulation(self.ants.population, data)
+        self.fitness.ComputeScorePopulation(self.lions.population, data)
+        self.UpdateElite()
 
     def Run(self,data,i):
 

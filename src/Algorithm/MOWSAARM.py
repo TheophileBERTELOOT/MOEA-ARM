@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MOWSAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 visionRange=10,nbPrey=10,step=2,hyperParameters = HyperParameters(['velocityFactor','enemyProb'])):
+                 visionRange=3,nbPrey=10,step=5,hyperParameters = HyperParameters(['velocityFactor','enemyProb'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -25,7 +25,7 @@ class MOWSAARM:
 
     def GenerateRule(self, i,data):
         for k in range(self.nbPrey):
-            nbChanges = rd.randint(1,self.visionRange)
+            nbChanges = rd.randint(1,self.step)
             ind = copy.deepcopy(self.population.population[i])
             for j in range(nbChanges):
                 index = rd.randint(0, (self.nbItem * 2) - 1)
@@ -47,6 +47,12 @@ class MOWSAARM:
 
     def GenerateEscape(self):
         return self.population.InitIndividual_HorizontalBinary()
+
+    def ResetPopulation(self, data, hyperParameters):
+        self.population.InitPopulation()
+        self.velocityFactor = hyperParameters.hyperParameters['velocityFactor']
+        self.enemyProb = hyperParameters.hyperParameters['enemyProb']
+
 
     def Run(self,data,i):
 

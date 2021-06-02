@@ -19,6 +19,7 @@ from src.Algorithm.MOSSOARM import *
 from src.Algorithm.MOWOAARM import *
 from src.Algorithm.MOSOSARM import *
 from src.Algorithm.MOCSSARM import *
+from src.Utils.HyperParameters import *
 from os import path,mkdir
 
 
@@ -30,6 +31,7 @@ class Experiment:
         self.populationSize = populationSize
         self.nbIteration = nbIteration
         self.nbRepetition = nbRepetition
+        self.hyperParametersList = {}
         self.data = data
         self.algList = []
         self.display = display
@@ -44,86 +46,116 @@ class Experiment:
     def InitAlgList(self):
         for name in self.algListNames:
             if name == 'mocsoarm':
-                self.algList.append(MOCSOARM(self.data.shape[1],self.populationSize,self.nbIteration,len(self.objectiveNames),self.objectiveNames,self.data))
+                h = HyperParameters(['ruthlessRatio'])
+                h.LoadHyperParameters('HyperParameters/MOCSOARM/bestParameters.json')
+                self.algList.append(MOCSOARM(self.data.shape[1],self.populationSize,self.nbIteration,len(self.objectiveNames),self.objectiveNames,self.data,hyperParameters=h))
             if name == 'mopso':
+                h = HyperParameters(['inertie', 'localAccelaration', 'globalAcceleration'])
+                h.LoadHyperParameters('HyperParameters/MOPSO/bestParameters.json')
                 self.algList.append(
                     MOPSO(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mobarm':
                 self.algList.append(
                     MOBARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
             if name == 'nsgaii':
+                h = HyperParameters(['mutationRate', 'crossOverRate'])
+                h.LoadHyperParameters('HyperParameters/NSGAII/bestParameters.json')
                 self.algList.append(
                     NSGAII(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'hmofaarm':
+                h = HyperParameters(['alpha', 'beta0', 'crossOverRate'])
+                h.LoadHyperParameters('HyperParameters/HMOFAARM/bestParameters.json')
                 self.algList.append(
                     HMOFAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mosaarm':
+                h = HyperParameters(['alpha'])
+                h.LoadHyperParameters('HyperParameters/MOSAARM/bestParameters.json')
                 self.algList.append(
                     MOSAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mowsaarm':
+                h = HyperParameters(['velocityFactor','enemyProb'])
+                h.LoadHyperParameters('HyperParameters/MOWSAARM/bestParameters.json')
                 self.algList.append(
                     MOWSAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mocatsoarm':
+                h = HyperParameters(['mixtureRatio','velocityRatio'])
+                h.LoadHyperParameters('HyperParameters/MOCatSOARM/bestParameters.json')
                 self.algList.append(
                     MOCatSOARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'motlboarm':
                 self.algList.append(
                     MOTLBOARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
             if name == 'mofpaarm':
+                h = HyperParameters(['P','gamma'])
+                h.LoadHyperParameters('HyperParameters/MOFPAARM/bestParameters.json')
                 self.algList.append(
                     MOFPAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'moaloarm':
                 self.algList.append(
                     MOALOARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
             if name == 'modaarm':
+                h = HyperParameters(['s','a','c','f','e','w'])
+                h.LoadHyperParameters('HyperParameters/MODAARM/bestParameters.json')
                 self.algList.append(
                     MODAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mohsbotsarm':
                 self.algList.append(
                     MOHSBOTSARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
             if name == 'modearm':
+                h = HyperParameters(['F','CR'])
+                h.LoadHyperParameters('HyperParameters/MODEARM/bestParameters.json')
                 self.algList.append(
                     MODEARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'nshsdearm':
+                h = HyperParameters(['F','Fw','PAR'])
+                h.LoadHyperParameters('HyperParameters/NSHSDEARM/bestParameters.json')
                 self.algList.append(
                     NSHSDEARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mogeaarm':
+                h = HyperParameters(['Jr','Sr','epsilon'])
+                h.LoadHyperParameters('HyperParameters/MOGEAARM/bestParameters.json')
                 self.algList.append(
                     MOGEAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mogsaarm':
+                h = HyperParameters(['G'])
+                h.LoadHyperParameters('HyperParameters/MOGSAARM/bestParameters.json')
                 self.algList.append(
                     MOGSAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mossoarm':
+                h = HyperParameters(['PF'])
+                h.LoadHyperParameters('HyperParameters/MOSSOARM/bestParameters.json')
                 self.algList.append(
                     MOSSOARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mowoaarm':
+                h = HyperParameters(['b'])
+                h.LoadHyperParameters('HyperParameters/MOWOAARM/bestParameters.json')
                 self.algList.append(
                     MOWOAARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                             self.objectiveNames, self.data))
+                             self.objectiveNames, self.data,hyperParameters=h))
             if name == 'mososarm':
                 self.algList.append(
                     MOSOSARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
-            if name == 'mocmsarm':
+            if name == 'mocssarm':
                 self.algList.append(
-                    MOCMSARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
+                    MOCSSARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data))
 
 

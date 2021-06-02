@@ -3,20 +3,23 @@ from src.Utils.Performances import *
 from src.Utils.Data import *
 from src.Utils.HyperParameters import *
 from src.Utils.Experiments import *
-
+from os import path,mkdir
 '''
-populationSize = 300
-nbIteration = 10,
-objectiveNames = ['support','confidence','klosgen']
-parameterNames = ['s','a','c','f','e','w']
-d = Data('Data/Transform/chess.csv',header=0,indexCol=0)
+populationSize = 200
+nbIteration = 10
+objectiveNames = ['support','confidence','cosine']
+parameterNames = ['F','Fw','PAR']
+p= 'HyperParameters/NSHSDEARM/'
+if(not path.exists(p)):
+    mkdir(p)
+d = Data('Data/Transform/iris.csv',header=0,indexCol=0)
 d.ToNumpy()
-modaarm = MODAARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
+alg = NSHSDEARM(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),objectiveNames,d.data)
 hyper = HyperParameters(parameterNames)
-hyper.RandomSearch(100,modaarm,d.data)
-hyper.SaveBestParameters('HyperParameters/MODAARM/bestParameters.json')
+hyper.RandomSearch(50,alg,d.data)
+hyper.SaveBestParameters(p+'bestParameters.json')
 '''
-
+'''
 nbIteration = 20
 nbRepetition = 5
 populationSize = 200
@@ -35,7 +38,7 @@ d.ToNumpy()
 
 E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,path='Experiments/TAE/',display=True)
 E.Run()
-
+'''
 
 
 

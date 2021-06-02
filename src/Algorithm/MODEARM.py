@@ -52,6 +52,11 @@ class MODEARM:
                 c = rd.randint(0, self.population.populationSize - 1)
             self.mutatedVectors[i] = self.population.population[a] + self.F*(self.population.population[b]-self.population.population[c])
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.F = hyperParameters.hyperParameters['F']
+        self.CR = hyperParameters.hyperParameters['CR']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def Run(self,data,i):
 

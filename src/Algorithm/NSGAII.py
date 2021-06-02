@@ -90,13 +90,15 @@ class NSGAII:
 
     def CrossOver(self,population):
         offsprings = []
-        for i in range(int(population.populationSize*self.crossOverRate)):
+        nbCross = int(population.populationSize*self.crossOverRate)
+        if nbCross+len(population.population)!=100:
+            nbCross+=1
+        for i in range(nbCross):
             p1 = rd.randint(0,len(population.population)-1)
             p2 = rd.randint(0, len(population.population) - 1)
             index = rd.randint(1,len(population.population[p1])-1)
             offspring = np.concatenate([population.population[p1][:index],population.population[p2][index:]],axis=0)
             offsprings.append(offspring)
-        offsprings = np.array(offsprings)
         offsprings = np.concatenate([population.population,np.array(offsprings)],axis=0)
         population.SetPopulation(offsprings)
 
@@ -146,6 +148,17 @@ class NSGAII:
         currentPopulationScores = np.concatenate([self.fitness.scores[:lastIndexInd],scores[:nbToAdd]],axis=0)
         currentPopulation,currentPopulationScores,self.distances = self.CrowdingDistanceAssignment(currentPopulation,currentPopulationScores)
         self.P.SetPopulation(np.array(currentPopulation))
+
+    def ResetPopulation(self, data, hyperParameters):
+        self.P.InitPopulation()
+        self.Q.InitPopulation()
+        self.R.InitPopulation()
+        self.mutationRate = hyperParameters.hyperParameters['mutationRate']
+        self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
+        self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
+        self.BinaryTournament(True)
+        self.CrossOver(self.Q)
+        self.Mutation(self.Q)
 
     def Run(self,data,i):
 

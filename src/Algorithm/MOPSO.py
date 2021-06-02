@@ -117,6 +117,20 @@ class MOPSO:
 
 
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.speeds = []
+        self.personalBests = []
+        self.personalBestsFitness = []
+        self.globalBest = []
+        self.globalBestFitness = []
+        self.inertie = hyperParameters.hyperParameters['inertie']
+        self.localAcceleration = hyperParameters.hyperParameters['localAccelaration']
+        self.globalAcceleration = hyperParameters.hyperParameters['globalAcceleration']
+        self.InitSpeed()
+        self.InitPersonalBest()
+        self.InitGlobalBest()
+
     def Run(self,data,i):
 
         t1 = time()

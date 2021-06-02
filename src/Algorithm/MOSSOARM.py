@@ -128,6 +128,10 @@ class MOSSOARM:
                 average = np.average(self.population.population[self.indexFemale:],axis=0)
                 self.population.population[self.indexFemale+i] = self.population.population[self.indexFemale+i]+alpha*average
 
+    def ResetPopulation(self, data, hyperParameters):
+        self.population.InitPopulation()
+        self.PF = hyperParameters.hyperParameters['PF']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def Run(self,data,i):
 

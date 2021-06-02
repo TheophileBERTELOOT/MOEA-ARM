@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\Data\Transform\abalone.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Data\Transform\bankrupt.csv">
           <value>
             <Attribute>
@@ -11,6 +18,13 @@
           </value>
         </entry>
         <entry key="\Data\Transform\breast-cancer.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Data\Transform\bridges.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -31,6 +45,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Data\Transform\cmc.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Data\Transform\congress.csv">
           <value>
             <Attribute>
@@ -45,7 +66,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Data\Transform\dermatology.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Data\Transform\easyTest.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Data\Transform\flag.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Data\Transform\machine.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -59,7 +101,28 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Data\Transform\nursery.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Data\Transform\primary-tumor.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Data\Transform\risk.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Data\Transform\water-treatment.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

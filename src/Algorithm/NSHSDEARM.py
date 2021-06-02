@@ -119,6 +119,14 @@ class NSHSDEARM:
         c = np.log(0.001/1)/self.nbIteration
         self.Fw = 1*np.exp(c*i)
 
+    def ResetPopulation(self, data, hyperParameters):
+        self.population.InitPopulation()
+        self.F = hyperParameters.hyperParameters['F']
+        self.Fw = hyperParameters.hyperParameters['Fw']
+        self.PAR =  hyperParameters.hyperParameters['PAR']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+
+
     def Run(self,data,i):
 
         t1 = time()

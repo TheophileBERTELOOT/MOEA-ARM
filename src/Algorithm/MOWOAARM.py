@@ -37,6 +37,12 @@ class MOWOAARM:
         self.bestInd = copy.deepcopy(self.population.population[index])
         self.bestIndScore = copy.deepcopy(self.fitness.scores[index])
 
+    def ResetPopulation(self, data, hyperParameters):
+        self.population.InitPopulation()
+        self.b = hyperParameters.hyperParameters['b']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.UpdateBest()
+
     def Run(self,data,i):
         t1 = time()
         a = 2-2*(i/self.nbIteration)

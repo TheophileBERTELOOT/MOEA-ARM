@@ -61,7 +61,12 @@ class MOCatSOARM:
         index = rd.choice(wheel)
         self.population.population[k] = environment[index]
 
-
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.mixtureRatio = hyperParameters.hyperParameters['mixtureRatio']
+        self.velocityRatio = hyperParameters.hyperParameters['velocityRatio']
+        self.bestCat = np.zeros(self.nbItem * 2, dtype=float)
+        self.bestCatScore = np.zeros(self.nbObjectifs, dtype=float)
 
     def Run(self,data,i):
         t1 = time()

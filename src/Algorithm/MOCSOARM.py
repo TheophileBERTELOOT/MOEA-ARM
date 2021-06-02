@@ -70,8 +70,12 @@ class MOCSOARM:
             if r<self.ruthlessRatio:
                 self.population.population[i] = copy.deepcopy(self.bestInd)
 
-    def Run(self,data,i):
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.ruthlessRatio = hyperParameters.hyperParameters['ruthlessRatio']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
 
+    def Run(self,data,i):
         t1 = time()
         self.CalculDistance()
         self.UpdateBestInd()

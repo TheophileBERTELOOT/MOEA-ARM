@@ -135,6 +135,14 @@ class HMOFAARM:
         self.paretoFront = copy.deepcopy(front[:self.nbSolution])
         self.paretoFrontScore=copy.deepcopy(scores[:self.nbSolution])
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.alpha = hyperParameters.hyperParameters['alpha']
+        self.beta0 = hyperParameters.hyperParameters['beta0']
+        self.gamma = 1/((self.nbItem*2)**2)
+        self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
+        self.paretoFront = []
+        self.paretoFrontScore = []
 
     def Run(self,data,i):
 

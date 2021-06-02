@@ -77,6 +77,12 @@ class MOGSAARM:
             if domination == 1:
                 self.population.population[i] = copy.deepcopy(individual)
 
+
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.G = hyperParameters.hyperParameters['G']
+
+
     def Run(self,data,i):
         t1 = time()
         self.population.CheckIfNull()

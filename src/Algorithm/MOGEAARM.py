@@ -77,6 +77,13 @@ class MOGEAARM:
                     self.population.population[i] = self.population.InitIndividual_HorizontalBinary()
                     self.Si[i] = 1
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.Jr = hyperParameters.hyperParameters['Jr']
+        self.Sr = hyperParameters.hyperParameters['Sr']
+        self.epsilon = hyperParameters.hyperParameters['epsilon']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+
     def Run(self,data,i):
 
         t1 = time()

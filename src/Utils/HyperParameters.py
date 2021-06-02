@@ -26,7 +26,7 @@ class HyperParameters:
         for i in range(nbIter):
             self.GetRandomParameters()
             alg.ResetPopulation(data,self)
-            for j in alg.nbIteration:
+            for j in range(alg.nbIteration):
                 alg.Run(data,j)
             alg.fitness.GetParetoFront()
             perf.UpdatePerformances(score=alg.fitness.paretoFront, i=j,

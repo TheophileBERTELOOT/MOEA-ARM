@@ -45,6 +45,13 @@ class MOFPAARM:
         index = rd.choice(candidate)
         self.bestSolution = copy.deepcopy(self.population.population[index])
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.P = hyperParameters.hyperParameters['P']
+        self.gamma = hyperParameters.hyperParameters['gamma']
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.UpdateBestSolution()
+
     def Run(self,data,i):
 
         t1 = time()
