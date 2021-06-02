@@ -20,7 +20,7 @@ hyper.SaveBestParameters('HyperParameters/MODAARM/bestParameters.json')
 nbIteration = 20
 nbRepetition = 5
 populationSize = 200
-objectiveNames = ['support','confidence','piatetskiShapiro']
+objectiveNames = ['support','confidence','jaccard']
 criterionList = ['scores','execution time']
 algorithmNameList = ['MOCSOARM','MOSSOARM']
 algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm',

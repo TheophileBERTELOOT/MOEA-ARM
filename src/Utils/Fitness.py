@@ -87,7 +87,7 @@ class Fitness:
         suppAntecedent = SuppGPU(indexAntecedent, data)
         suppRule = SuppGPU(indexRule, data)
         suppConsequent = SuppGPU(indexConsequent, data)
-        if suppAntecedent == 0 or suppConsequent == 0 or suppRule == 0:
+        if suppRule == 0 or suppAntecedent+suppConsequent == suppRule :
             return 0
         else:
             return suppRule/(suppAntecedent+suppConsequent-suppRule)
