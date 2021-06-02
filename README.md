@@ -2,6 +2,21 @@
 Multi Objectives Evolutionary Algorithm - Association rule mining
 # Introduction
 Gather a huge number of multi objectives evolutionary algorithm for solve the association rule mining problem. This library provide state-of-the-art algorithm and tools to compare algorithm performance, futhermore you can choose the metrics which be used for objectives. It's also possible to speed up algorithm by using GPUs.
+# Experiments 
+This library is initialy design to be used in experiments for articles, you have then the experiments module allowing you to specified a list of algorithm of criterion a number of repetition and it will perform the experiment and save the results somewhere:
+```python
+nbIteration = 20
+nbRepetition = 5
+populationSize = 200
+objectiveNames = ['support','confidence','cosine']
+criterionList = ['scores','execution time']
+algorithmNameList = ['MOCSOARM','MOSSOARM']
+perf = Performances(algorithmNameList,criterionList,objectiveNames)
+d = Data('Data/Transform/tae.csv',header=None,indexCol=None)
+d.ToNumpy()
+E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,path='Experiments/TAE/',display=True)
+E.Run()
+```
 # Hyperparameters managment 
 It's possible to perform a RandomSearch on the hyperparameters of an algorithm and next save then load latter hyperparameters with the best performances. You can do this using this template :
 ```python
@@ -56,6 +71,13 @@ graph.GraphNbRules()
   ```
   ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.png "nbRules")
  
+# Upcoming
+* Shark Smell Optimization
+* Krill herd
+* Symbiotic Organisms Search
+* Whale Optimization Algorithm
+* Bacterial Foraging
+
 # List of available algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
 > DEB, Kalyanmoy, PRATAP, Amrit, AGARWAL, Sameer, et al. A fast and elitist multiobjective genetic algorithm: NSGA-II. IEEE transactions on evolutionary computation, 2002, vol. 6, no 2, p. 182-197.
@@ -89,7 +111,9 @@ graph.GraphNbRules()
 >YAZDI, Jafar, CHOI, Young Hwan, et KIM, Joong Hoon. Non-dominated sorting harmony search differential evolution (NS-HS-DE): A hybrid algorithm for multi-objective design of water distribution networks. Water, 2017, vol. 9, no 8, p. 587.
 * MOGEAARM *MultiObjective Gradient Evolution Algorithm Association Rule Mining*
 >ABDI-DEHKORDI, Mehri, BOZORG-HADDAD, Omid, et CHU, Xuefeng. Gradient Evolution (GE) Algorithm. In : Advanced Optimization by Nature-Inspired Algorithms. Springer, Singapore, 2018. p. 117-130.
-* MOGSAARM *MultiObjective Gravitantional Search Algorithm Association Rule Mining*
+* MOGSAARM *MultiObjective Gravitational Search Algorithm Association Rule Mining*
 > RASHEDI, Esmat, NEZAMABADI-POUR, Hossein, et SARYAZDI, Saeid. GSA: a gravitational search algorithm. Information sciences, 2009, vol. 179, no 13, p. 2232-2248.
 * MOSSOARM *MultiObjective Social-Spider Optimization Association Rule Mining*
 >CUEVAS, Erik, CIENFUEGOS, Miguel, ZALDÍVAR, Daniel, et al. A swarm optimization algorithm inspired in the behavior of the social-spider. Expert Systems with Applications, 2013, vol. 40, no 16, p. 6374-6384.
+
+
