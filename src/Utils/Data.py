@@ -24,11 +24,23 @@ class Data:
             data.append(row)
         self.data = pd.DataFrame(np.array(data))
 
+    def isListFullOfDigit(self,l):
+        if(l.dtype == np.str_ or l.dtype==np.object_):
+            for i in range(len(l)):
+                if not l[i].lstrip('-').replace('.','',1).isdigit() and l[i] != '?' and l[i] != '-':
+                    return False
+        return True
+
+    def RemoveRowWithMissingValue(self):
+        indexWithMissingValues = self.data[(self.data == '?').any(axis=1)].index
+        self.data = self.data.drop(indexWithMissingValues)
+
     def TransformToHorizontalBinary(self):
+        self.RemoveRowWithMissingValue()
         transformed = []
         for col in self.data.columns:
             possibleValues = self.data[col].unique()
-            if len(possibleValues)>20:
+            if len(possibleValues)>20 and  self.isListFullOfDigit(possibleValues) :
                 possibleValues = self.Sampling(col)
                 self.labels+=list(possibleValues)
             else:
@@ -47,6 +59,7 @@ class Data:
         self.data = pd.DataFrame(transformed,columns=self.labels)
 
     def Sampling(self,col):
+        self.data[col]=self.data[col].astype(float)
         ma = self.data[col].max()
         mi = self.data[col].min()
         r = ma-mi
