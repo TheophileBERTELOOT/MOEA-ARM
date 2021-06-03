@@ -5,7 +5,7 @@ from src.Utils.HyperParameters import *
 from src.Utils.Graphs import *
 from src.Utils.Experiments import *
 from os import path,mkdir
-
+'''
 populationSize = 200
 nbIteration = 10
 objectiveNames = ['support','confidence','cosine']
@@ -19,9 +19,9 @@ alg = NSGAII(d.data.shape[1],populationSize,nbIteration,len(objectiveNames),obje
 hyper = HyperParameters(parameterNames)
 hyper.RandomSearch(50,alg,d.data)
 hyper.SaveBestParameters(p+'bestParameters.json')
-
-
 '''
+
+
 nbIteration = 20
 nbRepetition = 100
 populationSize = 100
@@ -48,7 +48,7 @@ E.Run()
 g = Graphs(objectiveNames,[])
 g.GraphExperimentation(algorithmNameList,'Experiments/FLAG/','LeaderBoard')
 
-'''
+
 
 
 
