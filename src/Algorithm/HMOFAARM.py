@@ -119,6 +119,7 @@ class HMOFAARM:
             distances[l-1] =np.infty
             for j in range(2,l-2):
                 distances[j]+= (score[j+1]-score[j-1])/(score[0]-score[l-1])
+                distances[j] = self.population.CheckDivide0(distances[j])
         front = list(zip(distances,front,scores))
         front = sorted(front, key=lambda x: x[0],reverse=True)
         front = np.array(front,dtype="object")

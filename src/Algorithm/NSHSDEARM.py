@@ -10,6 +10,7 @@ from src.Utils.HyperParameters import *
 class NSHSDEARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
                  hyperParameters = HyperParameters(['F','Fw','PAR'])):
+        self.mincst = 0.0001
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -18,10 +19,10 @@ class NSHSDEARM:
         self.F = hyperParameters.hyperParameters['F']
         self.Fw = hyperParameters.hyperParameters['Fw']
         self.PAR =  hyperParameters.hyperParameters['PAR']
-        self.mutatedVectors = np.zeros((populationSize,nbItem*2),dtype=float)
+        self.mutatedVectors = np.zeros((populationSize,nbItem*2),dtype=float)+self.mincst
         self.executionTime = 0
         self.fitness.ComputeScorePopulation(self.population.population, data)
-        self.rank = np.zeros(populationSize,dtype=int)
+        self.rank = np.zeros(populationSize,dtype=int)+self.mincst
 
     def CrowdingDistanceAssignment(self,front,scores):
         l = len(front)

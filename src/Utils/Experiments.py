@@ -44,6 +44,7 @@ class Experiment:
             mkdir(p)
 
     def InitAlgList(self):
+        self.algList = []
         for name in self.algListNames:
             if name == 'mocsoarm':
                 h = HyperParameters(['ruthlessRatio'])
@@ -182,8 +183,6 @@ class Experiment:
                     alg.fitness.GetParetoFront()
                     self.perf.UpdatePerformances(score=alg.fitness.paretoFront, executionTime=alg.executionTime, i=i,
                                             algorithmName=self.algListNames[k])
-                    print(self.algListNames[k])
-                    print(alg.fitness.paretoFront)
                     k += 1
                 graph = Graphs(self.objectiveNames, self.perf.scores, path=scoreGraphPath + str(i), display=self.display)
                 graph.GraphScores()

@@ -248,6 +248,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Experiments\Congress\0\Score\19.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Experiments\Congress\0\Score\2.csv">
           <value>
             <Attribute>
@@ -263,6 +270,13 @@
           </value>
         </entry>
         <entry key="\Experiments\Congress\0\Score\4.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\MUSHROOM\1\Score\3.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

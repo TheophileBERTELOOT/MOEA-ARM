@@ -80,7 +80,9 @@ class MOCSSARM:
         ka = 0.5*(1+i/self.nbIteration)
         for i in range(self.population.populationSize):
             individual = rd.random()*ka*(self.force[i]/sum(self.fitness.scores[i]))+rd.random()*kv*self.velocity[i]+self.population.population[i]
+            individual=self.population.CheckDivide0(individual)
             vNew = individual - self.population.population[i]
+            vNew = self.population.CheckDivide0(vNew)
             score = self.fitness.ComputeScoreIndividual(individual,data)
             if self.fitness.Domination(self.worstIndScore,score) == 1:
                 self.population.population[i] = copy.deepcopy(individual)
@@ -96,7 +98,6 @@ class MOCSSARM:
         self.UpdatePosition(i,data)
         self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population, data)
-
         self.executionTime = time() - t1
 
 

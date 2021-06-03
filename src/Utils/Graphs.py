@@ -40,7 +40,7 @@ class Graphs:
             fig.savefig(self.path+".png")
 
     def GraphScores(self):
-        fig = plt.figure()
+        fig = plt.figure(figsize=(15,15))
         ax = fig.add_subplot(111, projection='3d')
         ax.set_xlim3d(0, 1)
         ax.set_ylim3d(0, 1)
@@ -55,7 +55,7 @@ class Graphs:
                        self.data[self.data.algorithm==alg][self.objectiveNames[1]],
                        self.data[self.data.algorithm==alg][self.objectiveNames[2]],
                        label=alg)
-        ax.legend()
+        ax.legend(loc='center left', bbox_to_anchor=(1.2, 0.5))
 
         if self.display:
             plt.show()

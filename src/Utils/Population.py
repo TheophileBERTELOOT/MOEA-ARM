@@ -59,6 +59,12 @@ class Population:
             individual[index] = 1.0
         return np.array(individual)
 
+    def CheckDivide0(self,p):
+        p = np.where(p==np.inf,0,p)
+        p =np.where(p==-np.inf,0,p)
+        p = np.where(np.isnan(p),0,p)
+        return p
+
     def InitIndividual_HorizontalIndex(self):
         individual = []
         for i in range(self.nbItem):

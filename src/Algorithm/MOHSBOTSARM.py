@@ -69,11 +69,15 @@ class MOHSBOTSARM:
         indexs = np.arange(self.population.populationSize)
         paretoFront = np.ones(self.population.populationSize)
         for i in range(self.population.populationSize):
-            for j in range(self.population.populationSize):
-                domination = self.fitness.Domination(self.danceTableScore[i], self.danceTableScore[j])
-                if domination == 1:
-                    paretoFront[i] = 0
-                    break
+            if len(self.danceTable[i]) != 0 :
+                for j in range(self.population.populationSize):
+                    domination = self.fitness.Domination(self.danceTableScore[i], self.danceTableScore[j])
+                    if domination == 1:
+                        paretoFront[i] = 0
+                        break
+            else:
+                paretoFront[i] = 0
+
         candidate = indexs[paretoFront == 1]
         index = rd.choice(candidate)
         self.bestInd = copy.deepcopy(self.danceTable[index])
@@ -92,8 +96,7 @@ class MOHSBOTSARM:
             bestInd,bestScore = self.LocalSearch(j,data)
             self.danceTable.append(bestInd)
             self.danceTableScore.append(bestScore)
-        self.danceTable = np.array(self.danceTable)
-        self.danceTableScore = np.array(self.danceTableScore)
+        self.BestOfDance()
         if list(self.bestInd) in self.tabooList:
             index = rd.randint(0,len(self.tabooList)-1)
             self.bestInd = copy.deepcopy(self.tabooList[index])

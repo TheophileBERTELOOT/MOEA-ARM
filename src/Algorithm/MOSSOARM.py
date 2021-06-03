@@ -68,8 +68,10 @@ class MOSSOARM:
             if domination != 1:
                 indexVibci = rd.randint(0,self.population.populationSize-1)
             wb = (sum(self.fitness.scores[self.bestInd])-sum(self.worstIndScore))/(sum(self.bestIndScore)-sum(self.worstIndScore))
+            wb = self.population.CheckDivide0(wb)
             wc = (sum(self.fitness.scores[indexVibci]) - sum(self.worstIndScore)) / (
                         sum(self.bestIndScore) - sum(self.worstIndScore))
+            wc = self.population.CheckDivide0(wc)
             Vibci = wc * np.exp(-pow(self.distance[i, indexVibci], 2))
             Vibbi = wb * np.exp(-pow(self.distance[i, self.bestInd], 2))
             alpha = rd.random()
@@ -110,6 +112,7 @@ class MOSSOARM:
         weight = np.sum(weight,axis=1)
         weight = weight-sum(self.worstIndScore)
         weight = weight/(sum(self.bestIndScore-self.worstIndScore))
+        weight = self.population.CheckDivide0(weight)
         maleWeight = weight[self.indexFemale:]
         self.median = np.median(maleWeight)
         for i in range(self.population.populationSize-self.indexFemale):

@@ -34,8 +34,10 @@ class MOGSAARM:
         self.masses = np.zeros(self.population.populationSize, dtype=float)
         for i in range(self.population.populationSize):
             self.masses[i] = (sum(self.fitness.scores[i])-sum(self.worstIndScore))/(sum(self.bestIndScore)-sum(self.worstIndScore))
+            self.masses[i] = self.population.CheckDivide0(self.masses[i])
         somme = sum(self.masses)
         self.masses=self.masses/somme
+        self.masses = self.population.CheckDivide0(self.masses)
 
     def CalculDistance(self):
         for i in range(self.population.populationSize):
@@ -71,6 +73,7 @@ class MOGSAARM:
     def UpdatePosition(self,data):
         for i in range(self.population.populationSize):
             self.velocity[i] = self.velocity[i] *rd.random()    + self.forces[i]/self.masses[i]
+            self.velocity[i] = self.population.CheckDivide0(self.velocity[i])
             individual = copy.deepcopy(self.population.population[i] ) + self.velocity[i]
             score = self.fitness.ComputeScoreIndividual(individual,data)
             domination = self.fitness.Domination(self.fitness.scores[i],score)

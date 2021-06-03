@@ -27,7 +27,7 @@ class Fitness:
         self.populationSize = populationSize
         self.population = Population(representation,0,0)
         self.scores = np.array([np.array([0.0 for i in range(self.nbObjectives)]) for j in range(self.populationSize)])
-        self.paretoFront = np.array([])
+        self.paretoFront = np.zeros((1,len(objectivesNames)),dtype=float)
 
     def Supp(self,individual,data):
         supp = 0
@@ -138,14 +138,16 @@ class Fitness:
             return 0
 
     def GetParetoFront(self):
+        temp = np.concatenate([self.scores,copy.deepcopy(self.paretoFront)])
         self.paretoFront = []
-        n=[0 for i in range(self.populationSize)]
-        for p in range(self.populationSize):
-            for q in range(self.populationSize):
-                if  self.Domination(self.scores[p], self.scores[q]) == 1:
-                    n[p] += 1
-            if n[p] == 0:
-                self.paretoFront.append(self.scores[p])
+        for p in range(len(temp)):
+            dominate = True
+            for q in range(len(temp)):
+                if  self.Domination(temp[p], temp[q]) == 1:
+                    dominate = False
+                    break
+            if dominate:
+                self.paretoFront.append(temp[p])
         self.paretoFront = np.array(self.paretoFront)
         self.paretoFront = np.unique(self.paretoFront,axis=0)
 
