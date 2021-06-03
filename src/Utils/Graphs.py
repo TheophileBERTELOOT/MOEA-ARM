@@ -31,6 +31,8 @@ class Graphs:
         plt.tight_layout()
         if self.display:
             plt.show()
+        else:
+            plt.close(fig)
         if self.save:
             fig.savefig(self.path + ".png")
 
@@ -41,6 +43,8 @@ class Graphs:
         sns.lineplot(x='i',y='execution Time',hue='algorithm',data=self.data)
         if self.display:
             plt.show()
+        else:
+            plt.close(fig)
         if self.save:
             fig.savefig(self.path+".png")
 
@@ -66,6 +70,8 @@ class Graphs:
 
         if self.display:
             plt.show()
+        else:
+            plt.close(fig)
         if self.save:
             fig.savefig(self.path+".png")
 
@@ -83,13 +89,17 @@ class Graphs:
         ax.scatter(x, y, z)
         if self.display:
             plt.show()
+        else:
+            plt.close(fig)
         if self.save:
             fig.savefig(self.path+".png")
+        plt.close()
 
 
     def GraphExperimentation(self,algName,p,graphType):
         plt.cla()
         plt.clf()
+
         nbRepeat = len(os.listdir(p))-1
         data = []
         for i in range(nbRepeat):

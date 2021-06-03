@@ -44,13 +44,8 @@ class Performances:
         fitness = Fitness('horizontal_binary',self.objectiveNames,0)
         for i in range(len(self.algorithmList)):
             solutionsi = self.scores[self.scores['algorithm'] == self.algorithmList[i]][self.objectiveNames].to_numpy()
-            solutionsj = self.scores[self.scores['algorithm'] != self.algorithmList[i]][self.objectiveNames].to_numpy()
             for j in range(len(solutionsi)):
-                for k in range(len(solutionsj)):
-                    domination = fitness.Domination(solutionsi[j],solutionsj[k])
-                    if domination == -1:
-                        self.leaderBoard[i]+=1
-            self.leaderBoard[i] = (self.leaderBoard[i]/(len(solutionsi)))
+                self.leaderBoard[i]+=sum(solutionsi[j])
             self.leaderBoard[i] = np.round(self.leaderBoard[i],2)
         self.leaderBoardSorted = list(zip(self.leaderBoard, self.algorithmList))
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
