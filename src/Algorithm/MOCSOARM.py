@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MOCSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=10,step=3):
+                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=5,step=3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration

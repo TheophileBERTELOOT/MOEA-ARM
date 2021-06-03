@@ -16,7 +16,7 @@ class Population:
             presence = individual[:int(len(individual) / 2)]
             location = individual[int(len(individual) / 2):]
             indexRule = (presence > 0).nonzero()[0]
-            indexAntecedent = indexRule[(location[indexRule] < 0).nonzero()[0]]
+            indexAntecedent = indexRule[(location[indexRule] <= 0).nonzero()[0]]
             indexConsequent = indexRule[(location[indexRule] > 0).nonzero()[0]]
         elif self.representation == 'horizontal_index':
             individual = individual[0]
@@ -24,6 +24,16 @@ class Population:
             indexAntecedent = (individual[1:int(individual[0])] > 0).nonzero()[0]
             indexConsequent = (individual[int(individual[0]):] > 0).nonzero()[0]
         return indexRule,indexAntecedent,indexConsequent
+
+    def CheckIfNullIndividual(self,ind):
+        indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(ind)
+        if len(indexAntecedent) <1 or len(indexConsequent<1):
+            if self.representation == 'horizontal_binary':
+                individual = self.InitIndividual_HorizontalBinary()
+            if self.representation == 'horizontal_index':
+                individual = self.InitIndividual_HorizontalIndex()
+            return copy.deepcopy(individual)
+        return False
 
     def CheckIfNull(self):
         for i in range(self.populationSize):
@@ -44,6 +54,7 @@ class Population:
                 individual = self.InitIndividual_HorizontalIndex()
             self.population.append(individual)
         self.population = np.array(self.population)
+        self.CheckIfNull()
 
     def SetPopulation(self,population):
         self.population = copy.deepcopy(population)
@@ -54,9 +65,13 @@ class Population:
             individual.append(-1.0)
         for i in range(self.nbItem):
             individual.append(float(rd.randint(-1,1)))
-        for i in range(5):
+        for i in range(2):
             index = rd.randint(0,self.nbItem-1)
             individual[index] = 1.0
+            if i ==0:
+                individual[self.nbItem+index] = 1
+            else:
+                individual[self.nbItem + index] = -1
         return np.array(individual)
 
     def CheckDivide0(self,p):

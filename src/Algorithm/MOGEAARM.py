@@ -52,7 +52,7 @@ class MOGEAARM:
             rg = np.random.normal()
             ra = np.random.normal()
             dx = (abs(self.population.population[i]-self.bestInd)+abs(self.worstInd-self.population.population[i]))/2
-            gmove = (rg*dx/2)*((self.worstInd-self.bestInd)/(self.worstInd-self.population.population[i]+self.bestInd))
+            gmove = (rg*dx/2)*((self.worstInd-self.bestInd)/(self.worstInd-self.population.population[i]+self.bestInd+0.00001))
             gmove = self.population.CheckDivide0(gmove)
             acc = ra*(self.bestInd-self.population.population[i])
             self.mutatedVectors[i] = self.population.population[i]- gmove + acc
@@ -65,6 +65,9 @@ class MOGEAARM:
                 index = rd.randint(0,self.population.populationSize-1)
                 individual = self.mutatedVectors[i] +rm*(self.mutatedVectors[i] - self.mutatedVectors[index])
                 individual = self.population.CheckDivide0(individual)
+                is0 = self.population.CheckIfNullIndividual(individual)
+                if type(is0) != bool:
+                    individual = copy.deepcopy(is0)
                 self.mutatedVectors[i] = copy.deepcopy(individual)
 
     def VectorRefreshing(self,data):

@@ -24,7 +24,7 @@ class MOGSAARM:
         self.velocity = np.zeros((populationSize,nbItem*2),dtype=float)
         self.forces = np.zeros((populationSize,nbItem*2), dtype=float)
         self.G= hyperParameters.hyperParameters['G']
-        self.epsilon = 0.00000000000000000000000000000000000001
+        self.epsilon = 0.0000001
         self.executionTime = 0
 
     def UpdateG(self):
@@ -74,6 +74,9 @@ class MOGSAARM:
         for i in range(self.population.populationSize):
             self.velocity[i] = self.velocity[i] *rd.random()    + self.forces[i]/self.masses[i]
             self.velocity[i] = self.population.CheckDivide0(self.velocity[i])
+            is0 = self.population.CheckIfNullIndividual(self.velocity[i])
+            if type(is0) != bool:
+                self.velocity[i] = copy.deepcopy(is0)
             individual = copy.deepcopy(self.population.population[i] ) + self.velocity[i]
             score = self.fitness.ComputeScoreIndividual(individual,data)
             domination = self.fitness.Domination(self.fitness.scores[i],score)

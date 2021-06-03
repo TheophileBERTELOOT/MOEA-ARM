@@ -43,7 +43,7 @@ class MOWSAARM:
         return bestPrey,bestPreyScore
 
     def CalculDistance(self,wolf,prey):
-        return distance.minkowski(wolf,prey,self.nbItem*2)
+        return distance.euclidean(wolf,prey)
 
     def GenerateEscape(self):
         return self.population.InitIndividual_HorizontalBinary()

@@ -62,7 +62,6 @@ class MOWOAARM:
                     self.population.population[i] = copy.deepcopy(self.population.population[index]) -A*D
             else:
                 self.population.population[i] = D*np.exp(self.b*l)*np.cos(2*np.pi*l)+self.bestInd
-
         self.population.CheckIfNull()
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateBest()

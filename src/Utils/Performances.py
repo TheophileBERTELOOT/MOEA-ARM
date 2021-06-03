@@ -50,7 +50,7 @@ class Performances:
                     domination = fitness.Domination(solutionsi[j],solutionsj[k])
                     if domination == -1:
                         self.leaderBoard[i]+=1
-            self.leaderBoard[i] = (self.leaderBoard[i]/(len(solutionsj)))*len(solutionsi)
+            self.leaderBoard[i] = (self.leaderBoard[i]/(len(solutionsi)))
             self.leaderBoard[i] = np.round(self.leaderBoard[i],2)
         self.leaderBoardSorted = list(zip(self.leaderBoard, self.algorithmList))
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
@@ -69,7 +69,8 @@ class Performances:
             mkdir(leaderBoardPath)
         self.scores.to_csv(p+'Score/'+str(i)+'.csv')
         self.nbRules.to_csv(p+'NbRules/'+str(i)+'.csv')
-        pd.DataFrame(self.leaderBoardSorted).to_csv(p+'LeaderBoard/'+str(i)+'.csv')
+        pd.DataFrame(self.leaderBoardSorted,columns=['score','algorithm']).to_csv(p+'LeaderBoard/'+str(i)+'.csv')
+
 
     def SaveFinalPerf(self,p):
         if (not path.exists(p)):

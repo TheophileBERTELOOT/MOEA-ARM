@@ -276,6 +276,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Experiments\MUSHROOM\0\LeaderBoard\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\MUSHROOM\0\NbRules\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\MUSHROOM\0\Score\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Experiments\MUSHROOM\1\Score\3.csv">
           <value>
             <Attribute>
@@ -283,7 +304,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Experiments\TAE\0\ExecutionTime.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Experiments\TAE\0\LeaderBoard\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\0\LeaderBoard\1.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -298,6 +333,55 @@
           </value>
         </entry>
         <entry key="\Experiments\TAE\0\Score\0.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\0\Score\19.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\0\Score\6.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\1\ExecutionTime.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\5\Score\19.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\7\LeaderBoard\19.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\8\LeaderBoard\19.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Experiments\TAE\9\LeaderBoard\19.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

@@ -22,12 +22,9 @@ class MOCSSARM:
         self.worstInd = copy.deepcopy(self.population.population[rd.randint(0, populationSize - 1)])
         self.worstIndScore = np.zeros(nbObjectifs, dtype=float)
 
-        self.ruthlessRatio = hyperParameters.hyperParameters['ruthlessRatio']
-
         self.distance = np.zeros((populationSize,populationSize),dtype=float)
         self.executionTime = 0
         self.fitness.ComputeScorePopulation(self.population.population, data)
-
 
     def UpdateBestWorst(self):
         indexs = np.arange(self.population.populationSize)
@@ -52,7 +49,7 @@ class MOCSSARM:
             for j in range(self.population.populationSize):
                 dstij = distance.euclidean(self.population.population[i], self.population.population[j])
                 distMB = distance.euclidean((self.population.population[i]+self.population.population[j])/2, self.bestInd)
-                self.distance[i][j] = dstij/(distMB+0.000000000000000000000001)
+                self.distance[i][j] = dstij/(distMB+0.0001)
 
     def CalculForce(self):
         a=0.1*self.nbItem*2
@@ -81,6 +78,9 @@ class MOCSSARM:
         for i in range(self.population.populationSize):
             individual = rd.random()*ka*(self.force[i]/sum(self.fitness.scores[i]))+rd.random()*kv*self.velocity[i]+self.population.population[i]
             individual=self.population.CheckDivide0(individual)
+            is0 = self.population.CheckIfNullIndividual(individual)
+            if type(is0)!=bool:
+                individual = copy.deepcopy(is0)
             vNew = individual - self.population.population[i]
             vNew = self.population.CheckDivide0(vNew)
             score = self.fitness.ComputeScoreIndividual(individual,data)
@@ -89,8 +89,8 @@ class MOCSSARM:
                 self.velocity[i] = copy.deepcopy(vNew)
                 self.UpdateBestWorst()
 
-    def Run(self,data,i):
 
+    def Run(self,data,i):
         t1 = time()
         self.UpdateBestWorst()
         self.CalculDistance()

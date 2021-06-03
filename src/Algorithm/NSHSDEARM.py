@@ -61,6 +61,7 @@ class NSHSDEARM:
         currentPopulation,currentPopulationScores,self.distances = self.CrowdingDistanceAssignment(currentPopulation,currentPopulationScores)
         self.population.SetPopulation(np.array(currentPopulation))
 
+
     def FastNonDominatedSort(self,population):
         F = []
         F1 = []
