@@ -22,12 +22,12 @@ hyper.SaveBestParameters(p+'bestParameters.json')
 '''
 
 
-nbIteration = 20
+nbIteration = 50
 nbRepetition = 100
 populationSize = 100
 objectiveNames = ['support','confidence','cosine']
 criterionList = ['scores','execution time']
-algorithmNameList = ['mocsoarm','mowoaarm']
+algorithmNameList = ['moaloarm','mowoaarm']
 algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mosaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm',
                      'modaarm','mohsbotsarm','modearm','nshsdearm','mogeaarm','mogsaarm','mossoarm','mowoaarm','mososarm',
                      'mocssarm']
@@ -42,8 +42,8 @@ d = Data('Data/Transform/flag.csv',header=0,indexCol=0)
 d.ToNumpy()
 
 
-E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,path=p,display=False)
-E.Run()
+# E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,path=p,display=False)
+# E.Run()
 
 g = Graphs(objectiveNames,[])
 g.GraphExperimentation(algorithmNameList,'Experiments/FLAG/','LeaderBoard')

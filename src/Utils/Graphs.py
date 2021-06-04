@@ -25,7 +25,7 @@ class Graphs:
     def GraphNbRules(self):
         plt.cla()
         plt.clf()
-        fig = plt.figure()
+        fig = plt.figure(figsize=(15,15))
         sns.barplot(x='algorithm', y='nbRules', data=self.data)
         plt.xticks(rotation=70)
         plt.tight_layout()
@@ -39,8 +39,9 @@ class Graphs:
     def GraphExecutionTime(self):
         plt.cla()
         plt.clf()
-        fig = plt.figure()
-        sns.lineplot(x='i',y='execution Time',hue='algorithm',data=self.data)
+        fig = plt.figure(figsize=(15,15))
+        sns.lineplot(x='i',y='execution Time',hue='algorithm',style='algorithm',data=self.data)
+        fig.legend(loc='center left', bbox_to_anchor=(1, 0.5))
         if self.display:
             plt.show()
         else:
@@ -121,9 +122,12 @@ class Graphs:
                         data.append([algName[nameIndex],j,float(s)])
         df = pd.DataFrame(data,columns=['algorithm','iter',graphType])
         plt.figure(figsize=(15, 15))
-        ax = sns.lineplot(x='iter',y=graphType,hue='algorithm',data=df)
+        ax = sns.lineplot(x='iter',y=graphType,hue='algorithm',style='algorithm',data=df)
         ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
         plt.show()
+        df = df.groupby(['algorithm'])
+        print(df[graphType].agg(
+                      ['mean','std']).sort_values(by=['mean'],ascending=False))
 
 
 

@@ -145,6 +145,23 @@ class HMOFAARM:
         self.paretoFront = []
         self.paretoFrontScore = []
 
+    def SelectCurrentPopulation(self):
+        lastAddedFront = 0
+        lastIndexInd = 0
+        while lastIndexInd<self.population.populationSize:
+            lastIndexInd+=sum(self.rank==lastAddedFront)
+            lastAddedFront+=1
+        lastAddedFront-=1
+        lastIndexInd-=sum(self.rank==lastAddedFront)
+        front = copy.deepcopy(self.population.population[self.rank==lastAddedFront])
+        scores = copy.deepcopy(np.array(self.fitness.scores[self.rank==lastAddedFront]))
+        front,scores,distances = self.CrowdingDistanceAssignment(front,scores)
+        nbToAdd = self.population.populationSize-lastIndexInd
+        currentPopulation = np.concatenate([self.population.population[:lastIndexInd],front[:nbToAdd]],axis=0)
+        currentPopulationScores = np.concatenate([self.fitness.scores[:lastIndexInd],scores[:nbToAdd]],axis=0)
+        currentPopulation,currentPopulationScores,self.distances = self.CrowdingDistanceAssignment(currentPopulation,currentPopulationScores)
+        self.population.SetPopulation(np.array(currentPopulation))
+
     def Run(self,data,i):
 
         t1 = time()
@@ -153,6 +170,7 @@ class HMOFAARM:
         self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdatePopulation(data)
         self.FastNonDominatedSort(self.population)
+        self.SelectCurrentPopulation()
         self.FindParetoFront()
         self.executionTime = time() - t1
 

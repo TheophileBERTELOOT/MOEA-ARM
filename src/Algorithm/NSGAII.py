@@ -91,7 +91,7 @@ class NSGAII:
     def CrossOver(self,population):
         offsprings = []
         nbCross = int(population.populationSize*self.crossOverRate)
-        if nbCross+len(population.population)!=100:
+        if nbCross+len(population.population)!=self.Q.populationSize:
             nbCross+=1
         for i in range(nbCross):
             p1 = rd.randint(0,len(population.population)-1)

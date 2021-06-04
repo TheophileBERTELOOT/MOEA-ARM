@@ -71,6 +71,7 @@ class Performances:
         if (not path.exists(p)):
             mkdir(p)
         self.executionTime.to_csv(p+'ExecutionTime.csv')
+        self.InitExecutionTime()
 
 
 
