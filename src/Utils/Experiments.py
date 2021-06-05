@@ -24,13 +24,14 @@ from os import path,mkdir
 
 
 class Experiment:
-    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,display=False,path='Experiments/'):
+    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,display=False,path='Experiments/'):
         self.algListNames = algListNames
         self.objectiveNames = objectiveNames
         self.criterionList = criterionList
         self.populationSize = populationSize
         self.nbIteration = nbIteration
         self.nbRepetition = nbRepetition
+        self.iterationInitial = iterationInitial
         self.hyperParametersList = {}
         self.data = data
         self.algList = []
@@ -167,7 +168,7 @@ class Experiment:
         nbRulesGraphPath = graphPath + 'NbRules/'
         self.CheckIfFolderExist(scoreGraphPath)
         self.CheckIfFolderExist(nbRulesGraphPath)
-        for rep in range(self.nbRepetition):
+        for rep in range(self.iterationInitial,self.iterationInitial+self.nbRepetition):
             self.InitAlgList()
             executionTimeGraphPath = graphPath + 'ExecutionTime/'
             scoreGraphPath = graphPath + 'Scores/'+str(rep)+'/'

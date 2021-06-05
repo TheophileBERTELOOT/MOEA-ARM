@@ -25,9 +25,15 @@ class HyperParameters:
         algorithmName = 'best'
         for i in range(nbIter):
             self.GetRandomParameters()
-            alg.ResetPopulation(data,self)
+            try:
+                alg.ResetPopulation(data,self)
+            except:
+                pass
             for j in range(alg.nbIteration):
-                alg.Run(data,j)
+                try:
+                    alg.Run(data,j)
+                except:
+                    pass
             alg.fitness.GetParetoFront()
             perf.UpdatePerformances(score=alg.fitness.paretoFront, i=j,
                                     algorithmName=algorithmName)

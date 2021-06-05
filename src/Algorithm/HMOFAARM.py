@@ -18,6 +18,7 @@ class HMOFAARM:
         self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
         self.alpha = hyperParameters.hyperParameters['alpha']
         self.beta0 = hyperParameters.hyperParameters['beta0']
+        self.betaInit = hyperParameters.hyperParameters['beta0']
         self.gamma = 1/((self.nbItem*2)**2)
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.nbSolution = nbSolution
@@ -33,6 +34,9 @@ class HMOFAARM:
         r = rd.random()
         if r < 0.5:
             self.beta0 = rd.random()
+        else:
+            self.beta0 = self.betaInit
+
 
     def UpdateIndividual(self,xid,xjd):
         epsilon = rd.random()-0.5

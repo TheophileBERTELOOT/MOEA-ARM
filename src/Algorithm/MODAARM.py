@@ -76,13 +76,18 @@ class MODAARM:
         A = np.zeros(self.nbItem*2,dtype=float)
         for i in range(len(N)):
             A = A +self.velocity[N[i]]
-        return A/len(N)
+        if len(N)!=0:
+            return A/len(N)
+        return 0
 
     def Cohesion(self,df,N):
         C = np.zeros(self.nbItem*2,dtype=float)
         for i in range(len(N)):
             C = C +self.population.population[N[i]]
-        C = C/len(N)
+        if len(N)!=0:
+            C = C/len(N)
+        else:
+            C = 0
         return C-self.population.population[df]
 
     def FoodAttraction(self,df):

@@ -46,7 +46,7 @@ class Performances:
             solutionsi = self.scores[self.scores['algorithm'] == self.algorithmList[i]][self.objectiveNames].to_numpy()
             for j in range(len(solutionsi)):
                 self.leaderBoard[i]+=sum(solutionsi[j])
-            self.leaderBoard[i] = np.round(self.leaderBoard[i],2)
+            self.leaderBoard[i] = np.round(self.leaderBoard[i],2)/len(solutionsi)
         self.leaderBoardSorted = list(zip(self.leaderBoard, self.algorithmList))
         self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
         print(self.scores)
