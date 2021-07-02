@@ -51,6 +51,7 @@ class Performances:
             scoreDF = pd.DataFrame(score,columns=self.columnsScores)
             self.scores = self.scores.append(scoreDF, ignore_index=True)
             self.nbRules = self.nbRules.append(nbRule,ignore_index=True)
+            self.nbRules = self.nbRules.sort_values(by=['nbRules'], ascending=False)
         if 'execution time' in self.criterionList:
             executionTimeDF = pd.DataFrame([[i,algorithmName,executionTime]],columns=self.columnsET)
             self.executionTime = self.executionTime.append(executionTimeDF, ignore_index=True)

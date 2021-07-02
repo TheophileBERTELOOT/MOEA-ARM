@@ -50,7 +50,7 @@ d.ToNumpy()
 E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=True)
 E.Run()
 
-g = Graphs(objectiveNames,[])
+g = Graphs(objectiveNames,[],path='../Experiments/TAE/Graphs/LeaderBoard/')
 g.GraphExperimentation(algorithmNameList,'../Experiments/TAE/','LeaderBoard',nbIteration)
 
 

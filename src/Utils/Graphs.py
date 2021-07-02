@@ -157,11 +157,14 @@ class Graphs:
         df = pd.DataFrame(data,columns=['algorithm','iter']+self.objectiveNames)
         for k in range(len(self.objectiveNames)):
             objectiveName = self.objectiveNames[k]
-            plt.figure(figsize=(15, 15))
+            fig = plt.figure(figsize=(15, 15))
             ax = sns.lineplot(x='iter', y=objectiveName, hue='algorithm', style='algorithm', data=df)
             ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
             plt.show()
             dfTemp = df[df['iter'] == nbIter-1].groupby(['algorithm'])
+            if self.save:
+                fig.savefig(self.path+objectiveName + ".png")
+            plt.close()
             print(objectiveName)
             print(dfTemp[objectiveName].agg(
                 ['mean', 'std']).sort_values(by=['mean'], ascending=False))
