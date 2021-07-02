@@ -56,6 +56,8 @@ class MODEARM:
         self.population.InitPopulation()
         self.F = hyperParameters.hyperParameters['F']
         self.CR = hyperParameters.hyperParameters['CR']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def Run(self,data,i):

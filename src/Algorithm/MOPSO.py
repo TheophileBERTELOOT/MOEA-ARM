@@ -124,6 +124,8 @@ class MOPSO:
         self.personalBestsFitness = []
         self.globalBest = []
         self.globalBestFitness = []
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.inertie = hyperParameters.hyperParameters['inertie']
         self.localAcceleration = hyperParameters.hyperParameters['localAccelaration']
         self.globalAcceleration = hyperParameters.hyperParameters['globalAcceleration']

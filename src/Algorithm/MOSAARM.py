@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MOSAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 tempInitial = 1.0,nbIterationPerTemp=50,nbChanges=2,hyperParameters = HyperParameters(['alpha'])):
+                 tempInitial = 1.0,nbIterationPerTemp=10,nbChanges=5,hyperParameters = HyperParameters(['alpha'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -24,7 +24,8 @@ class MOSAARM:
 
     def GenerateRule(self,i):
         ind = copy.deepcopy(self.population.population[i])
-        for j in range(self.nbChanges):
+        nbChange = rd.randint(1,self.nbChanges)
+        for j in range(nbChange):
             index = rd.randint(0,(self.nbItem*2)-1)
             ind[index]*=-1
         return ind
@@ -33,6 +34,8 @@ class MOSAARM:
         self.population.InitPopulation()
         self.alpha = hyperParameters.hyperParameters['alpha']
         self.temp = self.tempInitial
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
 
     def Run(self,data,i):
 

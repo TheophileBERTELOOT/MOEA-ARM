@@ -49,8 +49,7 @@ class MOGSAARM:
         for i in range(self.population.populationSize):
             somme = np.zeros(self.nbItem*2,dtype=float)
             for j in range(self.population.populationSize):
-                r =rd.random()
-                somme+= self.G*((self.masses[i]*self.masses[j])/(self.distance[i,j]+self.epsilon))*(self.population.population[j]-self.population.population[i])
+                somme+= 2*((self.masses[i]*self.masses[j])/(self.distance[i,j]+self.epsilon))*(self.population.population[j]-self.population.population[i])
             self.forces[i] = copy.deepcopy(somme)
 
     def UpdateBestWorst(self):
@@ -72,12 +71,12 @@ class MOGSAARM:
 
     def UpdatePosition(self,data):
         for i in range(self.population.populationSize):
-            self.velocity[i] = self.velocity[i] *rd.random()    + self.forces[i]/self.masses[i]
+            self.velocity[i] = self.velocity[i] *rd.random()+ self.forces[i]/self.masses[i]
             self.velocity[i] = self.population.CheckDivide0(self.velocity[i])
-            is0 = self.population.CheckIfNullIndividual(self.velocity[i])
-            if type(is0) != bool:
-                self.velocity[i] = copy.deepcopy(is0)
             individual = copy.deepcopy(self.population.population[i] ) + self.velocity[i]
+            isNull = self.population.CheckIfNullIndividual(individual)
+            if type(isNull)!=bool:
+                individual = self.population.InitIndividual_HorizontalBinary()
             score = self.fitness.ComputeScoreIndividual(individual,data)
             domination = self.fitness.Domination(self.fitness.scores[i],score)
             if domination == 1:
@@ -87,6 +86,8 @@ class MOGSAARM:
     def ResetPopulation(self,data,hyperParameters):
         self.population.InitPopulation()
         self.G = hyperParameters.hyperParameters['G']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
 
 
     def Run(self,data,i):

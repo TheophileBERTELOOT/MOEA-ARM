@@ -40,6 +40,8 @@ class MOWOAARM:
     def ResetPopulation(self, data, hyperParameters):
         self.population.InitPopulation()
         self.b = hyperParameters.hyperParameters['b']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateBest()
 

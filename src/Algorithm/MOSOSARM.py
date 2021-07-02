@@ -76,7 +76,8 @@ class MOSOSARM:
             while j == i:
                 j = rd.randint(0, self.population.populationSize - 1)
             iNew = copy.deepcopy(self.population.population[i])
-            for k in range(self.nbParasitismModification):
+            nbChange = rd.randint(1,self.nbParasitismModification)
+            for k in range(nbChange):
                 index = rd.randint(0,self.nbItem*2-1)
                 iNew[index] = float(rd.randint(-1,1))
             iNewScore = self.fitness.ComputeScoreIndividual(iNew, data)

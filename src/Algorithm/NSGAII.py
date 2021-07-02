@@ -8,19 +8,20 @@ from src.Utils.HyperParameters import *
 
 class NSGAII:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,
-                 objectiveNames,data,hyperParameters = HyperParameters(['mutationRate', 'crossOverRate'])):
+                 objectiveNames,data,hyperParameters = HyperParameters(['mutationRate', 'crossOverRate']),nbChanges=5):
         self.P = Population('horizontal_binary',int(populationSize/2),nbItem)
         self.Q = Population('horizontal_binary',int(populationSize/2),nbItem)
-        self.R = Population('horizontal_binary',populationSize,nbItem)
+        self.population = Population('horizontal_binary',populationSize,nbItem)
         self.nbItem = nbItem
         self.distances = []
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
+        self.nbChanges = nbChanges
         self.fitness = Fitness('horizontal_binary',objectiveNames,populationSize)
         self.fitnessFirstGeneration = Fitness('horizontal_binary',objectiveNames,int(populationSize/2))
         self.mutationRate = hyperParameters.hyperParameters['mutationRate']
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
-        self.rank = [0 for _ in range(self.R.populationSize)]
+        self.rank = [0 for _ in range(self.population.populationSize)]
         self.executionTime = 0
 
         self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
@@ -34,7 +35,6 @@ class NSGAII:
         F1 = []
         n = [0 for _ in range(population.populationSize)]
         S = [[] for _ in range(population.populationSize)]
-        self.rank = [0 for _ in range(population.populationSize)]
         for p in range(population.populationSize):
             S[p] = []
             for q in range(population.populationSize):
@@ -43,7 +43,6 @@ class NSGAII:
                 elif self.fitness.Domination(self.fitness.scores[p],self.fitness.scores[q]) == 1:
                     n[p]+=1
             if n[p] == 0:
-                self.rank[p] = 0
                 F1.append(p)
         F.append(F1)
         i = 0
@@ -53,11 +52,13 @@ class NSGAII:
                 for q in range(len(F[i])):
                     n[q]-=1
                     if n[q] == 0:
-                        self.rank[q] = i+1
                         Q.append(q)
             i+=1
             F.append(Q)
-        self.rank = np.array(self.rank)
+        self.rank = np.ones(population.populationSize,dtype=int)*(len(F)-1)
+        for i in range(len(F)):
+            for j in range(len(F[i])):
+                self.rank[F[i][j]] = i
         sortedPopulation = list(zip(self.rank,population.population,self.fitness.scores))
         sortedPopulation = np.array(sorted(sortedPopulation,key=lambda x:x[0]),dtype="object")
         self.fitness.scores = np.stack(sortedPopulation[:,2],axis=0)
@@ -83,9 +84,9 @@ class NSGAII:
                         offsprings.append(self.P.population[q])
             else:
                 if self.distances[p]>=self.distances[q]:
-                    offsprings.append(self.P.population[p])
+                    offsprings.append(copy.deepcopy(self.P.population[p]))
                 else :
-                    offsprings.append(self.P.population[q])
+                    offsprings.append(copy.deepcopy(self.P.population[q]))
         self.Q.SetPopulation(np.array(offsprings))
 
     def CrossOver(self,population):
@@ -96,8 +97,13 @@ class NSGAII:
         for i in range(nbCross):
             p1 = rd.randint(0,len(population.population)-1)
             p2 = rd.randint(0, len(population.population) - 1)
-            index = rd.randint(1,len(population.population[p1])-1)
-            offspring = np.concatenate([population.population[p1][:index],population.population[p2][index:]],axis=0)
+            offspring = np.zeros(self.nbItem*2,dtype=float)
+            for j in range(self.nbItem*2):
+                r = rd.random()
+                if r<=0.5:
+                    offspring[j] = population.population[p1][j]
+                else:
+                    offspring[j] = population.population[p2][j]
             offsprings.append(offspring)
         offsprings = np.concatenate([population.population,np.array(offsprings)],axis=0)
         population.SetPopulation(offsprings)
@@ -106,30 +112,31 @@ class NSGAII:
         for i in range(population.populationSize):
             r = rd.random()
             if r<self.mutationRate:
-                for j in range(self.nbItem*2):
-                    r = rd.random()
-                    if r <self.mutationRate:
-                        population.population[i][j] = (rd.random()*2)-1
+                nbChange = rd.randint(1,self.nbChanges)
+                for j in range(nbChange):
+                    index = rd.randint(0,self.nbItem*2-1)
+                    population.population[i][index] = rd.randint(-1,1)
 
     def CrowdingDistanceAssignment(self,front,scores):
         l = len(front)
         distances = [0 for i in range(l)]
-        for i in range(self.nbObjectifs):
-            front = list(zip(scores[:,i],front))
-            front = np.array(sorted(front,key=lambda x:x[0]),dtype="object")
-            score = np.stack(front[:,0],axis=0)
-            front = np.stack(front[:,1],axis=0)
-            distances[0] = np.infty
-            distances[l-1] =np.infty
-            for j in range(2,l-2):
-                distances[j]+= (score[j+1]-score[j-1])/(score[0]-score[l-1])
-                distances[j] = self.R.CheckDivide0(distances[j])
-        front = list(zip(distances,front,scores))
-        front = sorted(front, key=lambda x: x[0],reverse=True)
-        front = np.array(front,dtype="object")
-        distances = np.stack(front[:,0],axis=0)
-        scores = np.stack(front[:, 2],axis=0)
-        front = np.stack(front[:, 1],axis=0)
+        if l>4:
+            for i in range(self.nbObjectifs):
+                front = list(zip(scores[:,i],front))
+                front = np.array(sorted(front,key=lambda x:x[0]),dtype="object")
+                score = np.stack(front[:,0],axis=0)
+                front = np.stack(front[:,1],axis=0)
+                distances[0] = np.infty
+                distances[l-1] =np.infty
+                for j in range(2,l-2):
+                    distances[j]+= (score[j+1]-score[j-1])/(score[0]-score[l-1]+0.00001)
+                distances[j] = self.population.CheckDivide0(distances[j])
+            front = list(zip(distances,front,scores))
+            front = sorted(front, key=lambda x: x[0],reverse=True)
+            front = np.array(front,dtype="object")
+            distances = np.stack(front[:,0],axis=0)
+            scores = np.stack(front[:, 2],axis=0)
+            front = np.stack(front[:, 1],axis=0)
         return front,scores,distances
 
 
@@ -141,11 +148,11 @@ class NSGAII:
             lastAddedFront+=1
         lastAddedFront-=1
         lastIndexInd-=sum(self.rank==lastAddedFront)
-        front = self.R.population[self.rank==lastAddedFront]
+        front = self.population.population[self.rank==lastAddedFront]
         scores = np.array(self.fitness.scores[self.rank==lastAddedFront])
         front,scores,distances = self.CrowdingDistanceAssignment(front,scores)
         nbToAdd = self.P.populationSize-lastIndexInd
-        currentPopulation = np.concatenate([self.R.population[:lastIndexInd],front[:nbToAdd]],axis=0)
+        currentPopulation = np.concatenate([self.population.population[:lastIndexInd],front[:nbToAdd]],axis=0)
         currentPopulationScores = np.concatenate([self.fitness.scores[:lastIndexInd],scores[:nbToAdd]],axis=0)
         currentPopulation,currentPopulationScores,self.distances = self.CrowdingDistanceAssignment(currentPopulation,currentPopulationScores)
         self.P.SetPopulation(np.array(currentPopulation))
@@ -153,10 +160,12 @@ class NSGAII:
     def ResetPopulation(self, data, hyperParameters):
         self.P.InitPopulation()
         self.Q.InitPopulation()
-        self.R.InitPopulation()
+        self.population.InitPopulation()
         self.mutationRate = hyperParameters.hyperParameters['mutationRate']
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.BinaryTournament(True)
         self.CrossOver(self.Q)
         self.Mutation(self.Q)
@@ -164,10 +173,10 @@ class NSGAII:
     def Run(self,data,i):
 
         t1 = time()
-        self.R.SetPopulation(np.concatenate([self.P.population,self.Q.population],axis=0))
-        self.R.CheckIfNull()
-        self.fitness.ComputeScorePopulation(self.R.population, data)
-        self.FastNonDominatedSort(self.R)
+        self.population.SetPopulation(np.concatenate([copy.deepcopy(self.P.population),copy.deepcopy(self.Q.population)],axis=0))
+        self.population.CheckIfNull()
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.FastNonDominatedSort(self.population)
         self.SelectCurrentPopulation()
         self.BinaryTournament(False)
         self.CrossOver(self.Q)

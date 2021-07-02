@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MOCSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=5,step=3):
+                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=3,step=3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -25,11 +25,17 @@ class MOCSOARM:
         self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def FindLocalBest(self,matesScore):
-        dominant = 0
-        for i in range(1,len(matesScore)):
-            if self.fitness.Domination(matesScore[i],matesScore[dominant]) == -1:
-                dominant = i
-        return dominant
+        indexs = np.arange(len(matesScore))
+        paretoFront = np.ones(len(matesScore))
+        for i in range(len(matesScore)):
+            for j in range(len(matesScore)):
+                domination = self.fitness.Domination(matesScore[i], matesScore[j])
+                if domination == 1:
+                    paretoFront[i] = 0
+                    break
+        candidate = indexs[paretoFront == 1]
+        index = rd.choice(candidate)
+        return index
 
     def ChaseSwarming(self):
         step = rd.random()
@@ -53,10 +59,17 @@ class MOCSOARM:
                 self.distance[i,j] = dst
 
     def UpdateBestInd(self):
+        indexs = np.arange(self.population.populationSize)
+        paretoFront = np.ones(self.population.populationSize)
         for i in range(self.population.populationSize):
-            if self.fitness.Domination(self.fitness.scores[i],self.bestIndScore ) == -1:
-                self.bestIndScore = self.fitness.scores[i]
-                self.bestInd = copy.deepcopy(self.population.population[i])
+            for j in range(self.population.populationSize):
+                domination = self.fitness.Domination(self.fitness.scores[i],self.fitness.scores[j])
+                if domination == 1:
+                    paretoFront[i] = 0
+                    break
+        candidate = indexs[paretoFront == 1]
+        index = rd.choice(candidate)
+        self.bestInd = copy.deepcopy(self.population.population[index])
 
     def Dispersion(self):
         for i in range(self.population.populationSize):
@@ -73,6 +86,8 @@ class MOCSOARM:
     def ResetPopulation(self,data,hyperParameters):
         self.population.InitPopulation()
         self.ruthlessRatio = hyperParameters.hyperParameters['ruthlessRatio']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def Run(self,data,i):

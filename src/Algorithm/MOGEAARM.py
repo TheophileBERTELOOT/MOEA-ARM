@@ -87,6 +87,8 @@ class MOGEAARM:
         self.Jr = hyperParameters.hyperParameters['Jr']
         self.Sr = hyperParameters.hyperParameters['Sr']
         self.epsilon = hyperParameters.hyperParameters['epsilon']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def Run(self,data,i):

@@ -36,6 +36,34 @@ class Graphs:
         if self.save:
             fig.savefig(self.path + ".png")
 
+    def GraphDistances(self):
+        plt.cla()
+        plt.clf()
+        fig = plt.figure(figsize=(15,15))
+        sns.barplot(x='algorithm', y='distances', data=self.data)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
+    def GraphCoverages(self):
+        plt.cla()
+        plt.clf()
+        fig = plt.figure(figsize=(15,15))
+        sns.barplot(x='algorithm', y='coverages', data=self.data)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
     def GraphExecutionTime(self):
         plt.cla()
         plt.clf()
@@ -97,10 +125,9 @@ class Graphs:
         plt.close()
 
 
-    def GraphExperimentation(self,algName,p,graphType):
+    def GraphExperimentation(self,algName,p,graphType,nbIter):
         plt.cla()
         plt.clf()
-
         nbRepeat = len(os.listdir(p))-1
         data = []
         for i in range(nbRepeat):
@@ -110,6 +137,10 @@ class Graphs:
                 for nameIndex in range(len(algName)):
                     for j in df['i'].unique():
                         data.append([algName[nameIndex],j , float(df.loc[(df['algorithm'] == algName[nameIndex]) & (df['i'] == j)]['execution Time'])])
+            elif graphType == 'Distance':
+                self.GraphDistances()
+            elif graphType == 'Coverage':
+                self.GraphCoverages()
             else:
                 repetitionPath = p + str(i) + '/' + graphType + '/'
                 nbIter = len(os.listdir(repetitionPath))
@@ -118,16 +149,23 @@ class Graphs:
                     df = pd.read_csv(iterPath,index_col=0)
                     nameCol = [nc for nc in df.columns if nc != 'algorithm']
                     for nameIndex in range(len(algName)):
-                        s = df[df['algorithm'] == algName[nameIndex]][nameCol[0]]
-                        data.append([algName[nameIndex],j,float(s)])
-        df = pd.DataFrame(data,columns=['algorithm','iter',graphType])
-        plt.figure(figsize=(15, 15))
-        ax = sns.lineplot(x='iter',y=graphType,hue='algorithm',style='algorithm',data=df)
-        ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
-        plt.show()
-        df = df.groupby(['algorithm'])
-        print(df[graphType].agg(
-                      ['mean','std']).sort_values(by=['mean'],ascending=False))
+                        s1 = df[df['algorithm'] == algName[nameIndex]][nameCol[0]]
+                        s2 =df[df['algorithm'] == algName[nameIndex]][nameCol[1]]
+                        s3 = df[df['algorithm'] == algName[nameIndex]][nameCol[2]]
+                        data.append([algName[nameIndex],j,float(s1),float(s2),float(s3)])
+
+        df = pd.DataFrame(data,columns=['algorithm','iter']+self.objectiveNames)
+        for k in range(len(self.objectiveNames)):
+            objectiveName = self.objectiveNames[k]
+            plt.figure(figsize=(15, 15))
+            ax = sns.lineplot(x='iter', y=objectiveName, hue='algorithm', style='algorithm', data=df)
+            ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+            plt.show()
+            dfTemp = df[df['iter'] == nbIter-1].groupby(['algorithm'])
+            print(objectiveName)
+            print(dfTemp[objectiveName].agg(
+                ['mean', 'std']).sort_values(by=['mean'], ascending=False))
+
 
 
 

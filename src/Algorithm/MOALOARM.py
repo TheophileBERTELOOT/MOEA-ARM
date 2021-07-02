@@ -13,11 +13,13 @@ class MOALOARM:
                  save=True,display=True,path='Figures/'):
         self.ants = Population('horizontal_binary', int(populationSize/2), nbItem)
         self.lions = Population('horizontal_binary', int(populationSize/2), nbItem)
+        self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, int(populationSize/2) )
+        self.fitnessLions = Fitness('horizontal_binary', objectiveNames, int(populationSize/2) )
         self.fitnessAnts = Fitness('horizontal_binary', objectiveNames, int(populationSize/2) )
+        self.fitness =  Fitness('horizontal_binary', objectiveNames, populationSize )
         self.elite = []
         self.eliteScore = []
         self.maxBound = 1
@@ -28,33 +30,32 @@ class MOALOARM:
         self.path = path
         self.executionTime = 0
         self.fitnessAnts.ComputeScorePopulation(self.ants.population, data)
-        self.fitness.ComputeScorePopulation(self.lions.population, data)
+        self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateElite()
 
 
 
     def UpdateElite(self):
-        indexs = np.arange(self.lions.populationSize)
-        paretoFront = np.ones(self.lions.populationSize)
-        for i in range(self.lions.populationSize):
-            for j in range(self.lions.populationSize):
+        indexs = np.arange(self.population.populationSize)
+        paretoFront = np.ones(self.population.populationSize)
+        for i in range(self.population.populationSize):
+            for j in range(self.population.populationSize):
                 domination = self.fitness.Domination(self.fitness.scores[i],self.fitness.scores[j])
                 if domination == 1:
                     paretoFront[i] = 0
                     break
         candidate = indexs[paretoFront == 1]
         index = rd.choice(candidate)
-        self.elite = copy.deepcopy(self.lions.population[index])
+        self.elite = copy.deepcopy(self.population.population[index])
         self.eliteScore = copy.deepcopy(self.fitness.scores[index])
 
     def SelectLions(self):
-
         candidate = []
         for i in range(self.lions.populationSize):
             for j in range(self.lions.populationSize):
-                domination = self.fitness.Domination(self.fitness.scores[i],self.fitness.scores[j])
+                domination = self.fitness.Domination(self.fitnessLions.scores[i],self.fitnessLions.scores[j])
                 if domination == 1:
-                    candidate.append(i)
+                    candidate.append(j)
         if len(candidate) == 0:
             index= rd.randint(0,self.lions.populationSize-1)
         else:
@@ -82,38 +83,41 @@ class MOALOARM:
         nbChanges = rd.randint(1,self.nbChanges)
         for i in range(nbChanges):
             index = rd.randint(0,self.nbItem*2-1)
-            rdw[index] = float(rd.randint(-1,1))
+            rdw[index] = float(rd.randint(-1,1))+rd.randint(-1,1)*0.001
         rdw = np.array(rdw)
         return rdw
 
     def ResetPopulation(self,data,hyperParameters):
         self.ants.InitPopulation()
         self.lions.InitPopulation()
-        self.fitness = Fitness('horizontal_binary', self.objectiveNames, self.lions.populationSize)
+        self.population.InitPopulation()
+        self.fitness = Fitness('horizontal_binary', self.objectiveNames, self.population.populationSize)
         self.fitnessAnts = Fitness('horizontal_binary', self.objectiveNames, self.ants.populationSize)
+        self.fitnessLions = Fitness('horizontal_binary', self.objectiveNames, self.ants.populationSize)
         self.elite = []
         self.eliteScore = []
         self.fitnessAnts.ComputeScorePopulation(self.ants.population, data)
-        self.fitness.ComputeScorePopulation(self.lions.population, data)
+        self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateElite()
 
     def Run(self,data,i):
 
         t1 = time()
+        self.fitnessLions.ComputeScorePopulation(self.lions.population,data)
         for i in range(self.ants.populationSize):
             lion = self.SelectLions()
             self.UpdateBounds(i)
-            lionRandomWalk = self.lions.population[lion] + self.GenerateRandomWalk()
+            lionRandomWalk = copy.deepcopy(self.lions.population[lion]) + self.GenerateRandomWalk()
             eliteRandomWalk = copy.deepcopy(self.elite) + self.GenerateRandomWalk()
             self.ants.population[i] = (lionRandomWalk+eliteRandomWalk)/2
             score = self.fitnessAnts.ComputeScoreIndividual(self.ants.population[i],data)
             domination = self.fitnessAnts.Domination(self.fitness.scores[lion],score)
             self.fitnessAnts.scores[i] = copy.deepcopy(score)
             if domination == 1:
-                self.lions.population[lion] = copy.deepcopy(self.ants.population[i])
-        self.ants.CheckIfNull()
-        self.lions.CheckIfNull()
-        self.fitness.ComputeScorePopulation(self.lions.population,data)
+                self.population.population[lion] = copy.deepcopy(self.ants.population[i])
+        self.population.SetPopulation(np.concatenate([copy.deepcopy(self.ants.population), copy.deepcopy(self.lions.population)], axis=0))
+        self.population.CheckIfNull()
+        self.fitness.ComputeScorePopulation(self.population.population,data)
         self.UpdateElite()
         self.executionTime = time() - t1
 

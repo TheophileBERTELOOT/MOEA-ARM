@@ -12,7 +12,7 @@ from src.Utils.HyperParameters import *
 
 class MODAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 minDist = 8,nbChanges = 5,hyperParameters = HyperParameters(['s','a','c','f','e','w'])):
+                 minDist = 3,nbChanges = 5,hyperParameters = HyperParameters(['s','a','c','f','e','w'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -48,8 +48,12 @@ class MODAARM:
     def GetNeighbors(self,df):
         N = []
         for i in range(self.population.populationSize):
-            if self.distance[i,df] <= self.minDist:
+            if self.distance[i,df] <= self.minDist and i!=df:
                 N.append(i)
+        if len(N) == 0:
+            r = rd.random()
+            if r<0.5:
+                N.append(np.argmin(self.distance[df]))
         return N
 
     def UpdateOrientation(self):
@@ -100,6 +104,8 @@ class MODAARM:
         for i in range(self.population.populationSize):
             for j in range(self.population.populationSize) :
                 dst = distance.euclidean(self.population.population[i], self.population.population[j])
+                if i == j:
+                    dst = np.inf
                 self.distance[i,j] = dst
 
     def UpdatePredator(self):
@@ -128,11 +134,26 @@ class MODAARM:
     def gamma(self,x):
         return scipy.special.factorial(x-1)
 
-    def RandomWalk(self,df):
+    '''def RandomWalk(self,df):
         beta = 1.5
         sigma = np.power((self.gamma(1+beta )*np.sin(np.pi*beta/2))/(self.gamma((1+beta)/2)*beta*np.power(2,(beta-1)/2)),1/beta)
         levy = 0.01* (rd.random()*sigma)/(np.power(rd.random(),1/beta))
-        self.population.population[df] = self.population.population[df] + rd.randint(-1,1)*levy * self.population.population[df]
+        print(self.population.GetIndividualRepresentation(self.population.population[df]))
+        nbChange = rd.randint(1, self.nbChanges)
+        for j in range(nbChange):
+            index = rd.randint(0, self.nbItem * 2 - 1)
+            self.population.population[df][index] = rd.randint(-1,1)
+        print(self.population.GetIndividualRepresentation(self.population.population[df]))'''
+
+    def RandomWalk(self,df):
+        rdw = [0 for _ in range(self.nbItem*2)]
+        nbChanges = rd.randint(1,self.nbChanges)
+        for i in range(nbChanges):
+            index = rd.randint(0,self.nbItem*2-1)
+            rdw[index] = float(rd.randint(-1,1))+rd.randint(-1,1)*0.001
+        rdw = np.array(rdw)
+        self.population.population[df] = self.population.population[df] + rdw
+
 
     def ResetPopulation(self,data,hyperParameters):
         self.s = hyperParameters.hyperParameters['s']
@@ -147,6 +168,8 @@ class MODAARM:
         self.distance = np.zeros((self.population.populationSize, self.population.populationSize), dtype=float)
         self.velocity = np.zeros((self.population.populationSize, self.nbItem * 2), dtype=float)
         self.orientaiton = np.zeros((self.population.populationSize, self.nbItem * 2), dtype=float)
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdatePredator()
         self.UpdateFood()

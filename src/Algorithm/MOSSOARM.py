@@ -10,7 +10,7 @@ import heapq
 
 class MOSSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['PF']),r=2):
+                 hyperParameters = HyperParameters(['PF']),r=3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.indexFemale = int((0.9-rd.random()*0.25)*populationSize)
         self.r = r
@@ -134,6 +134,8 @@ class MOSSOARM:
     def ResetPopulation(self, data, hyperParameters):
         self.population.InitPopulation()
         self.PF = hyperParameters.hyperParameters['PF']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
 
     def Run(self,data,i):

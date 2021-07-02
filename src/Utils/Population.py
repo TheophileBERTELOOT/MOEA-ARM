@@ -20,14 +20,22 @@ class Population:
             indexConsequent = indexRule[(location[indexRule] > 0).nonzero()[0]]
         elif self.representation == 'horizontal_index':
             individual = individual[0]
-            indexRule = (individual[1:] > 0).nonzero()[0]
+            indexRule = (individual[1:] >= 0).nonzero()[0]
             indexAntecedent = (individual[1:int(individual[0])] > 0).nonzero()[0]
             indexConsequent = (individual[int(individual[0]):] > 0).nonzero()[0]
         return indexRule,indexAntecedent,indexConsequent
 
+    def GetPopulationRepresentation(self):
+        popRep = []
+        for i in range(self.populationSize):
+            indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(self.population[i])
+            popRep.append([str(indexRule),str(indexAntecedent),str(indexConsequent)])
+        return np.array(popRep)
+
+
     def CheckIfNullIndividual(self,ind):
         indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(ind)
-        if len(indexAntecedent) <1 or len(indexConsequent<1):
+        if len(indexAntecedent) <1 or len(indexConsequent)<1:
             if self.representation == 'horizontal_binary':
                 individual = self.InitIndividual_HorizontalBinary()
             if self.representation == 'horizontal_index':
@@ -38,7 +46,7 @@ class Population:
     def CheckIfNull(self):
         for i in range(self.populationSize):
             indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(self.population[i])
-            if len(indexAntecedent) <1 or len(indexConsequent<1):
+            if len(indexAntecedent) <1 or len(indexConsequent)<1:
                 if self.representation == 'horizontal_binary':
                     individual = self.InitIndividual_HorizontalBinary()
                 if self.representation == 'horizontal_index':

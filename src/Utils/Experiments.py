@@ -19,12 +19,13 @@ from src.Algorithm.MOSSOARM import *
 from src.Algorithm.MOWOAARM import *
 from src.Algorithm.MOSOSARM import *
 from src.Algorithm.MOCSSARM import *
+from src.Algorithm.Custom import *
 from src.Utils.HyperParameters import *
 from os import path,mkdir
 
 
 class Experiment:
-    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,display=False,path='Experiments/'):
+    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,sizeHead=5,display=False,path='Experiments/'):
         self.algListNames = algListNames
         self.objectiveNames = objectiveNames
         self.criterionList = criterionList
@@ -32,6 +33,7 @@ class Experiment:
         self.nbIteration = nbIteration
         self.nbRepetition = nbRepetition
         self.iterationInitial = iterationInitial
+        self.sizeHead = sizeHead
         self.hyperParametersList = {}
         self.data = data
         self.algList = []
@@ -47,6 +49,10 @@ class Experiment:
     def InitAlgList(self):
         self.algList = []
         for name in self.algListNames:
+            if name == 'custom':
+                self.algList.append(
+                    CUSTOM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
+                           self.objectiveNames, self.data))
             if name == 'mocsoarm':
                 h = HyperParameters(['ruthlessRatio'])
                 h.LoadHyperParameters('HyperParameters/MOCSOARM/bestParameters.json')
@@ -166,32 +172,50 @@ class Experiment:
         self.CheckIfFolderExist(graphPath)
         scoreGraphPath = graphPath + 'Scores/'
         nbRulesGraphPath = graphPath + 'NbRules/'
+        coveragesGraphPath = graphPath + 'Coverages/'
+        distancesGraphPath = graphPath + 'Distances/'
         self.CheckIfFolderExist(scoreGraphPath)
         self.CheckIfFolderExist(nbRulesGraphPath)
+        self.CheckIfFolderExist(coveragesGraphPath)
+        self.CheckIfFolderExist(distancesGraphPath)
         for rep in range(self.iterationInitial,self.iterationInitial+self.nbRepetition):
             self.InitAlgList()
             executionTimeGraphPath = graphPath + 'ExecutionTime/'
             scoreGraphPath = graphPath + 'Scores/'+str(rep)+'/'
             nbRulesGraphPath = graphPath + 'NbRules/'+str(rep)+'/'
+            coveragesGraphPath = graphPath + 'Coverages/'+str(rep)+'/'
+            distancesGraphPath = graphPath + 'Distances/'+str(rep)+'/'
             self.CheckIfFolderExist(executionTimeGraphPath)
             self.CheckIfFolderExist(scoreGraphPath)
-            self.CheckIfFolderExist(nbRulesGraphPath)
+            self.CheckIfFolderExist(coveragesGraphPath)
+            self.CheckIfFolderExist(distancesGraphPath)
             self.CheckIfFolderExist(self.path+str(rep)+'/')
             for i in range(self.nbIteration):
                 k = 0
                 for alg in self.algList:
                     alg.Run(self.data, i)
-                    alg.fitness.GetParetoFront()
+                    # alg.fitness.GetParetoFront()
+                    #alg.fitness.GetHead(self.sizeHead,alg.population)
+                    alg.fitness.GetUniquePop(alg.population)
+                    alg.fitness.GetDistances(alg.population)
+                    alg.fitness.GetCoverage(self.data,alg.population)
                     self.perf.UpdatePerformances(score=alg.fitness.paretoFront, executionTime=alg.executionTime, i=i,
-                                            algorithmName=self.algListNames[k])
+                                            algorithmName=self.algListNames[k],coverage=alg.fitness.coverage,distance=alg.fitness.averageDistances)
                     k += 1
                 graph = Graphs(self.objectiveNames, self.perf.scores, path=scoreGraphPath + str(i), display=self.display)
                 graph.GraphScores()
-                graph = Graphs(self.objectiveNames, self.perf.nbRules, path=nbRulesGraphPath+str(i), display=self.display)
-                graph.GraphNbRules()
                 self.perf.UpdateLeaderBoard()
                 self.perf.SaveIntermediaryPerf(self.path+str(rep)+'/',i)
-                self.perf.FreeScores()
+                if i<self.nbIteration-1:
+                    self.perf.Free()
             graph = Graphs(['execution Time'], self.perf.executionTime, path=executionTimeGraphPath+str(rep), display=self.display)
             graph.GraphExecutionTime()
+            graph = Graphs(self.objectiveNames, self.perf.nbRules, path=nbRulesGraphPath + str(i), display=self.display)
+            graph.GraphNbRules()
+            graph = Graphs(self.objectiveNames, self.perf.coverages, path=coveragesGraphPath + str(i), display=self.display)
+            graph.GraphCoverages()
+            graph = Graphs(self.objectiveNames, self.perf.distances, path=distancesGraphPath + str(i),
+                           display=self.display)
+            graph.GraphDistances()
+
             self.perf.SaveFinalPerf(self.path+str(rep)+'/')

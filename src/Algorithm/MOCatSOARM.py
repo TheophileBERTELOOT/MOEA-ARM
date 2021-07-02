@@ -65,6 +65,8 @@ class MOCatSOARM:
         self.population.InitPopulation()
         self.mixtureRatio = hyperParameters.hyperParameters['mixtureRatio']
         self.velocityRatio = hyperParameters.hyperParameters['velocityRatio']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
         self.bestCat = np.zeros(self.nbItem * 2, dtype=float)
         self.bestCatScore = np.zeros(self.nbObjectifs, dtype=float)
 

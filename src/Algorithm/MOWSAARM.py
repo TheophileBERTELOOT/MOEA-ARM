@@ -52,6 +52,8 @@ class MOWSAARM:
         self.population.InitPopulation()
         self.velocityFactor = hyperParameters.hyperParameters['velocityFactor']
         self.enemyProb = hyperParameters.hyperParameters['enemyProb']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.paretoFrontSolutions=[]
 
 
     def Run(self,data,i):

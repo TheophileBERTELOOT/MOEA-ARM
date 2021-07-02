@@ -22,8 +22,6 @@ class HMOFAARM:
         self.gamma = 1/((self.nbItem*2)**2)
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.nbSolution = nbSolution
-        self.paretoFront = []
-        self.paretoFrontScore = []
         self.executionTime = 0
 
 
@@ -74,40 +72,40 @@ class HMOFAARM:
     def CalculDistance(self,xid,xjd):
         return distance.euclidean(xid, xjd)
 
-    def FastNonDominatedSort(self,population):
+    def FastNonDominatedSort(self, population):
         F = []
         F1 = []
         n = [0 for _ in range(population.populationSize)]
         S = [[] for _ in range(population.populationSize)]
-        self.rank = [0 for _ in range(population.populationSize)]
         for p in range(population.populationSize):
             S[p] = []
             for q in range(population.populationSize):
-                if self.fitness.Domination(self.fitness.scores[p],self.fitness.scores[q]) == -1:
+                if self.fitness.Domination(self.fitness.scores[p], self.fitness.scores[q]) == -1:
                     S[p].append(q)
-                elif self.fitness.Domination(self.fitness.scores[p],self.fitness.scores[q]) == 1:
-                    n[p]+=1
+                elif self.fitness.Domination(self.fitness.scores[p], self.fitness.scores[q]) == 1:
+                    n[p] += 1
             if n[p] == 0:
-                self.rank[p] = 0
                 F1.append(p)
         F.append(F1)
         i = 0
-        while len(F[i]) != 0 :
+        while len(F[i]) != 0:
             Q = []
             for p in range(len(F[i])):
                 for q in range(len(F[i])):
-                    n[q]-=1
+                    n[q] -= 1
                     if n[q] == 0:
-                        self.rank[q] = i+1
                         Q.append(q)
-            i+=1
+            i += 1
             F.append(Q)
-        self.rank = np.array(self.rank)
-        sortedPopulation = list(zip(self.rank,population.population,self.fitness.scores))
-        sortedPopulation = np.array(sorted(sortedPopulation,key=lambda x:x[0]),dtype="object")
-        self.fitness.scores = np.stack(sortedPopulation[:,2],axis=0)
-        self.rank = sortedPopulation[:,0]
-        sortedPopulation = np.stack(sortedPopulation[:,1],axis=0)
+        self.rank = np.ones(population.populationSize, dtype=int) * (len(F) - 1)
+        for i in range(len(F)):
+            for j in range(len(F[i])):
+                self.rank[F[i][j]] = i
+        sortedPopulation = list(zip(self.rank, population.population, self.fitness.scores))
+        sortedPopulation = np.array(sorted(sortedPopulation, key=lambda x: x[0]), dtype="object")
+        self.fitness.scores = np.stack(sortedPopulation[:, 2], axis=0)
+        self.rank = sortedPopulation[:, 0]
+        sortedPopulation = np.stack(sortedPopulation[:, 1], axis=0)
         population.SetPopulation(sortedPopulation)
 
 
@@ -132,13 +130,6 @@ class HMOFAARM:
         front = np.stack(front[:, 1],axis=0)
         return front,scores,distances
 
-    def FindParetoFront(self):
-        nonDominated = self.rank==0
-        candidates = self.population.population[nonDominated]
-        candidatesScore = np.array(self.fitness.scores[nonDominated])
-        front, scores, distances = self.CrowdingDistanceAssignment(candidates, candidatesScore)
-        self.paretoFront = copy.deepcopy(front[:self.nbSolution])
-        self.paretoFrontScore=copy.deepcopy(scores[:self.nbSolution])
 
     def ResetPopulation(self,data,hyperParameters):
         self.population.InitPopulation()
@@ -146,8 +137,7 @@ class HMOFAARM:
         self.beta0 = hyperParameters.hyperParameters['beta0']
         self.gamma = 1/((self.nbItem*2)**2)
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
-        self.paretoFront = []
-        self.paretoFrontScore = []
+
 
     def SelectCurrentPopulation(self):
         lastAddedFront = 0
@@ -175,7 +165,6 @@ class HMOFAARM:
         self.UpdatePopulation(data)
         self.FastNonDominatedSort(self.population)
         self.SelectCurrentPopulation()
-        self.FindParetoFront()
         self.executionTime = time() - t1
 
 

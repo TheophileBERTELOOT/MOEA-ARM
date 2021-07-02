@@ -14,6 +14,8 @@ class Data:
             self.GenerateArtificialData()
         else:
             self.data = pd.read_csv(path, header=header, index_col=indexCol)
+            print('nbColonnes :'+str(len(self.data.columns)))
+            print('nbLignes :' + str(len(self.data)))
 
     def GenerateArtificialData(self):
         data = []

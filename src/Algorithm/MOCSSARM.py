@@ -81,7 +81,8 @@ class MOCSSARM:
             is0 = self.population.CheckIfNullIndividual(individual)
             if type(is0)!=bool:
                 individual = copy.deepcopy(is0)
-            vNew = individual - self.population.population[i]
+            vNew = individual + self.population.population[i]
+            vNew[vNew<0] = 0
             vNew = self.population.CheckDivide0(vNew)
             score = self.fitness.ComputeScoreIndividual(individual,data)
             if self.fitness.Domination(self.worstIndScore,score) == 1:

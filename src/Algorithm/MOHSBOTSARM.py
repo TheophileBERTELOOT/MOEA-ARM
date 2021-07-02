@@ -9,9 +9,8 @@ from src.Utils.HyperParameters import *
 
 class MOHSBOTSARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                    nbChanges = 5, nbNeighbours = 50,
+                    nbChanges = 5, nbNeighbours = 10,
                  ):
-        populationSize = nbItem*2
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -46,8 +45,9 @@ class MOHSBOTSARM:
 
     def FindSearchRegion(self):
         for i in range(self.population.populationSize):
+            index = rd.randint(0,self.nbItem*2-1)
             self.population.population[i] = self.population.InitIndividual_HorizontalBinary()
-            self.population.population[i,i] = self.bestInd[i]
+            self.population.population[i][index] = self.bestInd[index]
 
     def LocalSearch(self,bee,data):
         bestInd = []

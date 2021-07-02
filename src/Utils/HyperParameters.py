@@ -4,9 +4,10 @@ import copy
 import json
 
 class HyperParameters:
-    def __init__(self,nameList):
+    def __init__(self,nameList,sizeHead=5):
         self.hyperParameters  = {i : np.round(rd.random(),2) for i in nameList}
         self.bestParamters = {i : np.round(rd.random(),2) for i in nameList}
+        self.sizeHead = sizeHead
 
     def GetRandomParameters(self):
         for key,value in self.hyperParameters.items():
@@ -24,6 +25,7 @@ class HyperParameters:
         perf = Performances(['best','candidate'], ['scores'], alg.fitness.objectivesNames)
         algorithmName = 'best'
         for i in range(nbIter):
+            print(i)
             self.GetRandomParameters()
             try:
                 alg.ResetPopulation(data,self)
@@ -34,7 +36,8 @@ class HyperParameters:
                     alg.Run(data,j)
                 except:
                     pass
-            alg.fitness.GetParetoFront()
+            # alg.fitness.GetParetoFront()
+            alg.fitness.GetHead(self.sizeHead,alg.population)
             perf.UpdatePerformances(score=alg.fitness.paretoFront, i=j,
                                     algorithmName=algorithmName)
             algorithmName = 'candidate'
