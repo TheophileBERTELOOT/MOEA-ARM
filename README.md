@@ -35,13 +35,13 @@ hyper.SaveBestParameters('HyperParameters/MODAARM/bestParameters.json')
 There is an example of instantiate the performance component.
 ```python
 objectiveNames = ['support','confidence','klosgen']
-criterionList = ['scores','execution time']
+criterionList = ['scores','execution time','distances','coverages']
 algorithmNameList = ['CSOARM','MOPSO']
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 ```
 There is an example of update the performance component, usually in the main loop
 ```python
-perf.UpdatePerformances(score=alg.fitness.paretoFront,executionTime=alg.executionTime,i=i,algorithmName=algorithmNameList[k])
+self.perf.UpdatePerformances(score=alg.fitness.paretoFront, executionTime=alg.executionTime, i=i,algorithmName=self.algListNames[k],coverage=alg.fitness.coverage,distance=alg.fitness.averageDistances)
 ```
   ## Domination scores graph
   ```python
@@ -56,12 +56,12 @@ graph = Graphs(['execution Time'],perf.executionTime,path='./Figures/Comparison/
 graph.GraphExecutionTime()
   ```
    ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/ExecutionTime.png "Execution time")
-  ## LeaderBoard
-  the leaderboard display a sorted list of the average number of dominated solution by each solution by algorithm.
-  ```python
-perf.UpdateLeaderBoard()
-  ```
-  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/LeaderBoard.PNG "leaderboard")
+ Display the average execution time for the full execution time, that mean the sum of the execution time of each iteration.
+ ```python
+ g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/ExecutionTime/',display=True,save=True)
+ g.GraphAverageExecutionTime('../Experiments/RISK/',algorithmNameList,nbIteration)
+ ```
+ ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/ExecutionTimeAverage.png "Execution time")
   
   ## Number of Rules
   This graph allow to know how many rules each algorithm find in his pareto front. There is how compute and display the number of rules.
@@ -69,8 +69,33 @@ perf.UpdateLeaderBoard()
 graph = Graphs(objectiveNames, perf.nbRules, path='./Figures/Comparison/nbRules' + str(i), display=True)
 graph.GraphNbRules()
   ```
-  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRules.png "nbRules")
- 
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/nbRule.png "nbRules")
+  
+  ## Distances
+  This graph display the average distance between one rule and all the others. The rules considered are the pareto front's. That allow us to know if the rules are diversified.
+    ```python
+    g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/Distances/',display=True,save=True)
+    g.GraphAverageDistances('../Experiments/RISK/',algorithmNameList)
+    ```
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/Distance.png "distance")
+  
+ ## Coverage
+  This graph display the number of row of the dataset cover by the pareto front.
+    ```python
+    g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/Coverages/',display=True,save=True)
+    g.GraphAverageCoverages('../Experiments/RISK/',algorithmNameList)
+    ```
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/Coverage.png "distance")
+  
+  ## Fitness functions
+  This graphs display the value of each fitness function for each iteration.
+    ```python
+    g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/LeaderBoard/')
+    g.GraphExperimentation(algorithmNameList,'../Experiments/RISK/','LeaderBoard',nbIteration)
+    ```
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/support.png "support")
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/confidence.png "confidence")
+  ![alt text](https://github.com/TheophileBERTELOOT/MOEA-ARM/blob/main/Figures/Readme/cosine.png "cosine")
 
 # List of available algorithms
 * NSGAII *Non-dominated Sorting Genetic Algorithm II* 
