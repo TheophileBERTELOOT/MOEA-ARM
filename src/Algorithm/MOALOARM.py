@@ -78,6 +78,8 @@ class MOALOARM:
         self.maxBound = self.maxBound/(np.power(10,w)*(i_/self.nbIteration))
         self.minBound = self.minBound / (np.power(10, w) * (i_ / self.nbIteration))
 
+
+
     def GenerateRandomWalk(self):
         rdw = [0 for _ in range(self.nbItem*2)]
         nbChanges = rd.randint(1,self.nbChanges)
@@ -96,6 +98,10 @@ class MOALOARM:
         self.fitnessLions = Fitness('horizontal_binary', self.objectiveNames, self.ants.populationSize)
         self.elite = []
         self.eliteScore = []
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
+        self.fitness.paretoFrontSolutions=[]
         self.fitnessAnts.ComputeScorePopulation(self.ants.population, data)
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateElite()

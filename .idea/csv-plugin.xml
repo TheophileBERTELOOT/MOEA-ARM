@@ -87,6 +87,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Data\Transform\iris.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Data\Transform\machine.csv">
           <value>
             <Attribute>

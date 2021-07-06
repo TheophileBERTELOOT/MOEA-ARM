@@ -174,10 +174,12 @@ class Experiment:
         nbRulesGraphPath = graphPath + 'NbRules/'
         coveragesGraphPath = graphPath + 'Coverages/'
         distancesGraphPath = graphPath + 'Distances/'
+        rulesPath = self.path+'Rules/'
         self.CheckIfFolderExist(scoreGraphPath)
         self.CheckIfFolderExist(nbRulesGraphPath)
         self.CheckIfFolderExist(coveragesGraphPath)
         self.CheckIfFolderExist(distancesGraphPath)
+        self.CheckIfFolderExist(rulesPath)
         for rep in range(self.iterationInitial,self.iterationInitial+self.nbRepetition):
             self.InitAlgList()
             executionTimeGraphPath = graphPath + 'ExecutionTime/'
@@ -185,23 +187,29 @@ class Experiment:
             nbRulesGraphPath = graphPath + 'NbRules/'+str(rep)+'/'
             coveragesGraphPath = graphPath + 'Coverages/'+str(rep)+'/'
             distancesGraphPath = graphPath + 'Distances/'+str(rep)+'/'
+            rulesPathRep = rulesPath + str(rep)+'/'
             self.CheckIfFolderExist(executionTimeGraphPath)
             self.CheckIfFolderExist(scoreGraphPath)
             self.CheckIfFolderExist(coveragesGraphPath)
             self.CheckIfFolderExist(distancesGraphPath)
             self.CheckIfFolderExist(self.path+str(rep)+'/')
+            self.CheckIfFolderExist(rulesPathRep)
             for i in range(self.nbIteration):
                 k = 0
                 for alg in self.algList:
                     alg.Run(self.data, i)
-                    # alg.fitness.GetParetoFront()
+                    alg.population.CheckIfNull()
+                    alg.fitness.ComputeScorePopulation(alg.population.population, self.data)
+                    alg.fitness.GetParetoFront(alg.population)
                     #alg.fitness.GetHead(self.sizeHead,alg.population)
-                    alg.fitness.GetUniquePop(alg.population)
-                    alg.fitness.GetDistances(alg.population)
-                    alg.fitness.GetCoverage(self.data,alg.population)
+                    #alg.fitness.GetUniquePop(alg.population)
+                    alg.fitness.GetDistances()
+                    alg.fitness.GetCoverage(self.data)
+                    alg.fitness.WritePop(rulesPathRep+self.algListNames[k]+'.txt')
                     self.perf.UpdatePerformances(score=alg.fitness.paretoFront, executionTime=alg.executionTime, i=i,
                                             algorithmName=self.algListNames[k],coverage=alg.fitness.coverage,distance=alg.fitness.averageDistances)
                     k += 1
+
                 graph = Graphs(self.objectiveNames, self.perf.scores, path=scoreGraphPath + str(i), display=self.display)
                 graph.GraphScores()
                 self.perf.UpdateLeaderBoard()

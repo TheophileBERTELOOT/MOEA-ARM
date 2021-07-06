@@ -36,15 +36,15 @@ class HyperParameters:
                     alg.Run(data,j)
                 except:
                     pass
-            # alg.fitness.GetParetoFront()
+            #alg.fitness.GetParetoFront(alg.population)
             alg.fitness.GetHead(self.sizeHead,alg.population)
             perf.UpdatePerformances(score=alg.fitness.paretoFront, i=j,
                                     algorithmName=algorithmName)
             algorithmName = 'candidate'
             if i >0:
                 perf.UpdateLeaderBoard()
-                best = perf.leaderBoard[0]
-                candidate = perf.leaderBoard[1]
+                best = sum(perf.leaderBoard[0])
+                candidate = sum(perf.leaderBoard[1])
                 if candidate>best:
                     candidateScores = perf.scores[perf.scores['algorithm'] == 'candidate']
                     candidateScores['algorithm'] = 'best'

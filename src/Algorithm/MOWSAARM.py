@@ -53,6 +53,8 @@ class MOWSAARM:
         self.velocityFactor = hyperParameters.hyperParameters['velocityFactor']
         self.enemyProb = hyperParameters.hyperParameters['enemyProb']
         self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
         self.fitness.paretoFrontSolutions=[]
 
 

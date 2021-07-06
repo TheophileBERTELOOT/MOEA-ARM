@@ -91,6 +91,15 @@ class MOCSSARM:
                 self.UpdateBestWorst()
 
 
+    def ResetPopulation(self,data,hyperParameters):
+        self.population.InitPopulation()
+        self.ruthlessRatio = hyperParameters.hyperParameters['ruthlessRatio']
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
+        self.fitness.paretoFrontSolutions=[]
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+
     def Run(self,data,i):
         t1 = time()
         self.UpdateBestWorst()

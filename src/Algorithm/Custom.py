@@ -65,6 +65,7 @@ class CUSTOM:
         return bestIndex
 
 
+
     def UpdatePopulation(self,data):
         for i in range(self.population.populationSize):
             participants = []
@@ -152,7 +153,9 @@ class CUSTOM:
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0, self.population.populationSize - 1)])
         self.worstInd = copy.deepcopy(self.population.population[rd.randint(0, self.population.populationSize - 1)])
         self.executionTime = 0
-        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
         self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
 

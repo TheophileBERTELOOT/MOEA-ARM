@@ -25,11 +25,14 @@ class Population:
             indexConsequent = (individual[int(individual[0]):] > 0).nonzero()[0]
         return indexRule,indexAntecedent,indexConsequent
 
-    def GetPopulationRepresentation(self):
+    def GetPopulationRepresentation(self,isString):
         popRep = []
         for i in range(self.populationSize):
             indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(self.population[i])
-            popRep.append([str(indexRule),str(indexAntecedent),str(indexConsequent)])
+            if isString:
+                popRep.append([str(indexRule),str(indexAntecedent),str(indexConsequent)])
+            else:
+                popRep.append([list(indexRule), list(indexAntecedent), list(indexConsequent)])
         return np.array(popRep)
 
 
@@ -46,12 +49,14 @@ class Population:
     def CheckIfNull(self):
         for i in range(self.populationSize):
             indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(self.population[i])
-            if len(indexAntecedent) <1 or len(indexConsequent)<1:
+            while len(indexAntecedent) <1 or len(indexConsequent)<1:
                 if self.representation == 'horizontal_binary':
                     individual = self.InitIndividual_HorizontalBinary()
                 if self.representation == 'horizontal_index':
                     individual = self.InitIndividual_HorizontalIndex()
                 self.population[i] = copy.deepcopy(individual)
+                indexRule, indexAntecedent, indexConsequent = self.GetIndividualRepresentation(self.population[i])
+
 
     def InitPopulation(self):
         self.population = []
@@ -77,9 +82,10 @@ class Population:
             index = rd.randint(0,self.nbItem-1)
             individual[index] = 1.0
             if i ==0:
-                individual[self.nbItem+index] = 1
+                individual[self.nbItem+index] = 1.0
             else:
-                individual[self.nbItem + index] = -1
+                individual[self.nbItem + index] = -1.0
+
         return np.array(individual)
 
     def CheckDivide0(self,p):
@@ -95,4 +101,6 @@ class Population:
         for i in range(5):
             individual[i] = rd.randint(0,self.nbItem-1)
         return np.array(individual)
+
+
 

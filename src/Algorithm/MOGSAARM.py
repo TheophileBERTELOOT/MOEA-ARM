@@ -87,6 +87,8 @@ class MOGSAARM:
         self.population.InitPopulation()
         self.G = hyperParameters.hyperParameters['G']
         self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
         self.fitness.paretoFrontSolutions=[]
 
 

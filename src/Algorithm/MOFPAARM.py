@@ -50,6 +50,8 @@ class MOFPAARM:
         self.P = hyperParameters.hyperParameters['P']
         self.gamma = hyperParameters.hyperParameters['gamma']
         self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
         self.fitness.paretoFrontSolutions=[]
         self.fitness.ComputeScorePopulation(self.population.population, data)
         self.UpdateBestSolution()

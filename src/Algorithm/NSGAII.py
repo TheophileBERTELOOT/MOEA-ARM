@@ -108,14 +108,41 @@ class NSGAII:
         offsprings = np.concatenate([population.population,np.array(offsprings)],axis=0)
         population.SetPopulation(offsprings)
 
+    def LS(self,individual,nbChanges):
+        candidate = copy.deepcopy(individual)
+        for k in range(nbChanges):
+            r = rd.random()
+            if r < 0.33:
+                index = rd.randint(0, self.nbItem-1)
+                candidate[index] += 1
+            elif r < 0.66:
+                r = rd.random()
+                if r<0.5:
+                    indexRule,_,_ = self.population.GetIndividualRepresentation(candidate)
+                    index = rd.choice(indexRule)
+                    candidate[index] = candidate[index]*-1
+                    index = rd.randint(0,self.nbItem-1)
+                    candidate[index] = candidate[index]*-1
+                else:
+                    indexRule, _, _ = self.population.GetIndividualRepresentation(candidate)
+                    index = rd.choice(indexRule)
+                    candidate[self.nbItem-1+index] = candidate[self.nbItem-1+index] * -1
+            else:
+                indexRule, _, _ = self.population.GetIndividualRepresentation(candidate)
+                index = rd.choice(indexRule)
+                candidate[index] = candidate[index] * -1
+        is0 = self.population.CheckIfNullIndividual(candidate)
+        if type(is0) != bool:
+            candidate = copy.deepcopy(is0)
+        return candidate
+
+
     def Mutation(self,population):
         for i in range(population.populationSize):
             r = rd.random()
             if r<self.mutationRate:
                 nbChange = rd.randint(1,self.nbChanges)
-                for j in range(nbChange):
-                    index = rd.randint(0,self.nbItem*2-1)
-                    population.population[i][index] = rd.randint(-1,1)
+                self.population.population[i] = copy.deepcopy(self.LS(self.population.population[i],nbChange))
 
     def CrowdingDistanceAssignment(self,front,scores):
         l = len(front)
@@ -165,6 +192,8 @@ class NSGAII:
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.fitnessFirstGeneration.ComputeScorePopulation(self.P.population, data)
         self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
         self.fitness.paretoFrontSolutions=[]
         self.BinaryTournament(True)
         self.CrossOver(self.Q)

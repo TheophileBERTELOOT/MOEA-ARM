@@ -25,6 +25,7 @@ class HMOFAARM:
         self.executionTime = 0
 
 
+
     def UpdateAlpha(self,i):
         self.alpha*= (1-(i/self.nbIteration))
 
@@ -136,6 +137,11 @@ class HMOFAARM:
         self.alpha = hyperParameters.hyperParameters['alpha']
         self.beta0 = hyperParameters.hyperParameters['beta0']
         self.gamma = 1/((self.nbItem*2)**2)
+        self.fitness.ComputeScorePopulation(self.population.population, data)
+        self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
+        self.fitness.paretoFrontSolutions=[]
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
 
 
@@ -157,7 +163,6 @@ class HMOFAARM:
         self.population.SetPopulation(np.array(currentPopulation))
 
     def Run(self,data,i):
-
         t1 = time()
         self.UpdateAlpha(i)
         self.population.CheckIfNull()
@@ -166,5 +171,6 @@ class HMOFAARM:
         self.FastNonDominatedSort(self.population)
         self.SelectCurrentPopulation()
         self.executionTime = time() - t1
+
 
 

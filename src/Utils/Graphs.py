@@ -64,6 +64,79 @@ class Graphs:
         if self.save:
             fig.savefig(self.path + ".png")
 
+    def GraphAverageCoverages(self,p,algName):
+        plt.cla()
+        plt.clf()
+        nbRepeat = len(os.listdir(p)) - 2
+        data = []
+        for i in range(nbRepeat):
+            print(i)
+            df = pd.read_csv(p + str(i) + '/Coverages.csv', index_col=0)
+            for nameIndex in range(len(algName)):
+                data.append([algName[nameIndex],float(df.loc[df['algorithm'] == algName[nameIndex]]['coverages'])])
+
+        df = pd.DataFrame(data,columns=['algorithm','coverages'])
+        df  = df.sort_values(by=['coverages'],ascending=False)
+        print(df)
+        fig = plt.figure(figsize=(15,15))
+        sns.barplot(x='algorithm', y='coverages', data=df)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
+    def GraphAverageExecutionTime(self,p,algName,nbIter):
+        plt.cla()
+        plt.clf()
+        nbRepeat = len(os.listdir(p)) - 2
+        data = []
+        for i in range(nbRepeat):
+            print(i)
+            df = pd.read_csv(p + str(i) + '/ExecutionTime.csv', index_col=0)
+            for nameIndex in range(len(algName)):
+                data.append([algName[nameIndex], float(sum(df.loc[df['algorithm'] == algName[nameIndex]]['execution Time']))])
+        df = pd.DataFrame(data, columns=['algorithm', 'execution Time'])
+        df = df.sort_values(by=['execution Time'], ascending=False)
+        print(df)
+        fig = plt.figure(figsize=(15, 15))
+        sns.barplot(x='algorithm', y='execution Time', data=df)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
+    def GraphAverageDistances(self, p, algName):
+        plt.cla()
+        plt.clf()
+        nbRepeat = len(os.listdir(p)) - 2
+        data = []
+        for i in range(nbRepeat):
+            print(i)
+            df = pd.read_csv(p + str(i) + '/Distances.csv', index_col=0)
+            for nameIndex in range(len(algName)):
+                data.append([algName[nameIndex], float(df.loc[df['algorithm'] == algName[nameIndex]]['distances'])])
+
+        df = pd.DataFrame(data, columns=['algorithm', 'distances'])
+        df = df.sort_values(by=['distances'], ascending=False)
+        fig = plt.figure(figsize=(15, 15))
+        sns.barplot(x='algorithm', y='distances', data=df)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
     def GraphExecutionTime(self):
         plt.cla()
         plt.clf()
@@ -128,31 +201,21 @@ class Graphs:
     def GraphExperimentation(self,algName,p,graphType,nbIter):
         plt.cla()
         plt.clf()
-        nbRepeat = len(os.listdir(p))-1
+        nbRepeat = len(os.listdir(p))-2
         data = []
         for i in range(nbRepeat):
             print(i)
-            if graphType == 'ExecutionTime':
-                df = pd.read_csv( p + str(i) + '/' +graphType+'.csv', index_col=0)
+            repetitionPath = p + str(i) + '/' + graphType + '/'
+            nbIter = len(os.listdir(repetitionPath))
+            for j in range(nbIter):
+                iterPath = repetitionPath+str(j)+'.csv'
+                df = pd.read_csv(iterPath,index_col=0)
+                nameCol = [nc for nc in df.columns if nc != 'algorithm']
                 for nameIndex in range(len(algName)):
-                    for j in df['i'].unique():
-                        data.append([algName[nameIndex],j , float(df.loc[(df['algorithm'] == algName[nameIndex]) & (df['i'] == j)]['execution Time'])])
-            elif graphType == 'Distance':
-                self.GraphDistances()
-            elif graphType == 'Coverage':
-                self.GraphCoverages()
-            else:
-                repetitionPath = p + str(i) + '/' + graphType + '/'
-                nbIter = len(os.listdir(repetitionPath))
-                for j in range(nbIter):
-                    iterPath = repetitionPath+str(j)+'.csv'
-                    df = pd.read_csv(iterPath,index_col=0)
-                    nameCol = [nc for nc in df.columns if nc != 'algorithm']
-                    for nameIndex in range(len(algName)):
-                        s1 = df[df['algorithm'] == algName[nameIndex]][nameCol[0]]
-                        s2 =df[df['algorithm'] == algName[nameIndex]][nameCol[1]]
-                        s3 = df[df['algorithm'] == algName[nameIndex]][nameCol[2]]
-                        data.append([algName[nameIndex],j,float(s1),float(s2),float(s3)])
+                    s1 = df[df['algorithm'] == algName[nameIndex]][nameCol[0]]
+                    s2 =df[df['algorithm'] == algName[nameIndex]][nameCol[1]]
+                    s3 = df[df['algorithm'] == algName[nameIndex]][nameCol[2]]
+                    data.append([algName[nameIndex],j,float(s1),float(s2),float(s3)])
 
         df = pd.DataFrame(data,columns=['algorithm','iter']+self.objectiveNames)
         for k in range(len(self.objectiveNames)):

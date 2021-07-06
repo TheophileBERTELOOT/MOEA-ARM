@@ -75,12 +75,15 @@ class Performances:
             self.leaderBoard[i] = self.leaderBoard[i]/len(solutionsi)
             self.leaderBoard[i] = np.round(self.leaderBoard[i],2)
         self.leaderBoardSorted = list(zip( self.algorithmList,self.leaderBoard[:,0],self.leaderBoard[:,1],self.leaderBoard[:,2]))
-        self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[0],reverse=True), dtype="object")
+        self.leaderBoardSorted = np.array(sorted(self.leaderBoardSorted, key=lambda x: x[1],reverse=True), dtype="object")
 
-        print(self.scores)
-        print(self.leaderBoardSorted)
-        print(self.distances)
-        print(self.coverages)
+        if 'scores' in self.criterionList:
+            print(self.scores)
+            print(self.leaderBoardSorted)
+        if 'distances' in self.criterionList:
+            print(self.distances)
+        if 'coverages' in self.criterionList:
+            print(self.coverages)
 
 
 

@@ -28,7 +28,7 @@ class Fitness:
         self.populationSize = populationSize
         self.population = Population(representation,0,0)
         self.scores = np.array([np.array([0.0 for i in range(self.nbObjectives)]) for j in range(self.populationSize)])
-        self.paretoFront = np.zeros((1,len(objectivesNames)),dtype=float)
+        self.paretoFront = []
         self.paretoFrontSolutions = []
         self.distances = []
         self.averageDistances = 0
@@ -128,9 +128,19 @@ class Fitness:
         else:
             return 0
 
-    def GetParetoFront(self):
-        temp = np.concatenate([self.scores,copy.deepcopy(self.paretoFront)])
+    def GetParetoFront(self,population):
+        if self.paretoFrontSolutions != []:
+            tempSolutions = np.concatenate([self.paretoFrontSolutions, copy.deepcopy(population.GetPopulationRepresentation(True))])
+            temp = np.concatenate([copy.deepcopy(self.paretoFront), copy.deepcopy(self.scores)])
+        else:
+            tempSolutions = copy.deepcopy(population.GetPopulationRepresentation(True))
+            temp = copy.deepcopy(self.scores)
+        indexUniques = np.unique(tempSolutions, return_index=True, axis=0)[1]
+        tempSolutions = tempSolutions[indexUniques]
+
+        temp = temp[indexUniques]
         self.paretoFront = []
+        self.paretoFrontSolutions = []
         for p in range(len(temp)):
             dominate = True
             for q in range(len(temp)):
@@ -139,14 +149,16 @@ class Fitness:
                     break
             if dominate:
                 self.paretoFront.append(temp[p])
+                self.paretoFrontSolutions.append(tempSolutions[p])
         self.paretoFront = np.array(self.paretoFront)
-        self.paretoFront = np.unique(self.paretoFront,axis=0)
+        self.paretoFrontSolutions = np.array(self.paretoFrontSolutions)
+
 
     def GetHead(self,sizeHead,population):
         if self.paretoFrontSolutions != []:
-            tempSolutions = np.concatenate([self.paretoFrontSolutions, copy.deepcopy(population.GetPopulationRepresentation())])
+            tempSolutions = np.concatenate([self.paretoFrontSolutions, copy.deepcopy(population.GetPopulationRepresentation(True))])
         else:
-            tempSolutions =copy.deepcopy(population.GetPopulationRepresentation())
+            tempSolutions =copy.deepcopy(population.GetPopulationRepresentation(True))
         indexUniques = np.unique(tempSolutions,return_index=True,axis=0)[1]
         temp = np.concatenate( [copy.deepcopy(self.paretoFront),self.scores])
         sumScore = np.sum(temp[indexUniques],axis=1)
@@ -159,36 +171,50 @@ class Fitness:
             self.paretoFrontSolutions = tempSolutions[indexUniques][indexParetoFront]
 
     def GetUniquePop(self,population):
-        tempSolutions =copy.deepcopy(population.GetPopulationRepresentation())
+        tempSolutions =copy.deepcopy(population.GetPopulationRepresentation(True))
         indexUniques = np.unique(tempSolutions, return_index=True, axis=0)[1]
         self.paretoFront = self.scores[indexUniques]
         self.paretoFrontSolutions = tempSolutions[indexUniques]
 
+    def Diff(self,li1,li2):
+        return list(set(li1) - set(li2)) + list(set(li2) - set(li1))
 
-    def GetDistances(self,population):
+    def GetDistances(self):
         self.averageDistances = 0
         self.distances = np.zeros(len(self.paretoFrontSolutions),dtype=float)
         for i in range(len(self.distances)):
             indAvgDistance = 0
-            indi = np.array(population.population[i]>0,dtype=int)
+            indi = copy.deepcopy(self.paretoFrontSolutions[i])
             for j in range(len(self.distances)):
-                indj = np.array(population.population[j]>0,dtype=int)
+                indj = copy.deepcopy(self.paretoFrontSolutions[j])
                 if i != j:
-                    indAvgDistance+=distance.euclidean(indi, indj)
-            indAvgDistance/=(len(self.distances)-1)
+                    nbDiff = 0
+                    for k in range(len(self.paretoFrontSolutions[i])):
+                        indik = list(np.fromstring(indi[k][1:-1], dtype=int, sep= ' '))
+                        indjk = list(np.fromstring(indj[k][1:-1], dtype=int, sep= ' '))
+                        nbDiff+= len(self.Diff(indik,indjk))
+                    indAvgDistance+=nbDiff
+            indAvgDistance/=(len(self.distances))
             self.distances[i] = indAvgDistance
         self.averageDistances = np.average(self.distances)
 
-    def GetCoverage(self,data,population):
+    def GetCoverage(self,data):
         coverage = 0
         for i in range(data.shape[0]):
-            for j in range(population.populationSize):
-                indexRule, _, _ = population.GetIndividualRepresentation(population.population[j])
+            for j in range(len(self.paretoFrontSolutions)):
+                indexRule = list(np.fromstring(self.paretoFrontSolutions[j][0][1:-1], dtype=int, sep= ' '))
                 if np.sum(data[i][indexRule]) == len(indexRule):
                     coverage+=1
                     break
         self.coverage =  coverage / data.shape[0]
 
+
+    def WritePop(self,p):
+        f = open(p,'w')
+        for i in range(len(self.paretoFrontSolutions)):
+            f.write(str(self.paretoFrontSolutions[i])+'\n')
+            f.write(str(self.paretoFront[i])+'\n')
+        f.close()
 
 
 

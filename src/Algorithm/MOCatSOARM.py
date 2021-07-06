@@ -66,6 +66,8 @@ class MOCatSOARM:
         self.mixtureRatio = hyperParameters.hyperParameters['mixtureRatio']
         self.velocityRatio = hyperParameters.hyperParameters['velocityRatio']
         self.fitness.paretoFront=np.zeros((1,len(self.fitness.objectivesNames)),dtype=float)
+        self.fitness.distances = []
+        self.fitness.coverage = []
         self.fitness.paretoFrontSolutions=[]
         self.bestCat = np.zeros(self.nbItem * 2, dtype=float)
         self.bestCatScore = np.zeros(self.nbObjectifs, dtype=float)
@@ -84,6 +86,7 @@ class MOCatSOARM:
             else:
                 self.Resting(j,data)
         self.executionTime = time() - t1
+
 
 
 
