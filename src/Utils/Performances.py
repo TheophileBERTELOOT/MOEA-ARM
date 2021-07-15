@@ -89,7 +89,7 @@ class Performances:
 
 
 
-    def SaveIntermediaryPerf(self,p,i):
+    def SaveIntermediaryPerf(self,p,i,updating=False,updatingAlg =''):
         scorePath = p+'Score/'
         nbRulesPath = p+'NbRules/'
         leaderBoardPath = p+'LeaderBoard/'
@@ -99,18 +99,48 @@ class Performances:
             mkdir(nbRulesPath)
         if (not path.exists(leaderBoardPath)):
             mkdir(leaderBoardPath)
-        self.scores.to_csv(p+'Score/'+str(i)+'.csv')
-        self.nbRules.to_csv(p+'NbRules/'+str(i)+'.csv')
+        if updating:
+            scores = pd.read_csv(p+'Score/'+str(i)+'.csv')
+            index = scores['algorithm'] == updatingAlg
+            scores.loc[index] = self.scores
+            scores.to_csv(p+'Score/'+str(i)+'.csv')
+            nbRules = pd.read_csv(p + 'Score/' + str(i) + '.csv')
+            index = nbRules['algorithm'] == updatingAlg
+            nbRules.loc[index] = self.nbRules
+            nbRules.to_csv(p + 'NbRules/' + str(i) + '.csv')
+            leaderBoard = pd.read_csv(p+'LeaderBoard/'+str(i)+'.csv')
+            index = leaderBoard['algorithm'] == updatingAlg
+            df = pd.DataFrame(self.leaderBoardSorted,columns=['algorithm']+[obj for obj in self.objectiveNames])
+            leaderBoard.loc[index] = df
+            leaderBoard.to_csv(p+'LeaderBoard/'+str(i)+'.csv')
+        else:
+            self.scores.to_csv(p+'Score/'+str(i)+'.csv')
+            self.nbRules.to_csv(p+'NbRules/'+str(i)+'.csv')
+            pd.DataFrame(self.leaderBoardSorted,columns=['algorithm']+[obj for obj in self.objectiveNames]).to_csv(p+'LeaderBoard/'+str(i)+'.csv')
 
-        pd.DataFrame(self.leaderBoardSorted,columns=['algorithm']+[obj for obj in self.objectiveNames]).to_csv(p+'LeaderBoard/'+str(i)+'.csv')
 
-
-    def SaveFinalPerf(self,p):
+    def SaveFinalPerf(self,p,updating=False,updatingAlg =''):
         if (not path.exists(p)):
             mkdir(p)
-        self.executionTime.to_csv(p+'ExecutionTime.csv')
-        self.distances.to_csv(p + 'Distances.csv')
-        self.coverages.to_csv(p + 'Coverages.csv')
+        if updating:
+            executionTime = pd.read_csv(p+'ExecutionTime.csv')
+            index = executionTime['algorithm'] == updatingAlg
+            executionTime.loc[index] = self.executionTime
+            executionTime.to_csv(p + 'ExecutionTime.csv')
+
+            distances = pd.read_csv(p+'ExecutionTime.csv')
+            index = distances['algorithm'] == updatingAlg
+            distances.loc[index] = self.distances
+            distances.to_csv(p + 'Distances.csv')
+
+            coverages = pd.read_csv(p + 'Coverages.csv')
+            index = coverages['algorithm'] == updatingAlg
+            coverages.loc[index] = self.coverages
+            coverages.to_csv(p + 'Coverages.csv')
+        else:
+            self.executionTime.to_csv(p+'ExecutionTime.csv')
+            self.distances.to_csv(p + 'Distances.csv')
+            self.coverages.to_csv(p + 'Coverages.csv')
         self.InitExecutionTime()
 
 

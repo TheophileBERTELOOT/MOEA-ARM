@@ -89,6 +89,31 @@ class Graphs:
         if self.save:
             fig.savefig(self.path + ".png")
 
+    def GraphAverageNBRules(self,p,algName,nbIter):
+        plt.cla()
+        plt.clf()
+        nbRepeat = len(os.listdir(p)) - 2
+        data = []
+        for i in range(nbRepeat):
+            print(i)
+            df = pd.read_csv(p + str(i) + '/NbRules/'+str(nbIter-1)+'.csv', index_col=0)
+            for nameIndex in range(len(algName)):
+                data.append([algName[nameIndex],float(df.loc[df['algorithm'] == algName[nameIndex]]['nbRules'])])
+
+        df = pd.DataFrame(data,columns=['algorithm','nbRules'])
+        df  = df.sort_values(by=['nbRules'],ascending=False)
+        print(df)
+        fig = plt.figure(figsize=(15,15))
+        sns.barplot(x='algorithm', y='nbRules', data=df)
+        plt.xticks(rotation=70)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
     def GraphAverageExecutionTime(self,p,algName,nbIter):
         plt.cla()
         plt.clf()
@@ -98,7 +123,8 @@ class Graphs:
             print(i)
             df = pd.read_csv(p + str(i) + '/ExecutionTime.csv', index_col=0)
             for nameIndex in range(len(algName)):
-                data.append([algName[nameIndex], float(sum(df.loc[df['algorithm'] == algName[nameIndex]]['execution Time']))])
+                for j in range(nbIter):
+                    data.append([algName[nameIndex], float(df.loc[(df['algorithm'] == algName[nameIndex]) & (df['i'] == j)]['execution Time'])])
         df = pd.DataFrame(data, columns=['algorithm', 'execution Time'])
         df = df.sort_values(by=['execution Time'], ascending=False)
         print(df)
@@ -231,6 +257,22 @@ class Graphs:
             print(objectiveName)
             print(dfTemp[objectiveName].agg(
                 ['mean', 'std']).sort_values(by=['mean'], ascending=False))
+
+
+    def DatasetColumnsRows(self,p):
+        df = pd.read_csv(p)
+        plt.cla()
+        plt.clf()
+        fig = plt.figure(figsize=(15, 15))
+        sns.scatterplot(x='row', y='binary attribute',hue='dataset', data=df)
+        plt.tight_layout()
+        if self.display:
+            plt.show()
+        else:
+            plt.close(fig)
+        if self.save:
+            fig.savefig(self.path + ".png")
+
 
 
 

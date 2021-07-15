@@ -7,6 +7,10 @@ from src.Utils.Experiments import *
 from os import path,mkdir
 import sys
 
+
+# g = Graphs([],[],path='Data/columnsRow',display=True,save=True)
+# g.DatasetColumnsRows('Data/columnsRows.csv')
+
 '''
 np.set_printoptions(threshold=sys.maxsize)
 populationSize = 100
@@ -24,6 +28,7 @@ hyper.RandomSearch(100,alg,d.data)
 hyper.SaveBestParameters(p+'bestParameters.json')
 '''
 
+#refaire les 10 premiers dataset avec sso
 
 nbIteration = 50
 sizeHead = 10
@@ -36,28 +41,32 @@ algorithmNameList = ['mosaarm','mossoarm','mocsoarm','nsgaii','hmofaarm','mowsaa
 algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mosaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm',
                      'modaarm','mohsbotsarm','modearm','nshsdearm','mogeaarm','mogsaarm','mossoarm','mowoaarm','mososarm',
                      'mocssarm','custom']
-p = '../Experiments/RISK/'
+nameDataset = 'MAGIC'
+p = '../Experiments/'+nameDataset+'/'
 if (not path.exists(p)):
     mkdir(p)
 perf = Performances(algorithmNameList,criterionList,objectiveNames)
 #d = Data(artificial=True)
-d = Data('Data/Transform/risk.csv',header=0,indexCol=0)
-# d.TransformToHorizontalBinary()
-# d.Save('Data/Transform/water-treatment.csv')
+d = Data('Data/Transform/magic.csv',header=0,indexCol=0,separator=',')
+#d.TransformToHorizontalBinary()
+#d.Save('Data/Transform/wine.csv')
 d.ToNumpy()
 
 
-# E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False)
-# E.Run()
+E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False)
+E.Run()
 
-g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/LeaderBoard/')
-g.GraphExperimentation(algorithmNameList,'../Experiments/RISK/','LeaderBoard',nbIteration)
-g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/Coverages/',display=True,save=True)
-g.GraphAverageCoverages('../Experiments/RISK/',algorithmNameList)
-g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/Distances/',display=True,save=True)
-g.GraphAverageDistances('../Experiments/RISK/',algorithmNameList)
-g = Graphs(objectiveNames,[],path='../Experiments/RISK/Graphs/ExecutionTime/',display=True,save=True)
-g.GraphAverageExecutionTime('../Experiments/RISK/',algorithmNameList,nbIteration)
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/LeaderBoard/')
+g.GraphExperimentation(algorithmNameList,'../Experiments/'+nameDataset+'/','LeaderBoard',nbIteration)
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/Coverages/',display=False,save=False)
+g.GraphAverageCoverages('../Experiments/'+nameDataset+'/',algorithmNameList)
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/Distances/',display=False,save=False)
+g.GraphAverageDistances('../Experiments/'+nameDataset+'/',algorithmNameList)
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/ExecutionTime/',display=False,save=False)
+g.GraphAverageExecutionTime('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/NbRules/',display=False,save=False)
+g.GraphAverageNBRules('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+
 
 
 

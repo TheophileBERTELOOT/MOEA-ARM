@@ -12,7 +12,7 @@ from src.Utils.HyperParameters import *
 
 class MODAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 minDist = 3,nbChanges = 5,hyperParameters = HyperParameters(['s','a','c','f','e','w'])):
+                 minDist = 4,nbChanges = 5,hyperParameters = HyperParameters(['s','a','c','f','e','w'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration

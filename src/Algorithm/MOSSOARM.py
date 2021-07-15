@@ -10,7 +10,7 @@ import heapq
 
 class MOSSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['PF']),r=3):
+                 hyperParameters = HyperParameters(['PF']),r=4):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.indexFemale = int((0.9-rd.random()*0.25)*populationSize)
         self.r = r
@@ -60,11 +60,12 @@ class MOSSOARM:
             smallest = heapq.nsmallest(idTest, distance)[-1]
             indexVibci = np.where(distance == smallest)[0][0]
             domination = self.fitness.Domination(self.fitness.scores[i],self.fitness.scores[indexVibci])
-            while domination != 1 and idTest<self.population.populationSize and idTest ==i:
+            while domination != 1 and idTest<self.population.populationSize:
                 idTest += 1
-                smallest = heapq.nsmallest(idTest, distance)[-1]
-                indexVibci = np.where(distance == smallest)[0][0]
-                domination = self.fitness.Domination(self.fitness.scores[i], self.fitness.scores[indexVibci])
+                if idTest != i:
+                    smallest = heapq.nsmallest(idTest, distance)[-1]
+                    indexVibci = np.where(distance == smallest)[0][0]
+                    domination = self.fitness.Domination(self.fitness.scores[i], self.fitness.scores[indexVibci])
             if domination != 1:
                 indexVibci = rd.randint(0,self.population.populationSize-1)
             wb = (sum(self.fitness.scores[self.bestInd])-sum(self.worstIndScore))/(sum(self.bestIndScore)-sum(self.worstIndScore))
@@ -86,17 +87,19 @@ class MOSSOARM:
                                                             self.population.population[i]) + delta * (
                                                             rd.random() * 2) - 1
     def MatingOperator(self,maleIndex,data):
+        if self.indexFemale == self.population.populationSize:
+            self.indexFemale = self.population.populationSize-1
         candidate = self.distance[:self.indexFemale]
-        candidate = candidate[candidate<self.r]
         if len(candidate) >0:
             indexs = np.arange(len(candidate))
             paretoFront = np.ones(len(candidate))
             for i in range(len(candidate)):
-                for j in range(len(candidate)):
-                    domination = self.fitness.Domination(self.fitness.scores[i], self.fitness.scores[j])
-                    if domination == 1:
-                        paretoFront[i] += 1
-                        break
+                    for j in range(len(candidate)):
+                        if self.distance[i][j] < self.r:
+                            domination = self.fitness.Domination(self.fitness.scores[i], self.fitness.scores[j])
+                            if domination == 1:
+                                paretoFront[i] += 1
+                                break
             candidate = indexs[paretoFront == 1]
             index = rd.choice(candidate)
             snew = self.population.population[maleIndex] + self.population.population[index]

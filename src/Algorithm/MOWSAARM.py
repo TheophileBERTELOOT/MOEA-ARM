@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MOWSAARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 visionRange=3,nbPrey=10,step=5,hyperParameters = HyperParameters(['velocityFactor','enemyProb'])):
+                 visionRange=4,nbPrey=10,step=5,hyperParameters = HyperParameters(['velocityFactor','enemyProb'])):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -29,7 +29,7 @@ class MOWSAARM:
             ind = copy.deepcopy(self.population.population[i])
             for j in range(nbChanges):
                 index = rd.randint(0, (self.nbItem * 2) - 1)
-                ind[index] *= -1
+                ind[index] = -1*ind[index]
             score = self.fitness.ComputeScoreIndividual(ind,data)
             if k == 0:
                 bestPrey=ind

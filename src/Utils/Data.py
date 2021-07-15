@@ -3,7 +3,7 @@ import numpy as np
 import random as rd
 
 class Data:
-    def __init__(self,path='',header=None,indexCol=None,nbSample = 10,artificial=False,nbRow=2000,nbItem=50):
+    def __init__(self,path='',header=None,indexCol=None,nbSample = 10,artificial=False,nbRow=2000,nbItem=50,separator=','):
 
         self.artificial = artificial
         self.nbRow=nbRow
@@ -13,9 +13,11 @@ class Data:
         if self.artificial:
             self.GenerateArtificialData()
         else:
-            self.data = pd.read_csv(path, header=header, index_col=indexCol)
+            self.data = pd.read_csv(path, header=header, index_col=indexCol,sep=separator)
+            print(self.data)
             print('nbColonnes :'+str(len(self.data.columns)))
             print('nbLignes :' + str(len(self.data)))
+
 
     def GenerateArtificialData(self):
         data = []
@@ -65,12 +67,13 @@ class Data:
         ma = self.data[col].max()
         mi = self.data[col].min()
         r = ma-mi
-        p = r/self.nbSample
+        p = (r/self.nbSample)+0.00001
         for index in self.data.index:
             for j in range(1,self.nbSample+1):
                 if self.data[col][index]<=mi+j*p:
                     self.data[col][index] = j-1
                     break
+        print(self.data[col].unique())
         possibleValues = np.arange(self.nbSample)
         return possibleValues
 

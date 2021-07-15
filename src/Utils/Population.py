@@ -77,7 +77,7 @@ class Population:
         for i in range(self.nbItem):
             individual.append(-1.0)
         for i in range(self.nbItem):
-            individual.append(float(rd.randint(-1,1)))
+            individual.append(float(0.0))
         for i in range(2):
             index = rd.randint(0,self.nbItem-1)
             individual[index] = 1.0
@@ -85,7 +85,6 @@ class Population:
                 individual[self.nbItem+index] = 1.0
             else:
                 individual[self.nbItem + index] = -1.0
-
         return np.array(individual)
 
     def CheckDivide0(self,p):

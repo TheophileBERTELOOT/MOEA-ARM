@@ -79,7 +79,7 @@ class MOSOSARM:
             nbChange = rd.randint(1,self.nbParasitismModification)
             for k in range(nbChange):
                 index = rd.randint(0,self.nbItem*2-1)
-                iNew[index] = float(rd.randint(-1,1))
+                iNew[index] = -1*iNew[index]
             iNewScore = self.fitness.ComputeScoreIndividual(iNew, data)
             dominationI = self.fitness.Domination(self.fitness.scores[j], iNewScore)
             if dominationI == 1:

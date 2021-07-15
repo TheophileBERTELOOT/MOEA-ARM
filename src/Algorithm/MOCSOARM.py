@@ -9,7 +9,7 @@ from src.Utils.HyperParameters import *
 
 class MOCSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=3,step=3):
+                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=4,step=3):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -75,7 +75,7 @@ class MOCSOARM:
         for i in range(self.population.populationSize):
             for j in range(self.step):
                 index = rd.randint(0,self.nbItem*2-1)
-                self.population.population[i][index] = float(rd.randint(-1,1))
+                self.population.population[i][index] = -1*self.population.population[i][index]
 
     def RuthlessBehavior(self):
         for i in range(self.population.populationSize):

@@ -1,0 +1,25 @@
+dataset,row,binary attribute,Task
+Abalone,4177,83,Classification
+Australian,690,98,Classification
+Bankrupt,250,19,Classification
+Breast-Cancer,277,43,Classification
+Bridges,70,116,Classification
+Car,1728,25,Classification
+Chess,3196,75,Classification
+CMC,1473,50,Classification
+Congress,435,33,Classification
+CRX,653,102,Classification
+Dermatology,358,145,Classification
+Fertility,100,55,Classification_Regression
+Flag,194,340,Classification
+German,1000,100,Classification
+Iris,150,43,Classification
+Machine,209,324,Classification
+Magic,19020,102,Classification
+Mammographic,830,32,Classification
+Mushroom,8124,118,Classification
+Nursery,12960,32,Classification
+Primary-Tumor,132,55,Classification
+Risk,776,110,Classification
+TAE,151,37,Classification
+Wine,4898,117,Classification

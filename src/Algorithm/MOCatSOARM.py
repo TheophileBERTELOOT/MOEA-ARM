@@ -10,7 +10,7 @@ from src.Utils.HyperParameters import *
 
 class MOCatSOARM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                hyperParameters = HyperParameters(['mixtureRatio','velocityRatio']) ,velocitySize=3,SMP=10, SRD = 3):
+                hyperParameters = HyperParameters(['mixtureRatio','velocityRatio']) ,velocitySize=5,SMP=10, SRD = 5):
         self.population = Population('horizontal_binary', populationSize, nbItem)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
@@ -46,7 +46,8 @@ class MOCatSOARM:
         wheel = [i  for i in range(self.SMP)]
         for i in range(self.SMP):
             position = copy.deepcopy(self.population.population[k])
-            for j in range(self.SRD):
+            nbChange = rd.randint(1,self.SRD)
+            for j in range(nbChange):
                 index = rd.randint(0,self.nbItem*2-1)
                 position[index] = -1*position[index]
             score = self.fitness.ComputeScoreIndividual(position,data)
@@ -59,7 +60,7 @@ class MOCatSOARM:
                     wheel.append(i)
 
         index = rd.choice(wheel)
-        self.population.population[k] = environment[index]
+        self.population.population[k] = copy.deepcopy(environment[index])
 
     def ResetPopulation(self,data,hyperParameters):
         self.population.InitPopulation()

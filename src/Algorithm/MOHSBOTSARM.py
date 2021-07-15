@@ -57,7 +57,7 @@ class MOHSBOTSARM:
             nbChange = rd.randint(1,self.nbChanges)
             for i in range(nbChange):
                 index = rd.randint(0,self.nbItem*2-1)
-                ind[index] = rd.randint(-1,1)
+                ind[index] = -1*ind[index]
             score = self.fitness.ComputeScoreIndividual(ind,data)
             domination = self.fitness.Domination(bestScore,score)
             if domination == 1:

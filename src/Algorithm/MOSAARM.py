@@ -46,8 +46,8 @@ class MOSAARM:
         self.fitness.ComputeScorePopulation(self.population.population,data)
         for j in range(self.population.populationSize):
             for m in range(self.nbIterationPerTemp):
-                newRule = self.GenerateRule(j)
-                newRuleScore = self.fitness.ComputeScoreIndividual(newRule,data)
+                newRule = copy.deepcopy(self.GenerateRule(j))
+                newRuleScore = copy.deepcopy(self.fitness.ComputeScoreIndividual(newRule,data))
                 domination = self.fitness.Domination(self.fitness.scores[j],newRuleScore)
                 delta =   abs(sum(newRuleScore)-sum(self.fitness.scores[j]))
                 if domination == 1:

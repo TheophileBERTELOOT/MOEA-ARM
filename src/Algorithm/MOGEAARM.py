@@ -51,11 +51,11 @@ class MOGEAARM:
         for i in range(self.population.populationSize):
             rg = np.random.normal()
             ra = np.random.normal()
-            dx = (abs(self.population.population[i]-self.bestInd)+abs(self.worstInd-self.population.population[i]))/2
-            gmove = (rg*dx/2)*((self.worstInd-self.bestInd)/(self.worstInd-self.population.population[i]+self.bestInd+0.00001))
+            dx = (abs(copy.deepcopy(self.population.population[i])-copy.deepcopy(self.bestInd))+abs(copy.deepcopy(self.worstInd)-copy.deepcopy(self.population.population[i])))/2
+            gmove = (rg*dx/2)*((copy.deepcopy(self.worstInd)-copy.deepcopy(self.bestInd))/(copy.deepcopy(self.worstInd)-copy.deepcopy(self.population.population[i])+copy.deepcopy(self.bestInd)+0.00001))
             gmove = self.population.CheckDivide0(gmove)
-            acc = ra*(self.bestInd-self.population.population[i])
-            self.mutatedVectors[i] = self.population.population[i]- gmove + acc
+            acc = ra*(copy.deepcopy(self.bestInd)-copy.deepcopy(self.population.population[i]))
+            self.mutatedVectors[i] = copy.deepcopy(self.population.population[i])- gmove + acc
 
     def VectorJumping(self):
         for i in range(self.population.populationSize):

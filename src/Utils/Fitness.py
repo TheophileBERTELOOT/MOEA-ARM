@@ -144,7 +144,7 @@ class Fitness:
         for p in range(len(temp)):
             dominate = True
             for q in range(len(temp)):
-                if  self.Domination(temp[p], temp[q]) == 1:
+                if self.Domination(temp[p], temp[q]) == 1:
                     dominate = False
                     break
             if dominate:
