@@ -17,7 +17,7 @@ class MODAARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.food = np.zeros(nbItem*2,dtype=float)
         self.predator = np.zeros(nbItem*2,dtype=float)
         self.executionTime = 0

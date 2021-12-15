@@ -28,45 +28,78 @@ hyper.RandomSearch(100,alg,d.data)
 hyper.SaveBestParameters(p+'bestParameters.json')
 '''
 
-#refaire les 10 premiers dataset avec sso
+
 
 nbIteration = 50
 sizeHead = 10
-iterationInitiale = 0
+
+iterationInitiale =0
 nbRepetition = 50 - iterationInitiale
 populationSize = 100
 objectiveNames = ['support','confidence','cosine']
-criterionList = ['scores','execution time','distances','coverages']
-algorithmNameList = ['mosaarm','mossoarm','mocsoarm','nsgaii','hmofaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm']
+criterionList = ['scores','execution time','distances','coverages','tested']
 algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mosaarm','mowsaarm','mocatsoarm','motlboarm','mofpaarm','moaloarm',
                      'modaarm','mohsbotsarm','modearm','nshsdearm','mogeaarm','mogsaarm','mossoarm','mowoaarm','mososarm',
                      'mocssarm','custom']
-nameDataset = 'MAGIC'
+# algorithmNameList = ['custom']
+updated = False
+nameDataset = 'IRIS'
 p = '../Experiments/'+nameDataset+'/'
 if (not path.exists(p)):
     mkdir(p)
-perf = Performances(algorithmNameList,criterionList,objectiveNames)
+# perf = Performances(algorithmNameList,criterionList,objectiveNames)
 #d = Data(artificial=True)
-d = Data('Data/Transform/magic.csv',header=0,indexCol=0,separator=',')
+d = Data('Data/Transform/iris.csv',header=0,indexCol=0,separator=',')
+# d = Data('Data/Transform/iris.csv')
 #d.TransformToHorizontalBinary()
 #d.Save('Data/Transform/wine.csv')
 d.ToNumpy()
+# g = Graphs(objectiveNames,d.data)
+# g.dataTSNE()
+#
+# E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False,update=updated)
+# E.Run()
+#
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+# g.GraphSCCVsNBRules(algorithmNameList,'../Experiments/'+nameDataset+'/','nbRulesvsSCC',nbIteration)
+#
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+# g.GraphSCCVsCoverage(algorithmNameList,'../Experiments/'+nameDataset+'/','coveragesvsSCC',nbIteration)
+# #
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/LeaderBoard/')
+# g.GraphExperimentation(algorithmNameList,'../Experiments/'+nameDataset+'/','LeaderBoard',nbIteration)
+#
+#
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+# g.GraphNBRulesVsCoverages(algorithmNameList,'../Experiments/'+nameDataset+'/','nbRulesVsCoverage',nbIteration)
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/Coverages/',display=True,save=True)
+# g.GraphAverageCoverages('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/Distances/',display=True,save=True)
+# g.GraphAverageDistances('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/ExecutionTime/',display=True,save=True)
+# g.GraphAverageExecutionTime('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/NbRules/',display=True,save=True)
+# g.GraphAverageNBRules('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+# g.dataTSNEFromFile(d.data)
 
 
-E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False)
-E.Run()
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+g.getAverage()
 
-g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/LeaderBoard/')
-g.GraphExperimentation(algorithmNameList,'../Experiments/'+nameDataset+'/','LeaderBoard',nbIteration)
-g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/Coverages/',display=False,save=False)
-g.GraphAverageCoverages('../Experiments/'+nameDataset+'/',algorithmNameList)
-g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/Distances/',display=False,save=False)
-g.GraphAverageDistances('../Experiments/'+nameDataset+'/',algorithmNameList)
-g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/ExecutionTime/',display=False,save=False)
-g.GraphAverageExecutionTime('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
-g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/NbRules/',display=False,save=False)
-g.GraphAverageNBRules('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
+# perf = Performances(algorithmNameList, criterionList, objectiveNames)
+# perf.CalculFitness('../Experiments/',nbIteration)
+# g = Graphs(objectiveNames,[],path='../Experiments/fitness',display=True,save=True)
+# g.GraphFitness('../Experiments/fitness.csv')
 
+
+# perf = Performances(algorithmNameList, criterionList, objectiveNames)
+# perf.CalculPerf('../Experiments/',nbIteration)
+
+# perf = pd.read_csv('../Experiments/results.csv',header=0,index_col=0)
+# print(perf[perf['dataset']=='MUSHROOM'][['suppCatchup',
+#                 'confCatchup','cosCatchup']].sort_values(['algorithm']))
 
 
 

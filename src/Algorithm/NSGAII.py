@@ -17,8 +17,8 @@ class NSGAII:
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.nbChanges = nbChanges
-        self.fitness = Fitness('horizontal_binary',objectiveNames,populationSize)
-        self.fitnessFirstGeneration = Fitness('horizontal_binary',objectiveNames,int(populationSize/2))
+        self.fitness = Fitness('horizontal_binary',objectiveNames,populationSize,nbItem)
+        self.fitnessFirstGeneration = Fitness('horizontal_binary',objectiveNames,int(populationSize/2),nbItem)
         self.mutationRate = hyperParameters.hyperParameters['mutationRate']
         self.crossOverRate = hyperParameters.hyperParameters['crossOverRate']
         self.rank = [0 for _ in range(self.population.populationSize)]

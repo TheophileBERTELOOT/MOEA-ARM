@@ -15,7 +15,7 @@ class MOCatSOARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem)
         self.mixtureRatio = hyperParameters.hyperParameters['mixtureRatio']
         self.velocityRatio = hyperParameters.hyperParameters['velocityRatio']
         self.velocitySize = velocitySize

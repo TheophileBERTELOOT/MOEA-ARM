@@ -16,7 +16,7 @@ class MOFPAARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.P = hyperParameters.hyperParameters['P']
         self.lambd = lambd
         self.bestSolution = []

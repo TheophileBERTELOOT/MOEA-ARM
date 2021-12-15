@@ -14,7 +14,7 @@ class MOSAARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem)
         self.temp = tempInitial
         self.tempInitial = tempInitial
         self.nbIterationPerTemp = nbIterationPerTemp

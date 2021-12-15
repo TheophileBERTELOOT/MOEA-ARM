@@ -14,7 +14,7 @@ class MOWOAARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0,populationSize-1)])
         self.bestIndScore = 0
         self.b = hyperParameters.hyperParameters['b']

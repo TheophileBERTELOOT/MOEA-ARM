@@ -14,7 +14,7 @@ class MOWSAARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem)
         self.visionRange = visionRange
         self.step = step
         self.velocityFactor = hyperParameters.hyperParameters['velocityFactor']

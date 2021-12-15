@@ -14,7 +14,7 @@ class MOCSSARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.force = np.zeros((populationSize,nbItem*2),dtype=float)
         self.velocity = np.zeros((populationSize, nbItem * 2), dtype=float)
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0,populationSize-1)])

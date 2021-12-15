@@ -13,7 +13,7 @@ class MOTLBOARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.teacher = []
         self.TF = 0
         self.executionTime = 0

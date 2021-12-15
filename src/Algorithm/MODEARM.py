@@ -14,7 +14,7 @@ class MODEARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.mutatedVectors = np.zeros((populationSize,nbItem*2),dtype=float)
         self.F = hyperParameters.hyperParameters['F']
         self.CR=hyperParameters.hyperParameters['CR']

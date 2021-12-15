@@ -17,9 +17,9 @@ class MOALOARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitnessLions = Fitness('horizontal_binary', objectiveNames, int(populationSize/2) )
-        self.fitnessAnts = Fitness('horizontal_binary', objectiveNames, int(populationSize/2) )
-        self.fitness =  Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitnessLions = Fitness('horizontal_binary', objectiveNames, int(populationSize/2) ,nbItem)
+        self.fitnessAnts = Fitness('horizontal_binary', objectiveNames, int(populationSize/2),nbItem )
+        self.fitness =  Fitness('horizontal_binary', objectiveNames, populationSize ,nbItem)
         self.elite = []
         self.eliteScore = []
         self.maxBound = 1

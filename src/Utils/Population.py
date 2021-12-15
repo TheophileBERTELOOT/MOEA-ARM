@@ -2,13 +2,15 @@ import numpy as np
 import random as rd
 import copy
 
+
+
+
 class Population:
     def __init__(self,representation, populationSize,nbItem):
         self.representation = representation
         self.populationSize = populationSize
         self.nbItem = nbItem
         self.population  = []
-
         self.InitPopulation()
 
     def GetIndividualRepresentation(self,individual):
@@ -35,6 +37,16 @@ class Population:
                 popRep.append([list(indexRule), list(indexAntecedent), list(indexConsequent)])
         return np.array(popRep)
 
+
+
+    def AddIndividualToTested(self,individual):
+        rep = self.GetIndividualRepresentation(individual)
+        tsneFriendlyRep = np.zeros(self.nbItem*2)
+        for antecedent in rep[1]:
+            tsneFriendlyRep[antecedent]=1
+        for consequent in rep[2]:
+            tsneFriendlyRep[self.nbItem+consequent] =1
+        return tsneFriendlyRep
 
     def CheckIfNullIndividual(self,ind):
         indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(ind)
@@ -68,6 +80,8 @@ class Population:
             self.population.append(individual)
         self.population = np.array(self.population)
         self.CheckIfNull()
+        # g = Graphs([],self.testedPopulation)
+        # g.dataTSNE()
 
     def SetPopulation(self,population):
         self.population = copy.deepcopy(population)

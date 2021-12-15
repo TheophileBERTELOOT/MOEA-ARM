@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import random as rd
+from sklearn.manifold import TSNE
 
 class Data:
     def __init__(self,path='',header=None,indexCol=None,nbSample = 10,artificial=False,nbRow=2000,nbItem=50,separator=','):
@@ -77,6 +78,11 @@ class Data:
         possibleValues = np.arange(self.nbSample)
         return possibleValues
 
+
+    def tSneDataView(self):
+        embedded = TSNE(n_components=2, learning_rate='auto',
+                        init='random').fit_transform(np.asarray(self.data,dtype='float64'))
+        return embedded
 
     def Save(self,path):
         self.data.to_csv(path)

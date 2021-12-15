@@ -5,6 +5,7 @@ import pandas as pd
 from scipy.spatial import distance
 from src.Utils.Graphs import *
 from time import time
+import random
 from src.Utils.HyperParameters import *
 
 class CUSTOM:
@@ -14,7 +15,7 @@ class CUSTOM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem)
         self.distance = np.zeros((populationSize,populationSize),dtype=float)
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0, populationSize - 1)])
         self.worstInd = copy.deepcopy(self.population.population[rd.randint(0, populationSize - 1)])
@@ -53,7 +54,11 @@ class CUSTOM:
                 if domination == 1:
                     dominatingSolutions.append(j)
 
-        return dominatingSolutions
+
+        if len(dominatingSolutions)>10:
+            return random.sample(dominatingSolutions,10)
+        else:
+            return dominatingSolutions
 
     def Turnament(self,participant,participantScore):
         bestIndex = 0
@@ -74,9 +79,11 @@ class CUSTOM:
             isBetter = False
             if len(dominatingSolutions)>0:
                 for j in dominatingSolutions:
-                    nbChanges = int(self.distance[i][j]/2)
+                    nbChange = rd.randint(1,5)
                     candidate = copy.deepcopy(self.population.population[i])
-                    for k in range(nbChanges):
+                    # candidate = candidate - rd.random() * (self.population.population[j] - self.population.population[i])
+                    for k in range(nbChange):
+
                         r = rd.random()
                         if r <0.33:
                             index = rd.choice(np.nonzero(self.population.population[j]>0))
@@ -109,9 +116,11 @@ class CUSTOM:
                 participantsIndex = []
                 dominatingSolutions = self.GetDominatingSolutions(i, True)
                 for j in dominatingSolutions:
-                    nbChanges = int(self.distance[i][j] / 2)
+                    nbChange = rd.randint(1,5)
                     candidate = copy.deepcopy(self.population.population[j])
-                    for k in range(nbChanges):
+                    # candidate = candidate - rd.random() * (
+                    #             self.population.population[j] - self.population.population[i])
+                    for k in range(nbChange):
                         r = rd.random()
                         if r < 0.33:
                             index = rd.choice(np.nonzero(self.population.population[i] > 0))
@@ -149,7 +158,7 @@ class CUSTOM:
         self.population.InitPopulation()
         self.fitness.paretoFront=np.zeros((1,len(self.objectivesNames)),dtype=float)
         self.fitness = Fitness('horizontal_binary', self.objectiveNames, self.population.populationSize)
-        self.distance = np.zeros((self.population.populationSize, self.population.populationSize), dtype=float)
+        # self.distance = np.zeros((self.population.populationSize, self.population.populationSize), dtype=float)
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0, self.population.populationSize - 1)])
         self.worstInd = copy.deepcopy(self.population.population[rd.randint(0, self.population.populationSize - 1)])
         self.executionTime = 0
@@ -161,7 +170,7 @@ class CUSTOM:
 
     def Run(self,data,i):
         t1 = time()
-        self.CalculDistance()
+        # self.CalculDistance()
         self.UpdateBestWorst()
         self.UpdatePopulation(data)
         self.population.CheckIfNull()

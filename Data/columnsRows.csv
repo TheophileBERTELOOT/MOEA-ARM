@@ -15,10 +15,8 @@ Flag,194,340,Classification
 German,1000,100,Classification
 Iris,150,43,Classification
 Machine,209,324,Classification
-Magic,19020,102,Classification
 Mammographic,830,32,Classification
 Mushroom,8124,118,Classification
-Nursery,12960,32,Classification
 Primary-Tumor,132,55,Classification
 Risk,776,110,Classification
 TAE,151,37,Classification

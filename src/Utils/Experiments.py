@@ -25,7 +25,7 @@ from os import path,mkdir
 
 
 class Experiment:
-    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,sizeHead=5,display=False,path='Experiments/'):
+    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,sizeHead=5,display=False,path='Experiments/',update=False):
         self.algListNames = algListNames
         self.objectiveNames = objectiveNames
         self.criterionList = criterionList
@@ -40,13 +40,15 @@ class Experiment:
         self.display = display
         self.path = path
         self.CheckIfFolderExist(self.path)
-        self.perf = Performances(algListNames, criterionList, objectiveNames)
+        print(self.data.shape[1])
+        self.perf = Performances(algListNames, criterionList,self.data.shape[1], objectiveNames=objectiveNames)
+        self.update = update
 
     def CheckIfFolderExist(self,p):
         if(not path.exists(p)):
             mkdir(p)
 
-    def InitAlgList(self):
+    def InitAlgList(self,rep):
         self.algList = []
         for name in self.algListNames:
             if name == 'custom':
@@ -165,6 +167,31 @@ class Experiment:
                 self.algList.append(
                     copy.deepcopy(MOCSSARM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
                              self.objectiveNames, self.data)))
+            self.algList[-1].population.CheckIfNull()
+            self.algList[-1].fitness.ComputeScorePopulation(self.algList[-1].population.population, self.data)
+            self.algList[-1].fitness.GetParetoFront(self.algList[-1].population)
+            self.algList[-1].fitness.GetDistances()
+            self.algList[-1].fitness.GetPopulationDistances(self.algList[-1].population)
+            self.algList[-1].fitness.GetCoverage(self.data)
+            self.algList[-1].fitness.WritePop(self.path+'Rules/'+str(rep)+'/' + name + '.txt')
+            self.perf.UpdatePerformances(score=self.algList[-1].fitness.paretoFront, executionTime=self.algList[-1].executionTime, i=0,
+                                         algorithmName=name, coverage=self.algList[-1].fitness.coverage,
+                                         distance=self.algList[-1].fitness.averageDistances,
+                                         popDistance=self.algList[-1].fitness.averagePopDistances,
+                                         testedIndividuals=self.algList[-1].fitness.testedPopulation,
+                                         testedScoreIndividuals=self.algList[-1].fitness.testedScorePopulation
+                                         )
+        self.perf.UpdateLeaderBoard()
+        self.perf.SaveIntermediaryPerf(self.path + str(rep) + '/', 0, self.update)
+        graph = Graphs(self.objectiveNames, self.perf.transformTestedIndividuals, path=self.path +'/Graphs/tested/'+ str(rep) + '/' + str(0),
+                       display=self.display)
+        graph.dataTSNE()
+        graph = Graphs(self.objectiveNames, self.perf.transformTestedScoreIndividuals,
+                       path=self.path +'/Graphs/testedScore/'+ str(rep) + '/' + str(0),
+                       display=self.display)
+        graph.dataTSNE()
+        self.perf.Free()
+        self.perf.InitTestedIndividuals()
 
 
     def Run(self):
@@ -174,19 +201,25 @@ class Experiment:
         nbRulesGraphPath = graphPath + 'NbRules/'
         coveragesGraphPath = graphPath + 'Coverages/'
         distancesGraphPath = graphPath + 'Distances/'
+        testedGraphPath = graphPath + 'tested/'
+        testedScoreGraphPath = graphPath + 'testedScore/'
         rulesPath = self.path+'Rules/'
         self.CheckIfFolderExist(scoreGraphPath)
         self.CheckIfFolderExist(nbRulesGraphPath)
         self.CheckIfFolderExist(coveragesGraphPath)
         self.CheckIfFolderExist(distancesGraphPath)
         self.CheckIfFolderExist(rulesPath)
+        self.CheckIfFolderExist(testedGraphPath)
+        self.CheckIfFolderExist(testedScoreGraphPath)
         for rep in range(self.iterationInitial,self.iterationInitial+self.nbRepetition):
-            self.InitAlgList()
+            self.InitAlgList(rep)
             executionTimeGraphPath = graphPath + 'ExecutionTime/'
             scoreGraphPath = graphPath + 'Scores/'+str(rep)+'/'
             nbRulesGraphPath = graphPath + 'NbRules/'+str(rep)+'/'
             coveragesGraphPath = graphPath + 'Coverages/'+str(rep)+'/'
-            distancesGraphPath = graphPath + 'Distances/'+str(rep)+'/'
+            testedGraphPath = graphPath + 'tested/'+str(rep)+'/'
+            testedScoreGraphPath = graphPath + 'testedScore/'+str(rep)+'/'
+            distancesGraphPath = graphPath + 'Distances/' + str(rep) + '/'
             rulesPathRep = rulesPath + str(rep)+'/'
             self.CheckIfFolderExist(executionTimeGraphPath)
             self.CheckIfFolderExist(scoreGraphPath)
@@ -194,7 +227,10 @@ class Experiment:
             self.CheckIfFolderExist(distancesGraphPath)
             self.CheckIfFolderExist(self.path+str(rep)+'/')
             self.CheckIfFolderExist(rulesPathRep)
-            for i in range(self.nbIteration):
+            self.CheckIfFolderExist(testedGraphPath)
+            self.CheckIfFolderExist(testedScoreGraphPath)
+            print(rep)
+            for i in range(1,self.nbIteration+1):
                 k = 0
                 for alg in self.algList:
                     alg.Run(self.data, i)
@@ -204,16 +240,31 @@ class Experiment:
                     #alg.fitness.GetHead(self.sizeHead,alg.population)
                     #alg.fitness.GetUniquePop(alg.population)
                     alg.fitness.GetDistances()
+                    alg.fitness.GetPopulationDistances(alg.population)
                     alg.fitness.GetCoverage(self.data)
                     alg.fitness.WritePop(rulesPathRep+self.algListNames[k]+'.txt')
                     self.perf.UpdatePerformances(score=alg.fitness.paretoFront, executionTime=alg.executionTime, i=i,
-                                            algorithmName=self.algListNames[k],coverage=alg.fitness.coverage,distance=alg.fitness.averageDistances)
+                                            algorithmName=self.algListNames[k],coverage=alg.fitness.coverage,
+                                                 distance=alg.fitness.averageDistances,popDistance=alg.fitness.averagePopDistances,
+                                                 testedIndividuals=alg.fitness.testedPopulation,testedScoreIndividuals=alg.fitness.testedScorePopulation)
+                    alg.fitness.ResetTestedPopulation()
                     k += 1
 
                 graph = Graphs(self.objectiveNames, self.perf.scores, path=scoreGraphPath + str(i), display=self.display)
                 graph.GraphScores()
+
                 self.perf.UpdateLeaderBoard()
-                self.perf.SaveIntermediaryPerf(self.path+str(rep)+'/',i)
+                self.perf.SaveIntermediaryPerf(self.path+str(rep)+'/',i,self.update)
+                if(i==1 or i==10 or i == 20 or i ==30 or i == 40 or i == 49):
+                    graph = Graphs(self.objectiveNames, self.perf.transformTestedIndividuals, path=testedGraphPath + str(i),
+                                   display=self.display)
+                    graph.dataTSNE()
+                    graph = Graphs(self.objectiveNames, self.perf.transformTestedScoreIndividuals,
+                                   path=testedScoreGraphPath + str(i),
+                                   display=self.display)
+                    graph.dataTSNE()
+
+
                 if i<self.nbIteration-1:
                     self.perf.Free()
             graph = Graphs(['execution Time'], self.perf.executionTime, path=executionTimeGraphPath+str(rep), display=self.display)
@@ -222,9 +273,10 @@ class Experiment:
             graph.GraphNbRules()
             graph = Graphs(self.objectiveNames, self.perf.coverages, path=coveragesGraphPath + str(i), display=self.display)
             graph.GraphCoverages()
+
             graph = Graphs(self.objectiveNames, self.perf.distances, path=distancesGraphPath + str(i),
                            display=self.display)
             graph.GraphDistances()
 
-            self.perf.SaveFinalPerf(self.path+str(rep)+'/')
-            self.perf = Performances(self.algListNames, self.criterionList, self.objectiveNames)
+            self.perf.SaveFinalPerf(self.path+str(rep)+'/',self.update)
+            self.perf = Performances(self.algListNames, self.criterionList,self.data.shape[1], self.objectiveNames)

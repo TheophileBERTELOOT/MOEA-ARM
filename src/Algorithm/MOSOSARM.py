@@ -14,7 +14,7 @@ class MOSOSARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.bestInd = copy.deepcopy(self.population.population[rd.randint(0,populationSize-1)])
         self.bestIndScore = np.zeros(nbObjectifs,dtype=float)
         self.nbParasitismModification = nbParasitismModification

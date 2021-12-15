@@ -29,7 +29,7 @@ class MOPSO:
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.paretoFront = []
-        self.fitness = Fitness('horizontal_binary',objectiveNames,self.population.populationSize)
+        self.fitness = Fitness('horizontal_binary',objectiveNames,self.population.populationSize,nbItem)
 
         self.executionTime = 0
 

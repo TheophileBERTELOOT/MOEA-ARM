@@ -21,18 +21,20 @@ def negativeSuppGPU( individual, data):
     return supp / data.shape[0]
 
 class Fitness:
-    def __init__(self,representation,objectivesNames,populationSize):
+    def __init__(self,representation,objectivesNames,populationSize,nbItem=0):
         self.representation = representation
         self.objectivesNames = objectivesNames
         self.nbObjectives = len(objectivesNames)
         self.populationSize = populationSize
-        self.population = Population(representation,0,0)
+        self.population = Population(representation,0,nbItem)
         self.scores = np.array([np.array([0.0 for i in range(self.nbObjectives)]) for j in range(self.populationSize)])
         self.paretoFront = []
         self.paretoFrontSolutions = []
         self.distances = []
         self.averageDistances = 0
         self.coverage = 0
+        self.testedScorePopulation = []
+        self.testedPopulation = []
 
 
     def Supp(self,individual,data):
@@ -91,6 +93,7 @@ class Fitness:
         suppRule = SuppGPU(indexRule, data)
         suppAntecedent = SuppGPU(indexAntecedent, data)
         suppConsequent = SuppGPU(indexConsequent, data)
+        individualTestedScore = []
         for j in range(self.nbObjectives):
             objective = self.objectivesNames[j]
             if objective == 'support':
@@ -112,7 +115,12 @@ class Fitness:
                 score[j] = self.Jaccard(suppRule, suppAntecedent, suppConsequent)
             if objective == 'piatetskiShapiro':
                 score[j] = self.PiatetskiShapiro(suppRule, suppAntecedent, suppConsequent)
+            individualTestedScore.append(score[j])
 
+
+        # A DECOMMENTERRRRRRRRRRRRRRR
+        # self.testedScorePopulation.append(individualTestedScore)
+        # self.testedPopulation.append(self.population.AddIndividualToTested(individual))
         return np.array(score)
 
     def ComputeScorePopulation(self,population,data):
@@ -127,6 +135,10 @@ class Fitness:
             return 1
         else:
             return 0
+
+    def ResetTestedPopulation(self):
+        self.testedScorePopulation = []
+        self.testedPopulation = []
 
     def GetParetoFront(self,population):
         if self.paretoFrontSolutions != []:
@@ -197,6 +209,26 @@ class Fitness:
             indAvgDistance/=(len(self.distances))
             self.distances[i] = indAvgDistance
         self.averageDistances = np.average(self.distances)
+
+    def GetPopulationDistances(self,pop):
+        self.averagePopDistances = 0
+        population = copy.deepcopy(pop.GetPopulationRepresentation(True))
+        self.popDistances = np.zeros(self.populationSize, dtype=float)
+        for i in range(len(self.popDistances)):
+            indAvgDistance = 0
+            indi = copy.deepcopy(population[i])
+            for j in range(len(self.popDistances)):
+                indj = copy.deepcopy(population[j])
+                if i != j:
+                    nbDiff = 0
+                    for k in range(len(population[i])):
+                        indik = list(np.fromstring(indi[k][1:-1], dtype=int, sep=' '))
+                        indjk = list(np.fromstring(indj[k][1:-1], dtype=int, sep=' '))
+                        nbDiff += len(self.Diff(indik, indjk))
+                    indAvgDistance += (nbDiff/2)
+            indAvgDistance /= (len(self.popDistances))
+            self.popDistances[i] = indAvgDistance
+        self.averagePopDistances = np.average(self.popDistances)
 
     def GetCoverage(self,data):
         coverage = 0

@@ -17,7 +17,7 @@ class MOSSOARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.bestInd = 0
         self.bestIndScore = np.zeros(nbObjectifs, dtype=float)
         self.worstInd = 0

@@ -15,7 +15,7 @@ class HMOFAARM:
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize)
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem)
         self.alpha = hyperParameters.hyperParameters['alpha']
         self.beta0 = hyperParameters.hyperParameters['beta0']
         self.betaInit = hyperParameters.hyperParameters['beta0']
@@ -54,7 +54,7 @@ class HMOFAARM:
 
     def UpdatePopulation(self,data):
         for i in range(self.population.populationSize):
-            for j in range(self.population.populationSize):
+            for j in np.random.randint(self.population.populationSize,size=10):
                 if self.fitness.Domination(self.fitness.scores[j],self.fitness.scores[i]) == -1:
                     self.UpdateBeta0()
                     xit = self.population.population[i]

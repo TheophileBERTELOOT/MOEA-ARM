@@ -15,7 +15,7 @@ class NSHSDEARM:
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
         self.harmoni = Population('horizontal_binary', int(populationSize/2), nbItem)
-        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize )
+        self.fitness = Fitness('horizontal_binary', objectiveNames, populationSize,nbItem )
         self.F = hyperParameters.hyperParameters['F']
         self.Fw =  1/(self.nbItem*2)
         self.PAR =  hyperParameters.hyperParameters['PAR']

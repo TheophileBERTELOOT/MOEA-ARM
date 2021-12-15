@@ -143,6 +143,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\Data\columnsRows.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Data\congress.csv">
           <value>
             <Attribute>
