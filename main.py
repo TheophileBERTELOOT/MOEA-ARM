@@ -34,7 +34,7 @@ nbIteration = 50
 sizeHead = 10
 
 iterationInitiale =0
-nbRepetition = 50 - iterationInitiale
+nbRepetition = 1 - iterationInitiale
 populationSize = 100
 objectiveNames = ['support','confidence','cosine']
 criterionList = ['scores','execution time','distances','coverages','tested']
@@ -43,13 +43,13 @@ algorithmNameList = ['mocsoarm','mopso','nsgaii','hmofaarm','mosaarm','mowsaarm'
                      'mocssarm','custom']
 # algorithmNameList = ['custom']
 updated = False
-nameDataset = 'IRIS'
+nameDataset = 'MUSHROOM'
 p = '../Experiments/'+nameDataset+'/'
 if (not path.exists(p)):
     mkdir(p)
 # perf = Performances(algorithmNameList,criterionList,objectiveNames)
 #d = Data(artificial=True)
-d = Data('Data/Transform/iris.csv',header=0,indexCol=0,separator=',')
+d = Data('Data/Transform/mushroom.csv',header=0,separator=',')
 # d = Data('Data/Transform/iris.csv')
 #d.TransformToHorizontalBinary()
 #d.Save('Data/Transform/wine.csv')
@@ -57,8 +57,8 @@ d.ToNumpy()
 # g = Graphs(objectiveNames,d.data)
 # g.dataTSNE()
 #
-# E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False,update=updated)
-# E.Run()
+E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False,update=updated)
+E.Run()
 #
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
 # g.GraphSCCVsNBRules(algorithmNameList,'../Experiments/'+nameDataset+'/','nbRulesvsSCC',nbIteration)
@@ -81,12 +81,12 @@ d.ToNumpy()
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/NbRules/',display=True,save=True)
 # g.GraphAverageNBRules('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
 
-# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
-# g.dataTSNEFromFile(d.data)
-
-
 g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
-g.getAverage()
+g.dataTSNEFromFile(d.data)
+
+
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+# g.getAverage()
 
 # perf = Performances(algorithmNameList, criterionList, objectiveNames)
 # perf.CalculFitness('../Experiments/',nbIteration)

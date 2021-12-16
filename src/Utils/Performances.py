@@ -32,10 +32,11 @@ class Performances:
         self.executionTime = pd.DataFrame(columns=self.columnsET)
 
     def InitTestedIndividuals(self):
+
         self.transformTestedIndividuals =  pd.DataFrame(columns=['algorithm','x','y'])
-        self.transformTestedScoreIndividuals = pd.DataFrame(columns=['algorithm', 'x', 'y'])
+        print(self.transformTestedIndividuals)
         self.testedIndividuals = pd.DataFrame(columns=['algorithm']+[str(i) for i in range(self.nbItem*2)])
-        self.testedScoreIndividuals = pd.DataFrame(columns=['algorithm']+[str(i) for i in range(len(self.objectiveNames))])
+
 
     def Init(self):
         if 'scores' in self.criterionList:
@@ -90,11 +91,7 @@ class Performances:
                     testedData.append([algorithmName]+[testedIndividuals[i][j] for j in range(len(testedIndividuals[i]))])
                 testedDf = pd.DataFrame(testedData,columns=['algorithm']+[str(i) for i in range(self.nbItem*2)])
                 self.testedIndividuals = self.testedIndividuals.append(testedDf, ignore_index=True)
-                testedData = []
-                for i in range(len(testedScoreIndividuals)):
-                    testedData.append([algorithmName]+[testedScoreIndividuals[i][j] for j in range(len(testedScoreIndividuals[i]))])
-                testedScoreDf = pd.DataFrame(testedData,columns=['algorithm']+[str(i) for i in range(len(self.objectiveNames))])
-                self.testedScoreIndividuals = self.testedScoreIndividuals.append(testedScoreDf, ignore_index=True)
+
 
 
 
@@ -122,15 +119,10 @@ class Performances:
                         init='random').fit_transform(np.asarray(data,dtype='float64'))
         transformed = pd.DataFrame(list(zip(list(algorithms),data[:,0],data[:,1])),columns=['algorithm','x','y'])
         transformed = transformed.drop_duplicates()
-        self.transformTestedIndividuals = self.transformTestedIndividuals.append(transformed)
+        self.transformTestedIndividuals = transformed
+        print(self.transformTestedIndividuals)
 
-        data = self.testedScoreIndividuals.drop('algorithm', axis=1)
-        algorithms = self.testedScoreIndividuals['algorithm']
-        data = TSNE(n_components=2, learning_rate='auto',
-                        init='random').fit_transform(np.asarray(data,dtype='float64'))
-        transformed = pd.DataFrame(list(zip(list(algorithms),data[:,0],data[:,1])),columns=['algorithm','x','y'])
-        transformed = transformed.drop_duplicates()
-        self.transformTestedScoreIndividuals = self.transformTestedIndividuals.append(transformed)
+
 
 
     def SaveIntermediaryPerf(self,p,i,updating=False):
@@ -174,8 +166,7 @@ class Performances:
             if (i == 0 or i == 1 or i == 10 or i == 20 or i == 30 or i == 40 or i == 49):
                 self.RefactorTSNE()
                 self.testedIndividuals.to_csv(p+'TestedIndividuals/'+str(i)+'.csv')
-                self.testedScoreIndividuals.to_csv(p + 'TestedScoreIndividuals/' + str(i) + '.csv')
-            pd.DataFrame(self.leaderBoardSorted,columns=['algorithm']+[obj for obj in self.objectiveNames]).to_csv(p+'LeaderBoard/'+str(i)+'.csv')
+
 
 
     def SaveFinalPerf(self,p,updating=False):

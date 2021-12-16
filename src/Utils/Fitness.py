@@ -119,8 +119,8 @@ class Fitness:
 
 
         # A DECOMMENTERRRRRRRRRRRRRRR
-        # self.testedScorePopulation.append(individualTestedScore)
-        # self.testedPopulation.append(self.population.AddIndividualToTested(individual))
+        self.testedScorePopulation.append(individualTestedScore)
+        self.testedPopulation.append(self.population.AddIndividualToTested(individual))
         return np.array(score)
 
     def ComputeScorePopulation(self,population,data):

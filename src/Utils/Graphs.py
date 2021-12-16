@@ -36,9 +36,10 @@ class Graphs:
 
     def findGlobalParetoFront(self,dataSet,pop):
         print('find global pareto front')
-        fitness = Fitness('horizontal_binary', ['support','confidence','cosine'], len(self.data) ,dataSet.shape[1])
+        fitness = Fitness('horizontal_binary', ['support','confidence','cosine'], len(pop) ,dataSet.shape[1])
         fitness.ComputeScorePopulation(pop,dataSet)
         scores = fitness.scores
+        print(scores)
         paretoFront = []
         isParetoFrontColumn = []
         for p in range(len(scores)):
@@ -52,37 +53,53 @@ class Graphs:
             if dominate:
                 paretoFront.append(p)
                 isParetoFrontColumn.append(True)
-
         paretoFront = np.array(paretoFront)
         return paretoFront
 
 
-    def getRulesFromFiles(self,dataSet):
+    def getRulesFromFiles(self,dataSet,data):
         rules = []
-        f = open('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/Rules/10/custom.txt','r')
-        lines = f.readlines()
         pop = []
-        for i in range(len(lines)):
-            if(i%2==0):
-                ind = np.zeros(dataSet.shape[1]*2)
-                line = lines[i]
-                line = line[1:len(line)-2]
-                line = line.split("' '")
-                line = [l.replace("'", "") for l in line]
-                for li in range(len(line)):
-                    obj = line[li]
-                    obj = obj[1:len(obj)-1]
-                    obj = obj.split(' ')
-                    if(li==0):
-                        for item in obj:
-                            ind[int(item)] = 1
-                    if(li==2):
-                        for item in obj:
-                            ind[int(item)+dataSet.shape[1]*2] = 1
-                pop.append(ind)
+        files = os.listdir('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/Rules/0/')
+        for file in files:
+            f = open('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/Rules/0/'+file,'r')
+            lines = f.readlines()
+            f.close()
+            for i in range(len(lines)):
+                if(i%2==0):
+                    ind = np.zeros(dataSet.shape[1]*2)
+                    line = lines[i]
+                    line = line[1:len(line)-2]
+                    line = line.split("' '")
+                    line = [l.replace("'", "") for l in line]
+                    for li in range(len(line)):
+                        obj = line[li]
+                        obj = obj[1:len(obj)-1]
+                        obj = obj.split(' ')
+                        obj= [ x for x in obj if x!='']
+                        if(li==0):
+                            for item in obj:
+                                ind[int(item)] = 1
+                        if(li==2):
+                            for item in obj:
+                                ind[int(item)+dataSet.shape[1]] = 1
+                    pop.append(ind)
         pop = np.array(pop)
         paretoFront = self.findGlobalParetoFront(dataSet,pop)
         pop = pop[paretoFront]
+        pop = [list(x) for x in pop]
+        isInParetoFront = []
+        for i in range(len(data)):
+            line = list(np.array(data.loc[i])[1:])
+            isInPareto = False
+            for ind in pop:
+                if(ind == line):
+                    isInPareto = True
+            if isInPareto:
+                isInParetoFront.append(True)
+            else:
+                isInParetoFront.append(False)
+        return isInParetoFront
 
 
 
@@ -92,19 +109,17 @@ class Graphs:
 
 
     def dataTSNEFromFile(self,dataSet):
-        self.getRulesFromFiles(dataSet)
-        self.data = pd.read_csv('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/10/TestedIndividuals/0.csv',index_col=0)
-        for i in [1,10,20,30,40,49]:
-            self.data = self.data.append(pd.read_csv('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/10/TestedIndividuals/'+str(i)+'.csv',
-                                    index_col=0),ignore_index=True)
+
+        self.data = pd.read_csv('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/0/TestedIndividuals/49.csv',index_col=0)
+        isParetoFrontColumn = self.getRulesFromFiles(dataSet,self.data)
 
         self.data = self.ChangeAlgoNames(self.data)
         print(self.data)
 
         algorithms = self.data['algorithm']
-        isParetoFrontColumn = self.data['isInParetoFront']
+
         self.data = self.data.drop('algorithm',axis=1)
-        self.data = self.data.drop('isInParetoFront', axis=1)
+        self.data['isInParetoFront'] = isParetoFrontColumn
 
         self.data = TSNE(n_components=2, learning_rate='auto',
                         init='random').fit_transform(np.asarray(self.data,dtype='float64'))
@@ -113,7 +128,7 @@ class Graphs:
         self.data = transformed
         print(self.data)
         fig = sns.relplot(data=self.data,x=self.data['x'],y=self.data['y'],col='algorithm',kind='scatter',col_wrap=4,height=8.27, aspect=17/8.27,hue='isInParetoFront')
-        self.path = 'D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/10/TestedIndividuals/graph'
+        self.path = 'D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/0/TestedIndividuals/graph'
         if True:
             plt.show()
         if True:

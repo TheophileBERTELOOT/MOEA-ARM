@@ -186,12 +186,7 @@ class Experiment:
         graph = Graphs(self.objectiveNames, self.perf.transformTestedIndividuals, path=self.path +'/Graphs/tested/'+ str(rep) + '/' + str(0),
                        display=self.display)
         graph.dataTSNE()
-        graph = Graphs(self.objectiveNames, self.perf.transformTestedScoreIndividuals,
-                       path=self.path +'/Graphs/testedScore/'+ str(rep) + '/' + str(0),
-                       display=self.display)
-        graph.dataTSNE()
         self.perf.Free()
-        self.perf.InitTestedIndividuals()
 
 
     def Run(self):
@@ -259,10 +254,8 @@ class Experiment:
                     graph = Graphs(self.objectiveNames, self.perf.transformTestedIndividuals, path=testedGraphPath + str(i),
                                    display=self.display)
                     graph.dataTSNE()
-                    graph = Graphs(self.objectiveNames, self.perf.transformTestedScoreIndividuals,
-                                   path=testedScoreGraphPath + str(i),
-                                   display=self.display)
-                    graph.dataTSNE()
+
+
 
 
                 if i<self.nbIteration-1:
