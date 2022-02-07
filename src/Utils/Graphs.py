@@ -28,7 +28,7 @@ class Graphs:
 
     def dataTSNE(self):
         self.data = self.ChangeAlgoNames(self.data)
-        fig = sns.relplot(data=self.data,x=self.data['x'],y=self.data['y'],col='algorithm',kind='scatter',col_wrap=4,height=8.27, aspect=17/8.27)
+        fig = sns.relplot(data=self.data,x=self.data['x'],y=self.data['y'],col='algorithm',kind='scatter',col_wrap=3,height=8.27, aspect=17/8.27)
         if self.display:
             plt.show()
         if self.save:
@@ -39,7 +39,6 @@ class Graphs:
         fitness = Fitness('horizontal_binary', ['support','confidence','cosine'], len(pop) ,dataSet.shape[1])
         fitness.ComputeScorePopulation(pop,dataSet)
         scores = fitness.scores
-        print(scores)
         paretoFront = []
         isParetoFrontColumn = []
         for p in range(len(scores)):
@@ -87,19 +86,15 @@ class Graphs:
         pop = np.array(pop)
         paretoFront = self.findGlobalParetoFront(dataSet,pop)
         pop = pop[paretoFront]
-        pop = [list(x) for x in pop]
-        isInParetoFront = []
-        for i in range(len(data)):
-            line = list(np.array(data.loc[i])[1:])
-            isInPareto = False
-            for ind in pop:
-                if(ind == line):
-                    isInPareto = True
-            if isInPareto:
-                isInParetoFront.append(True)
-            else:
-                isInParetoFront.append(False)
-        return isInParetoFront
+        transformedPop = []
+        column = ['algorithm']+[str(i) for i in range(dataSet.shape[1]*2)]
+        algorithms = self.data['algorithm'].unique()
+        for ind in pop:
+            for algorithm in algorithms:
+                transformedPop.append([algorithm]+list(ind))
+
+        transformedPop = pd.DataFrame(transformedPop,columns=column)
+        return transformedPop
 
 
 
@@ -111,28 +106,62 @@ class Graphs:
     def dataTSNEFromFile(self,dataSet):
 
         self.data = pd.read_csv('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/0/TestedIndividuals/49.csv',index_col=0)
-        isParetoFrontColumn = self.getRulesFromFiles(dataSet,self.data)
+        paretoFront = self.getRulesFromFiles(dataSet,self.data)
+        print(paretoFront)
 
-        self.data = self.ChangeAlgoNames(self.data)
-        print(self.data)
+        isInParetoFront = [False for i in range(len(self.data))] + [True for i in range(len(paretoFront))]
 
+
+        print(len(self.data))
+        self.data = self.data.append(paretoFront,ignore_index=True)
         algorithms = self.data['algorithm']
-
+        print(len(self.data))
+        self.data = self.ChangeAlgoNames(self.data)
+        print(len(self.data))
         self.data = self.data.drop('algorithm',axis=1)
-        self.data['isInParetoFront'] = isParetoFrontColumn
+        print(len(self.data))
 
         self.data = TSNE(n_components=2, learning_rate='auto',
                         init='random').fit_transform(np.asarray(self.data,dtype='float64'))
-        transformed = pd.DataFrame(list(zip(list(algorithms),self.data[:,0],self.data[:,1],isParetoFrontColumn)),columns=['algorithm','x','y','isInParetoFront'])
+        print(len(self.data))
+        transformed = pd.DataFrame(list(zip(list(algorithms),self.data[:,0],self.data[:,1],isInParetoFront)),columns=['algorithm','x','y','isInParetoFront'])
         transformed = transformed.drop_duplicates()
         self.data = transformed
-        print(self.data)
+        print(len(self.data))
         fig = sns.relplot(data=self.data,x=self.data['x'],y=self.data['y'],col='algorithm',kind='scatter',col_wrap=4,height=8.27, aspect=17/8.27,hue='isInParetoFront')
         self.path = 'D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/0/TestedIndividuals/graph'
         if True:
             plt.show()
         if True:
             fig.savefig(self.path + ".png")
+
+
+    def dataTSNEFromFileWithoutPareto(self,dataSet):
+        self.data = pd.read_csv('D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/0/TestedIndividuals/49.csv',
+                                index_col=0)
+
+        print(len(self.data))
+        self.data = self.ChangeAlgoNames(self.data)
+        algorithms = self.data['algorithm']
+        print(len(self.data))
+        self.data = self.data.drop('algorithm',axis=1)
+        print(len(self.data))
+
+        self.data = TSNE(n_components=2, learning_rate='auto',
+                        init='random').fit_transform(np.asarray(self.data,dtype='float64'))
+        print(len(self.data))
+        transformed = pd.DataFrame(list(zip(list(algorithms),self.data[:,0],self.data[:,1])),columns=['algorithm','x','y'])
+        transformed = transformed.drop_duplicates()
+        self.data = transformed
+        print(len(self.data))
+        fig = sns.relplot(data=self.data,x=self.data['x'],y=self.data['y'],col='algorithm',kind='scatter',col_wrap=3,  s=8,linewidth=0)
+
+        fig.set_titles(  y=0.9)
+        self.path = 'D:/ULaval/Maitrise/Recherche/Code/Experiments/MUSHROOM/0/TestedIndividuals/graph'
+        if True:
+            plt.show()
+        if True:
+            fig.savefig(self.path + ".pdf")
 
     def GraphNbRules(self):
         plt.cla()
@@ -218,7 +247,10 @@ class Graphs:
         df = pd.DataFrame(data,columns=['algorithm','nbRules'])
         df  = df.sort_values(by=['nbRules'],ascending=False)
         df = self.ChangeAlgoNames(df)
-        print(df)
+        nbRules = df.groupby(['algorithm'])
+        nbRules = nbRules['nbRules'].agg(
+            ['mean', 'std']).sort_values(by=['mean'], ascending=False)
+        print(nbRules)
         fig = plt.figure(figsize=(15,15))
         sns.barplot(x='algorithm', y='nbRules', data=df)
         plt.xticks(rotation=70)
@@ -421,11 +453,17 @@ class Graphs:
         df.reset_index(level=0, inplace=True)
         df = self.ChangeAlgoNames(df)
         fig = plt.figure(figsize=(15, 15))
-        ax = sns.scatterplot(x='nbRulesMean', y='covMean', hue='algorithm', style='algorithm',data=df)
-        ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        ax = sns.scatterplot(x='nbRulesMean', y='covMean', hue='algorithm', style='algorithm',data=df,s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Number of Rules', fontsize=17)
+        plt.ylabel('Coverage', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
         plt.show()
         if self.save:
-            fig.savefig(self.path+'GraphNBRulesVsCoverages' + ".png")
+            fig.savefig(self.path+'GraphNBRulesVsCoverages' + ".pdf")
 
 
     def GraphSCCVsCoverage(self,algName,p,graphType,nbIter):
@@ -474,17 +512,45 @@ class Graphs:
         df.reset_index(level=0, inplace=True)
         df = self.ChangeAlgoNames(df)
 
-        fig, axes = plt.subplots(1, 3, figsize=(17, 5), sharey=True)
-        ax = sns.scatterplot(ax=axes[0],x='coveragesMean', y='supportMean', hue='algorithm', style='algorithm',data=df)
-        ax.get_legend().remove()
-        ax =sns.scatterplot(ax=axes[1], x='coveragesMean', y='confidenceMean', hue='algorithm', style='algorithm', data=df)
-        ax.get_legend().remove()
-        ax =sns.scatterplot(ax=axes[2], x='coveragesMean', y='cosineMean', hue='algorithm', style='algorithm', data=df)
-        ax.get_legend().remove()
-        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+        fig = plt.figure(figsize=(15, 15))
+        ax = sns.scatterplot(x='coveragesMean', y='supportMean', hue='algorithm', style='algorithm',data=df,s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Coverage', fontsize=17)
+        plt.ylabel('Support', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
         plt.show()
         if self.save:
-            fig.savefig(self.path+'GraphCoveragesVsSCC' + ".png")
+            fig.savefig(self.path+'CoverageSupport' + ".pdf")
+
+        fig = plt.figure(figsize=(15, 15))
+        ax = sns.scatterplot(x='coveragesMean', y='confidenceMean', hue='algorithm', style='algorithm',data=df,s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Coverage', fontsize=17)
+        plt.ylabel('Support', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
+        plt.show()
+        if self.save:
+            fig.savefig(self.path+'CoverageConfidence' + ".pdf")
+
+        fig = plt.figure(figsize=(15, 15))
+        ax = sns.scatterplot(x='coveragesMean', y='cosineMean', hue='algorithm', style='algorithm',data=df,s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Coverage', fontsize=17)
+        plt.ylabel('Cosine', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
+        plt.show()
+        if self.save:
+            fig.savefig(self.path+'CoverageCosine' + ".pdf")
+
 
     def GraphSCCVsNBRules(self,algName,p,graphType,nbIter):
         plt.cla()
@@ -531,17 +597,46 @@ class Graphs:
         df.reset_index(level=0, inplace=True)
         df = self.ChangeAlgoNames(df)
 
-        fig, axes = plt.subplots(1, 3, figsize=(18, 5), sharey=True)
-        ax = sns.scatterplot(ax=axes[0],x='nbRulesMean', y='supportMean', hue='algorithm', style='algorithm',data=df)
-        ax.get_legend().remove()
-        ax =sns.scatterplot(ax=axes[1], x='nbRulesMean', y='confidenceMean', hue='algorithm', style='algorithm', data=df)
-        ax.get_legend().remove()
-        ax =sns.scatterplot(ax=axes[2], x='nbRulesMean', y='cosineMean', hue='algorithm', style='algorithm', data=df)
-        ax.get_legend().remove()
-        plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+
+
+        fig = plt.figure(figsize=(15, 15))
+        ax = sns.scatterplot(x='nbRulesMean', y='supportMean', hue='algorithm', style='algorithm', data=df, s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Coverage', fontsize=17)
+        plt.ylabel('Support', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
         plt.show()
         if self.save:
-            fig.savefig(self.path+'GraphNBRulesVsSCC' + ".png")
+            fig.savefig(self.path + 'nbRulesSupport' + ".pdf")
+
+        fig = plt.figure(figsize=(15, 15))
+        ax = sns.scatterplot(x='nbRulesMean', y='confidenceMean', hue='algorithm', style='algorithm', data=df, s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Coverage', fontsize=17)
+        plt.ylabel('Support', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
+        plt.show()
+        if self.save:
+            fig.savefig(self.path + 'nbRulesConfidence' + ".pdf")
+
+        fig = plt.figure(figsize=(15, 15))
+        ax = sns.scatterplot(x='nbRulesMean', y='cosineMean', hue='algorithm', style='algorithm', data=df, s=250)
+
+        plt.legend(fontsize='x-large', title_fontsize='40')
+        plt.xlabel('Coverage', fontsize=17)
+        plt.ylabel('Cosine', fontsize=17)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
+
+        plt.show()
+        if self.save:
+            fig.savefig(self.path + 'nbRulesCosine' + ".pdf")
 
     def GraphPopDistances(self,algName,p,graphType,nbIter):
         plt.cla()
@@ -596,16 +691,41 @@ class Graphs:
         df = pd.DataFrame(data,columns=['algorithm','iter']+self.objectiveNames)
         df.reset_index(level=0, inplace=True)
         df = self.ChangeAlgoNames(df)
+        print(df)
+
         for k in range(len(self.objectiveNames)):
             objectiveName = self.objectiveNames[k]
             fig = plt.figure(figsize=(15, 15))
-            ax = sns.lineplot(x='iter', y=objectiveName, hue='algorithm', style='algorithm', data=df)
+            ax = sns.lineplot(x='iter', y=objectiveName, hue='algorithm', style='algorithm', data=df, ci=None)
             ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+            plt.tight_layout()
+            plt.legend(fontsize='x-large', title_fontsize='40')
+            plt.xlabel('iteration')
+            plt.ylabel(self.objectiveNames[k])
             plt.show()
-            dfTemp = df[df['iter'] == nbIter-1].groupby(['algorithm'])
             if self.save:
-                fig.savefig(self.path+objectiveName + ".png")
+                fig.savefig(self.path+objectiveName + ".pdf")
             plt.close()
+
+
+            variance = df.groupby(['algorithm', 'iter'])
+            variance = variance[self.objectiveNames[k]].agg(
+                ['mean', 'std']).sort_values(by=['algorithm'], ascending=False)
+            fig = plt.figure(figsize=(15, 15))
+            ax = sns.lineplot(x='iter', y='std', hue='algorithm', style='algorithm', data=variance, ci=None)
+            ax.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+            plt.xlabel('iteration')
+            plt.legend(fontsize='x-large', title_fontsize='40')
+            plt.ylabel(self.objectiveNames[k]+ ' standard deviation')
+            plt.tight_layout()
+            plt.show()
+
+            if self.save:
+                fig.savefig(self.path+objectiveName + "Variance.pdf")
+            plt.close()
+
+            dfTemp = df[df['iter'] == nbIter-1].groupby(['algorithm'])
+
             print(objectiveName)
             print(dfTemp[objectiveName].agg(
                 ['mean', 'std']).sort_values(by=['mean'], ascending=False))
@@ -616,14 +736,19 @@ class Graphs:
         plt.cla()
         plt.clf()
         fig = plt.figure(figsize=(15, 15))
-        sns.scatterplot(x='row', y='binary attribute',hue='dataset', data=df)
+        plt.rcParams.update({'font.size': 13})
+        sns.scatterplot(x='row', y='binary attribute',hue='dataset', data=df,s=150)
+        plt.xlabel('Row', fontsize=18)
+        plt.ylabel('Binary Attributes', fontsize=18)
+        plt.xticks(fontsize=15)
+        plt.yticks(fontsize=15)
         plt.tight_layout()
         if self.display:
             plt.show()
         else:
             plt.close(fig)
         if self.save:
-            fig.savefig(self.path + ".png")
+            fig.savefig(self.path + ".pdf")
 
 
     def GraphFitness(self,p):

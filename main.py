@@ -32,7 +32,7 @@ hyper.SaveBestParameters(p+'bestParameters.json')
 
 nbIteration = 50
 sizeHead = 10
-
+isPolypharmacy = False
 iterationInitiale =0
 nbRepetition = 1 - iterationInitiale
 populationSize = 100
@@ -49,7 +49,7 @@ if (not path.exists(p)):
     mkdir(p)
 # perf = Performances(algorithmNameList,criterionList,objectiveNames)
 #d = Data(artificial=True)
-d = Data('Data/Transform/mushroom.csv',header=0,separator=',')
+d = Data('Data/Transform/wine.csv',header=0,separator=',')
 # d = Data('Data/Transform/iris.csv')
 #d.TransformToHorizontalBinary()
 #d.Save('Data/Transform/wine.csv')
@@ -57,17 +57,17 @@ d.ToNumpy()
 # g = Graphs(objectiveNames,d.data)
 # g.dataTSNE()
 #
-E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False,update=updated)
-E.Run()
-#
+# E = Experiment(algorithmNameList,objectiveNames,criterionList,d.data,populationSize,nbIteration,nbRepetition,iterationInitiale,sizeHead=sizeHead,path=p,display=False,update=updated,isPolypharmacy = isPolypharmacy)
+# E.Run()
+# #
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
 # g.GraphSCCVsNBRules(algorithmNameList,'../Experiments/'+nameDataset+'/','nbRulesvsSCC',nbIteration)
 #
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
 # g.GraphSCCVsCoverage(algorithmNameList,'../Experiments/'+nameDataset+'/','coveragesvsSCC',nbIteration)
-# #
-# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/LeaderBoard/')
-# g.GraphExperimentation(algorithmNameList,'../Experiments/'+nameDataset+'/','LeaderBoard',nbIteration)
+#
+g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/LeaderBoard/')
+g.GraphExperimentation(algorithmNameList,'../Experiments/'+nameDataset+'/','LeaderBoard',nbIteration)
 #
 #
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
@@ -80,9 +80,9 @@ E.Run()
 # g.GraphAverageExecutionTime('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/NbRules/',display=True,save=True)
 # g.GraphAverageNBRules('../Experiments/'+nameDataset+'/',algorithmNameList,nbIteration)
-
-g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
-g.dataTSNEFromFile(d.data)
+# #
+# g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')
+# g.dataTSNEFromFileWithoutPareto(d.data)
 
 
 # g = Graphs(objectiveNames,[],path='../Experiments/'+nameDataset+'/Graphs/')

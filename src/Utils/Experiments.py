@@ -25,7 +25,7 @@ from os import path,mkdir
 
 
 class Experiment:
-    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,sizeHead=5,display=False,path='Experiments/',update=False):
+    def __init__(self,algListNames,objectiveNames,criterionList,data,populationSize,nbIteration,nbRepetition,iterationInitial,sizeHead=5,display=False,path='Experiments/',update=False,isPolypharmacy=False):
         self.algListNames = algListNames
         self.objectiveNames = objectiveNames
         self.criterionList = criterionList
@@ -39,6 +39,7 @@ class Experiment:
         self.algList = []
         self.display = display
         self.path = path
+        self.isPolypharmacy = isPolypharmacy
         self.CheckIfFolderExist(self.path)
         print(self.data.shape[1])
         self.perf = Performances(algListNames, criterionList,self.data.shape[1], objectiveNames=objectiveNames)
@@ -54,7 +55,7 @@ class Experiment:
             if name == 'custom':
                 self.algList.append(
                     CUSTOM(self.data.shape[1], self.populationSize, self.nbIteration, len(self.objectiveNames),
-                           self.objectiveNames, self.data))
+                           self.objectiveNames, self.data,isPolypharmacy=self.isPolypharmacy))
             if name == 'mocsoarm':
                 h = HyperParameters(['ruthlessRatio'])
                 h.LoadHyperParameters('HyperParameters/MOCSOARM/bestParameters.json')

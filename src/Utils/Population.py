@@ -6,11 +6,15 @@ import copy
 
 
 class Population:
-    def __init__(self,representation, populationSize,nbItem):
+    def __init__(self,representation, populationSize,nbItem,isPolypharmacy = False):
         self.representation = representation
         self.populationSize = populationSize
         self.nbItem = nbItem
         self.population  = []
+        self.isPolypharmacy = isPolypharmacy
+        self.minLength = 1
+        if isPolypharmacy:
+            self.minLength = 5
         self.InitPopulation()
 
     def GetIndividualRepresentation(self,individual):
@@ -50,7 +54,7 @@ class Population:
 
     def CheckIfNullIndividual(self,ind):
         indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(ind)
-        if len(indexAntecedent) <1 or len(indexConsequent)<1:
+        if len(indexAntecedent) <self.minLength  or len(indexConsequent)<self.minLength :
             if self.representation == 'horizontal_binary':
                 individual = self.InitIndividual_HorizontalBinary()
             if self.representation == 'horizontal_index':
@@ -61,7 +65,7 @@ class Population:
     def CheckIfNull(self):
         for i in range(self.populationSize):
             indexRule,indexAntecedent,indexConsequent = self.GetIndividualRepresentation(self.population[i])
-            while len(indexAntecedent) <1 or len(indexConsequent)<1:
+            while len(indexAntecedent) <self.minLength  or len(indexConsequent)<self.minLength :
                 if self.representation == 'horizontal_binary':
                     individual = self.InitIndividual_HorizontalBinary()
                 if self.representation == 'horizontal_index':
@@ -86,16 +90,19 @@ class Population:
     def SetPopulation(self,population):
         self.population = copy.deepcopy(population)
 
-    def InitIndividual_HorizontalBinary(self):
+    def InitIndividual_HorizontalBinary(self,isPolypharmacy=False):
         individual = []
+        nbDefaultItem = 2
+        if isPolypharmacy:
+            nbDefaultItem = 5
         for i in range(self.nbItem):
             individual.append(-1.0)
         for i in range(self.nbItem):
             individual.append(float(0.0))
-        for i in range(2):
+        for i in range(nbDefaultItem):
             index = rd.randint(0,self.nbItem-1)
             individual[index] = 1.0
-            if i ==0:
+            if i == 0:
                 individual[self.nbItem+index] = 1.0
             else:
                 individual[self.nbItem + index] = -1.0

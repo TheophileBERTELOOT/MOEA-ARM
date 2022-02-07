@@ -10,8 +10,8 @@ from src.Utils.HyperParameters import *
 
 class CUSTOM:
     def __init__(self,nbItem,populationSize,nbIteration,nbObjectifs,objectiveNames,data,
-                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=3,step=3):
-        self.population = Population('horizontal_binary', populationSize, nbItem)
+                 hyperParameters = HyperParameters(['ruthlessRatio']),visualScope=3,step=3,isPolypharmacy=False):
+        self.population = Population('horizontal_binary', populationSize, nbItem,isPolypharmacy)
         self.nbItem = nbItem
         self.nbIteration = nbIteration
         self.nbObjectifs = nbObjectifs
